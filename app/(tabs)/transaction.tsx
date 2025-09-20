@@ -13,6 +13,7 @@ import { QRGenerator } from '../../components/QRGenerator';
 import { QRScanner } from '../../components/QRScanner';
 import { ArrowDownLeftIcon, CameraIcon, QRCodeIcon, QRGenerateIcon, ScanQRIcon } from '../../components/icons';
 import { useNotification } from '../../context/NotificationContext';
+import * as Haptics from 'expo-haptics';
 
 type TransactionMode = 'main' | 'receive' | 'qr-display' | 'qr-scan' | 'confirm';
 
@@ -196,7 +197,12 @@ export default function TransactionScreen() {
             <View style={styles.buttonRow}>
               <TouchableOpacity
                 style={[styles.outlineButton, { flex: 1 }, loading && styles.disabledButton]}
-                onPress={handleCancelOffer}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  // 간단하게 바로 메인 화면으로 돌아가기
+                  setMode('main');
+                  setTransactionData({ type: 'receive', currency: 'KRW', amount: '' });
+                }}
                 disabled={loading}>
                 <Text style={styles.outlineButtonText}>
                   {loading ? '취소 중...' : '닫기'}
@@ -207,9 +213,13 @@ export default function TransactionScreen() {
                 style={[styles.primaryButton, { flex: 1 }]}
                 onPress={async () => {
                   // 테스트용: 결제 완료 시뮬레이션
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
                   await sendTransactionNotification('received', transactionData.amount, transactionData.currency);
                   showTransactionSuccess(transactionData.amount, transactionData.currency, 'received');
                   Alert.alert('테스트', '결제 받기 완료 알림이 전송되었습니다!');
+                  // 테스트 후 메인 화면으로 돌아가기
+                  setMode('main');
+                  setTransactionData({ type: 'receive', currency: 'KRW', amount: '' });
                 }}>
                 <Text style={styles.primaryButtonText}>테스트 결제</Text>
               </TouchableOpacity>
@@ -279,7 +289,11 @@ export default function TransactionScreen() {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.primaryButton, { flex: 1 }, loading && styles.disabledButton]}
-                onPress={handleConfirmTransaction}
+                onPress={() => {
+                  if (loading) return;
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                  handleConfirmTransaction();
+                }}
                 disabled={loading}>
                 <Text style={styles.primaryButtonText}>
                   {loading ? '처리 중...' : '확인'}
@@ -298,7 +312,10 @@ export default function TransactionScreen() {
       <View style={styles.optionsGrid}>
         <TouchableOpacity
           style={styles.optionCard}
-          onPress={() => setMode('receive')}>
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            setMode('receive');
+          }}>
           <QRGenerateIcon size={36} color="#10b981" />
           <Text style={styles.optionTitle}>QR 생성하기</Text>
           <Text style={styles.optionSubtitle}>결제 요청</Text>
@@ -306,7 +323,10 @@ export default function TransactionScreen() {
 
         <TouchableOpacity
           style={styles.optionCard}
-          onPress={handleSend}>
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            handleSend();
+          }}>
           <ScanQRIcon size={36} color="#3b82f6" />
           <Text style={styles.optionTitle}>QR 송금하기</Text>
           <Text style={styles.optionSubtitle}>즉시 결제</Text>
@@ -329,8 +349,10 @@ export default function TransactionScreen() {
                     styles.currencyOption,
                     transactionData.currency === 'KRW' && styles.currencyOptionActive,
                   ]}
-                  onPress={() =>
-                    setTransactionData(prev => ({ ...prev, currency: 'KRW' }))}
+                  onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setTransactionData(prev => ({ ...prev, currency: 'KRW' }));
+                  }}
                   >
                   <Text
                     style={[
@@ -345,8 +367,10 @@ export default function TransactionScreen() {
                     styles.currencyOption,
                     transactionData.currency === 'USD' && styles.currencyOptionActive,
                   ]}
-                  onPress={() =>
-                    setTransactionData(prev => ({ ...prev, currency: 'USD' }))}
+                  onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setTransactionData(prev => ({ ...prev, currency: 'USD' }));
+                  }}
                   >
                   <Text
                     style={[
@@ -383,7 +407,11 @@ export default function TransactionScreen() {
                   { flex: 1 },
                   (!transactionData.amount || loading) && styles.disabledButton,
                 ]}
-                onPress={handleReceive}
+                onPress={() => {
+                  if (!transactionData.amount || loading) return;
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                  handleReceive();
+                }}
                 disabled={!transactionData.amount || loading}>
                 <Text style={styles.primaryButtonText}>
                   {loading ? '생성 중...' : '⚡ QR 생성'}
