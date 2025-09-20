@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
 
 interface QRGeneratorProps {
   data: string;
@@ -7,26 +8,6 @@ interface QRGeneratorProps {
 }
 
 export function QRGenerator({ data, size = 200 }: QRGeneratorProps) {
-  // QR 코드 생성을 위한 간단한 패턴
-  const generateQRPattern = () => {
-    const pattern = [];
-    for (let i = 0; i < 21; i++) {
-      const row = [];
-      for (let j = 0; j < 21; j++) {
-        // 간단한 패턴 생성 (실제 QR 코드 아님)
-        const isBlack = (i + j + data.length) % 3 === 0 ||
-                       (i === 0 || i === 20 || j === 0 || j === 20) ||
-                       (i < 7 && j < 7) || (i < 7 && j > 13) || (i > 13 && j < 7);
-        row.push(isBlack);
-      }
-      pattern.push(row);
-    }
-    return pattern;
-  };
-
-  const pattern = generateQRPattern();
-  const cellSize = size / 21;
-
   return (
     <View style={styles.container}>
       <View style={[
@@ -36,31 +17,14 @@ export function QRGenerator({ data, size = 200 }: QRGeneratorProps) {
           height: size + 32
         }
       ]}>
-        <View style={[
-          styles.qrCode,
-          {
-            width: size,
-            height: size
-          }
-        ]}>
-          {pattern.map((row, i) =>
-            row.map((cell, j) => (
-              <View
-                key={`${i}-${j}`}
-                style={[
-                  styles.qrCell,
-                  {
-                    width: cellSize,
-                    height: cellSize,
-                    left: j * cellSize,
-                    top: i * cellSize,
-                    backgroundColor: cell ? '#000000' : '#ffffff',
-                  }
-                ]}
-              />
-            ))
-          )}
-        </View>
+        <QRCode
+          value={data}
+          size={size}
+          color="black"
+          backgroundColor="white"
+          logoSize={30}
+          logoBackgroundColor="transparent"
+        />
       </View>
     </View>
   );
@@ -79,11 +43,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 4,
-  },
-  qrCode: {
-    position: 'relative',
-  },
-  qrCell: {
-    position: 'absolute',
   },
 });
