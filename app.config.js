@@ -27,7 +27,13 @@ module.exports = {
     web: {
       bundler: "metro",
       output: "static",
-      favicon: "./assets/images/favicon.png"
+      favicon: "./assets/images/favicon.png",
+      fonts: [
+        {
+          source: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap",
+          display: "swap"
+        }
+      ]
     },
     plugins: [
       "expo-router"
@@ -40,6 +46,9 @@ module.exports = {
       serverHost: process.env.SERVER_HOST || 'http://localhost:8081',
       apiTimeout: process.env.API_TIMEOUT || '30000',
       environment: process.env.NODE_ENV || 'development',
+      eas: {
+        projectId: process.env.EXPO_PROJECT_ID || 'ripplepay-development-id'
+      }
     }
   }
 };

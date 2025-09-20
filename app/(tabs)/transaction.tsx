@@ -14,7 +14,7 @@ import { ArrowUpRightIcon, ArrowDownLeftIcon, QRCodeIcon, CameraIcon } from '../
 import { useNotification } from '../../context/NotificationContext';
 import { useInAppNotification } from '../../components/InAppNotification';
 
-type TransactionMode = 'main' | 'send' | 'receive' | 'qr-display' | 'qr-scan' | 'confirm';
+type TransactionMode = 'main' | 'receive' | 'qr-display' | 'qr-scan' | 'confirm';
 
 interface TransactionData {
   type: 'send' | 'receive';
@@ -306,7 +306,7 @@ export default function TransactionScreen() {
 
         <TouchableOpacity
           style={styles.optionCard}
-          onPress={() => setMode('send')}>
+          onPress={handleSend}>
           <ArrowUpRightIcon size={32} color="#dc2626" />
           <Text style={styles.optionTitle}>보내기</Text>
           <Text style={styles.optionSubtitle}>QR 스캔</Text>
@@ -329,8 +329,8 @@ export default function TransactionScreen() {
                     transactionData.currency === 'KRW' && styles.currencyOptionActive,
                   ]}
                   onPress={() =>
-                    setTransactionData(prev => ({ ...prev, currency: 'KRW' }))
-                  }>
+                    setTransactionData(prev => ({ ...prev, currency: 'KRW' }))}
+                  >
                   <Text
                     style={[
                       styles.currencyOptionText,
@@ -345,8 +345,8 @@ export default function TransactionScreen() {
                     transactionData.currency === 'USD' && styles.currencyOptionActive,
                   ]}
                   onPress={() =>
-                    setTransactionData(prev => ({ ...prev, currency: 'USD' }))
-                  }>
+                    setTransactionData(prev => ({ ...prev, currency: 'USD' }))}
+                  >
                   <Text
                     style={[
                       styles.currencyOptionText,
@@ -365,8 +365,7 @@ export default function TransactionScreen() {
                 placeholder="받을 금액을 입력하세요"
                 value={transactionData.amount}
                 onChangeText={text =>
-                  setTransactionData(prev => ({ ...prev, amount: text }))
-                }
+                  setTransactionData(prev => ({ ...prev, amount: text }))}
                 keyboardType="numeric"
               />
             </View>
@@ -394,35 +393,6 @@ export default function TransactionScreen() {
         </View>
       )}
 
-      {/* 보내기 안내 */}
-      {mode === 'send' && (
-        <View style={styles.card}>
-          <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>보내기</Text>
-          </View>
-          <View style={styles.cardContent}>
-            <View style={styles.scanInstructions}>
-              <CameraIcon size={64} color="#6b7280" />
-              <Text style={styles.instructionTitle}>QR 코드를 스캔하세요</Text>
-              <Text style={styles.instructionSubtitle}>
-                받는 사람의 QR 코드를 카메라로 스캔해주세요
-              </Text>
-            </View>
-            <View style={styles.buttonRow}>
-              <TouchableOpacity
-                style={[styles.outlineButton, { flex: 1 }]}
-                onPress={() => setMode('main')}>
-                <Text style={styles.outlineButtonText}>취소</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.primaryButton, { flex: 1 }]}
-                onPress={handleSend}>
-                <Text style={styles.primaryButtonText}>스캔 시작</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      )}
 
       {/* 최근 거래 내역 */}
       <View style={styles.card}>

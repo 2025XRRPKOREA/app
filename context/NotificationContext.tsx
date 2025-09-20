@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import * as Notifications from 'expo-notifications';
-import * as Device from 'expo-device';
 import Constants from 'expo-constants';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 
 // 푸시 알림 핸들러 설정
@@ -10,6 +10,8 @@ Notifications.setNotificationHandler({
     shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
   }),
 });
 
@@ -66,8 +68,8 @@ async function registerForPushNotificationsAsync(): Promise<string | null> {
       return null;
     }
 
-    // 프로젝트 ID 설정 (실제 프로젝트에서는 app.config.js에서 설정)
-    const projectId = Constants.expoConfig?.extra?.eas?.projectId ?? '이곳에-실제-프로젝트-ID-입력';
+    // 프로젝트 ID 설정 (app.config.js에서 설정)
+    const projectId = Constants.expoConfig?.extra?.eas?.projectId;
 
     try {
       token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
@@ -76,7 +78,8 @@ async function registerForPushNotificationsAsync(): Promise<string | null> {
       console.error('푸시 토큰 생성 실패:', error);
     }
   } else {
-    alert('실제 기기에서만 푸시 알림이 작동합니다!');
+    console.log('웹 환경에서는 Expo 푸시 토큰을 사용할 수 없습니다. 로컬 알림만 사용 가능합니다.');
+    // 웹 환경에서는 로컬 알림만 사용
   }
 
   return token;
@@ -86,7 +89,7 @@ interface NotificationProviderProps {
   children: ReactNode;
 }
 
-export function NotificationProvider({ children }: NotificationProviderProps): JSX.Element {
+export function NotificationProvider({ children }: NotificationProviderProps): React.ReactNode {
   const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
   const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>({
     transaction: true,
@@ -120,15 +123,34 @@ export function NotificationProvider({ children }: NotificationProviderProps): J
   };
 
   const sendLocalNotification = async (title: string, body: string, data?: any) => {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title,
-        body,
-        data,
-        sound: true,
-      },
-      trigger: null, // 즉시 발송
-    });
+    try {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title,
+          body,
+          data,
+          sound: true,
+        },
+        trigger: null, // 즉시 발송
+      });
+    } catch (error) {
+      console.error('로컬 알림 전송 실패:', error);
+      // 웹 환경에서는 브라우저 알림으로 대체
+      if (Platform.OS === 'web' && 'Notification' in window) {
+        try {
+          if (Notification.permission === 'granted') {
+            new Notification(title, { body });
+          } else if (Notification.permission !== 'denied') {
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+              new Notification(title, { body });
+            }
+          }
+        } catch (webError) {
+          console.error('웹 알림 전송 실패:', webError);
+        }
+      }
+    }
   };
 
   const sendTransactionNotification = async (
