@@ -1,4 +1,5 @@
 import React from 'react';
+import { useWalletBalance } from '../../hooks/useWalletBalance';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { WalletIcon, ArrowUpRightIcon, ArrowDownLeftIcon } from '../../components/icons';
@@ -44,6 +45,8 @@ const mockTransactions: Transaction[] = [
 ];
 
 export default function HomeScreen() {
+  const { balance, loading } = useWalletBalance();
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* 잔고 카드 */}
@@ -61,23 +64,19 @@ export default function HomeScreen() {
         <View style={styles.balanceContainer}>
           <View style={styles.balanceLeft}>
             <Text style={styles.currencyLabel}>XRP</Text>
-            <Text style={styles.balanceAmount}>1,234.56</Text>
-          </View>
-          <View style={styles.balanceRight}>
-            <Text style={styles.fiatAmount}>≈ ₩1,856,840</Text>
-            <Text style={styles.changePercent}>+2.3%</Text>
+            <Text style={styles.balanceAmount}>
+              {loading ? '로딩 중...' : balance?.XRP?.toFixed(2) || '0.00'}
+            </Text>
           </View>
         </View>
 
-        {/* 스테이블코인 잔고 */}
+        {/* KRW 잔고 */}
         <View style={styles.stablecoinContainer}>
           <View style={styles.stablecoinItem}>
             <Text style={styles.stablecoinLabel}>KRW</Text>
-            <Text style={styles.stablecoinAmount}>₩50,000</Text>
-          </View>
-          <View style={styles.stablecoinItem}>
-            <Text style={styles.stablecoinLabel}>USD</Text>
-            <Text style={styles.stablecoinAmount}>$75.50</Text>
+            <Text style={styles.stablecoinAmount}>
+              {loading ? '로딩 중...' : `₩${balance?.KRW?.toLocaleString() || '0'}`}
+            </Text>
           </View>
         </View>
       </LinearGradient>

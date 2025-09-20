@@ -1,7 +1,7 @@
+import { AuthApi, Configuration } from '@/api';
+import { API_CONFIG, STORAGE_KEYS } from '@/constants/config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
-import { Configuration, AuthApi, ApiAuthLoginPostRequest, ApiAuthRegisterPost201Response } from '@/api';
-import { API_CONFIG, STORAGE_KEYS } from '@/constants/config';
 
 class ApiClient {
   private configuration: Configuration;
@@ -16,7 +16,6 @@ class ApiClient {
         timeout: API_CONFIG.TIMEOUT,
         headers: {
           'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true', // ngrok 브라우저 경고 스킵
         },
       },
     });
@@ -90,7 +89,6 @@ class ApiClient {
         timeout: API_CONFIG.TIMEOUT,
         headers: {
           'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true', // ngrok 브라우저 경고 스킵
         },
       },
     });
@@ -108,13 +106,26 @@ class ApiClient {
     message?: string;
   }> {
     try {
-      const loginRequest: ApiAuthLoginPostRequest = {
-        email,
-        password,
-      };
+      // 해커톤 모드: 직접 서버 호출
+      const apiUrl = 'http://122.40.46.59/api/auth/login';
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      const response = await this.authApi.apiAuthLoginPost(loginRequest);
-      const data = response.data;
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error('이메일 또는 비밀번호가 올바르지 않습니다.');
+        } else if (response.status === 404) {
+          throw new Error('해당 이메일로 등록된 사용자를 찾을 수 없습니다.');
+        }
+        throw new Error(`Login failed: ${response.status}`);
+      }
+
+      const data = await response.json();
 
       if (data.token) {
         await this.saveTokenToStorage(data.token);
@@ -140,12 +151,8 @@ class ApiClient {
       console.error('Login failed:', error);
 
       // 에러 메시지 처리
-      if (error.response?.status === 401) {
-        throw new Error('이메일 또는 비밀번호가 올바르지 않습니다.');
-      } else if (error.response?.status === 404) {
-        throw new Error('해당 이메일로 등록된 사용자를 찾을 수 없습니다.');
-      } else if (error.response?.data?.message) {
-        throw new Error(error.response.data.message);
+      if (error.message.includes('이메일') || error.message.includes('비밀번호')) {
+        throw error;
       } else {
         throw new Error('로그인 중 오류가 발생했습니다. 다시 시도해 주세요.');
       }
@@ -240,7 +247,6 @@ class ApiClient {
         timeout: API_CONFIG.TIMEOUT,
         headers: {
           'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true', // ngrok 브라우저 경고 스킵
         },
       },
     });
