@@ -37,7 +37,7 @@ module.exports = {
     },
     extra: {
       // 환경 변수들을 여기에 정의
-      serverHost: process.env.SERVER_HOST || 'http://localhost:3000',
+      serverHost: process.env.SERVER_HOST || 'http://localhost:8081',
       apiTimeout: process.env.API_TIMEOUT || '30000',
       environment: process.env.NODE_ENV || 'development',
     }
