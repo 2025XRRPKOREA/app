@@ -8,7 +8,7 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
-import { RefreshIcon, SwapIcon, ChartIcon } from '../../components/icons';
+import { RefreshIcon, ArrowLeftRightIcon, ChartIcon } from '../../components/icons';
 
 interface ExchangeRate {
   from: string;
@@ -72,6 +72,7 @@ export default function ExchangeScreen() {
   const [fromCurrency, setFromCurrency] = useState<'XRP' | 'KRW' | 'USD'>('XRP');
   const [toCurrency, setToCurrency] = useState<'XRP' | 'KRW' | 'USD'>('KRW');
   const [amount, setAmount] = useState('');
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   const getCurrentRate = () => {
     const rate = exchangeRates.find(r => r.from === fromCurrency && r.to === toCurrency);
@@ -108,32 +109,63 @@ export default function ExchangeScreen() {
   const CurrencySelector = ({
     value,
     onSelect,
-    style,
+    id,
   }: {
     value: string;
     onSelect: (currency: 'XRP' | 'KRW' | 'USD') => void;
-    style?: any;
-  }) => (
-    <View style={[styles.currencySelector, style]}>
-      {['XRP', 'KRW', 'USD'].map(currency => (
-        <TouchableOpacity
-          key={currency}
-          style={[
-            styles.currencyOption,
-            value === currency && styles.currencyOptionActive,
-          ]}
-          onPress={() => onSelect(currency as 'XRP' | 'KRW' | 'USD')}>
-          <Text
-            style={[
-              styles.currencyOptionText,
-              value === currency && styles.currencyOptionTextActive,
-            ]}>
-            {currency}
-          </Text>
+    id: string;
+  }) => {
+    const currencies = ['XRP', 'KRW', 'USD'];
+    const isOpen = activeDropdown === id;
+
+    const handleToggle = () => {
+      setActiveDropdown(isOpen ? null : id);
+    };
+
+    const handleSelect = (currency: 'XRP' | 'KRW' | 'USD') => {
+      onSelect(currency);
+      setActiveDropdown(null);
+    };
+
+    return (
+      <View style={styles.currencyDropdownContainer}>
+        <TouchableOpacity 
+          style={styles.currencyPickerButton}
+          onPress={handleToggle}
+        >
+          <Text style={styles.currencyPickerText}>{value}</Text>
+          <View style={[styles.dropdownArrow, isOpen && styles.dropdownArrowOpen]}>
+            <Text style={styles.dropdownArrowText}>▼</Text>
+          </View>
         </TouchableOpacity>
-      ))}
-    </View>
-  );
+        
+        {isOpen && (
+          <View style={styles.currencyDropdown}>
+            {currencies.map((currency) => (
+              <TouchableOpacity
+                key={currency}
+                style={[
+                  styles.currencyDropdownItem,
+                  currency === value && styles.currencyDropdownItemSelected
+                ]}
+                onPress={() => handleSelect(currency as 'XRP' | 'KRW' | 'USD')}
+              >
+                <Text style={[
+                  styles.currencyDropdownText,
+                  currency === value && styles.currencyDropdownTextSelected
+                ]}>
+                  {currency}
+                </Text>
+                {currency === value && (
+                  <Text style={styles.checkMark}>✓</Text>
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+      </View>
+    );
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -144,53 +176,60 @@ export default function ExchangeScreen() {
           <Text style={styles.cardTitle}>환전</Text>
         </View>
         <View style={styles.cardContent}>
-          {/* From 섹션 */}
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>보낼 통화</Text>
-            <View style={styles.inputRow}>
-              <CurrencySelector
-                value={fromCurrency}
-                onSelect={setFromCurrency}
-                style={{ width: 80 }}
-              />
-              <TextInput
-                style={[styles.textInput, { flex: 1 }]}
-                placeholder="0"
-                value={amount}
-                onChangeText={setAmount}
-                keyboardType="numeric"
-              />
+          <View style={styles.exchangeFormContainer}>
+            {/* From 섹션 */}
+            <View style={[styles.inputSection, styles.fromSection]}>
+              <Text style={styles.sectionLabel}>보낼 통화</Text>
+              <View style={styles.inputRowContainer}>
+                <View style={styles.currencySelectContainer}>
+                  <CurrencySelector
+                    value={fromCurrency}
+                    onSelect={setFromCurrency}
+                    id="from"
+                  />
+                </View>
+                <TextInput
+                  style={styles.amountInput}
+                  placeholder="0"
+                  value={amount}
+                  onChangeText={setAmount}
+                  keyboardType="numeric"
+                  placeholderTextColor="#9ca3af"
+                />
+              </View>
             </View>
-          </View>
 
-          {/* 스왑 버튼 */}
-          <View style={styles.swapContainer}>
-            <TouchableOpacity style={styles.swapButton} onPress={handleSwapCurrencies}>
-              <SwapIcon size={20} color="#6b7280" />
-            </TouchableOpacity>
-          </View>
+            {/* 스왑 버튼 */}
+            <View style={styles.swapButtonContainer}>
+              <TouchableOpacity style={styles.swapButton} onPress={handleSwapCurrencies}>
+                <ArrowLeftRightIcon size={16} color="#6b7280" />
+              </TouchableOpacity>
+            </View>
 
-          {/* To 섹션 */}
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>받을 통화</Text>
-            <View style={styles.inputRow}>
-              <CurrencySelector
-                value={toCurrency}
-                onSelect={setToCurrency}
-                style={{ width: 80 }}
-              />
-              <View style={styles.estimatedAmountContainer}>
-                <Text style={styles.estimatedAmount}>{getEstimatedAmount()}</Text>
+            {/* To 섹션 */}
+            <View style={[styles.inputSection, styles.toSection]}>
+              <Text style={styles.sectionLabel}>받을 통화</Text>
+              <View style={styles.inputRowContainer}>
+                <View style={styles.currencySelectContainer}>
+                  <CurrencySelector
+                    value={toCurrency}
+                    onSelect={setToCurrency}
+                    id="to"
+                  />
+                </View>
+                <View style={styles.resultContainer}>
+                  <Text style={styles.resultAmount}>{getEstimatedAmount()}</Text>
+                </View>
               </View>
             </View>
           </View>
 
           {/* 환율 정보 */}
           {getCurrentRate() > 0 && (
-            <View style={styles.rateInfo}>
-              <View style={styles.rateRow}>
-                <Text style={styles.rateLabel}>현재 환율</Text>
-                <Text style={styles.rateValue}>
+            <View style={styles.exchangeRateContainer}>
+              <View style={styles.exchangeRateRow}>
+                <Text style={styles.exchangeRateLabel}>현재 환율</Text>
+                <Text style={styles.exchangeRateValue}>
                   1 {fromCurrency} = {getCurrentRate().toLocaleString()} {toCurrency}
                 </Text>
               </View>
@@ -330,52 +369,120 @@ const styles = StyleSheet.create({
   cardContent: {
     padding: 20,
   },
-  inputGroup: {
-    marginBottom: 20,
+  exchangeFormContainer: {
+    zIndex: 1000,
+    elevation: 1000,
   },
-  label: {
+  inputSection: {
+    marginBottom: 16,
+  },
+  fromSection: {
+    zIndex: 10000,
+    elevation: 10000,
+  },
+  toSection: {
+    zIndex: 1000,
+    elevation: 1000,
+  },
+  sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
     color: '#374151',
     marginBottom: 8,
   },
-  inputRow: {
+  inputRowContainer: {
     flexDirection: 'row',
     gap: 8,
-  },
-  currencySelector: {
-    flexDirection: 'row',
-    gap: 4,
-  },
-  currencyOption: {
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-    minWidth: 40,
     alignItems: 'center',
   },
-  currencyOptionActive: {
-    borderColor: '#2563eb',
-    backgroundColor: '#eff6ff',
+  currencySelectContainer: {
+    width: 80,
+    zIndex: 5000,
+    elevation: 5000,
   },
-  currencyOptionText: {
-    fontSize: 12,
+  currencyDropdownContainer: {
+    position: 'relative',
+    zIndex: 5000,
+    elevation: 5000,
+  },
+  currencyPickerButton: {
+    backgroundColor: '#f9fafb',
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  currencyPickerText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#374151',
+  },
+  dropdownArrow: {
+    marginLeft: 4,
+  },
+  dropdownArrowOpen: {
+    transform: [{ rotate: '180deg' }],
+  },
+  dropdownArrowText: {
+    fontSize: 10,
     color: '#6b7280',
   },
-  currencyOptionTextActive: {
-    color: '#2563eb',
-    fontWeight: '600',
-  },
-  textInput: {
+  currencyDropdown: {
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    right: 0,
+    backgroundColor: '#ffffff',
     borderWidth: 1,
-    borderColor: '#d1d5db',
+    borderColor: '#e5e7eb',
     borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
+    marginTop: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 20,
+    zIndex: 50000,
   },
-  swapContainer: {
+  currencyDropdownItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  currencyDropdownItemSelected: {
+    backgroundColor: '#f3f4f6',
+  },
+  currencyDropdownText: {
+    fontSize: 14,
+    color: '#374151',
+  },
+  currencyDropdownTextSelected: {
+    fontWeight: '600',
+    color: '#2563eb',
+  },
+  checkMark: {
+    fontSize: 14,
+    color: '#2563eb',
+    fontWeight: 'bold',
+  },
+  amountInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    color: '#1f2937',
+    backgroundColor: '#ffffff',
+  },
+  swapButtonContainer: {
     alignItems: 'center',
     marginVertical: 16,
   },
@@ -384,38 +491,49 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#d1d5db',
+    borderColor: '#e5e7eb',
     backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
-  estimatedAmountContainer: {
+  resultContainer: {
     flex: 1,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: '#f9fafb',
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
     borderRadius: 8,
-    padding: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     justifyContent: 'center',
   },
-  estimatedAmount: {
+  resultAmount: {
     fontSize: 16,
     color: '#6b7280',
+    fontWeight: '500',
   },
-  rateInfo: {
+  exchangeRateContainer: {
     backgroundColor: '#f9fafb',
-    padding: 12,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
     borderRadius: 8,
+    padding: 12,
     marginBottom: 20,
   },
-  rateRow: {
+  exchangeRateRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  rateLabel: {
+  exchangeRateLabel: {
     fontSize: 14,
     color: '#6b7280',
   },
-  rateValue: {
+  exchangeRateValue: {
     fontSize: 14,
     fontWeight: '600',
     color: '#1f2937',

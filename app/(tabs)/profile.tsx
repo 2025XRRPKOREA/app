@@ -19,6 +19,8 @@ import {
   ChevronRightIcon,
   EyeIcon
 } from '../../components/icons';
+import { useAuth } from '@/context/AuthContext';
+import { router } from 'expo-router';
 
 interface UserProfile {
   name: string;
@@ -29,12 +31,13 @@ interface UserProfile {
 }
 
 export default function ProfileScreen() {
+  const { user, logout } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<UserProfile>({
-    name: '김사용자',
-    email: 'user@example.com',
+    name: user?.name || '사용자',
+    email: user?.email || 'user@example.com',
     phone: '010-1234-5678',
-    displayName: '김사용자',
+    displayName: user?.name || '사용자',
     walletAddress: 'rN7n7otQDd6FczFgLdSqtcsAUxDkw6fzRH',
   });
   const [editProfile, setEditProfile] = useState<UserProfile>(profile);
@@ -60,7 +63,18 @@ export default function ProfileScreen() {
   const handleLogout = () => {
     Alert.alert('로그아웃', '정말 로그아웃하시겠습니까?', [
       { text: '취소', style: 'cancel' },
-      { text: '로그아웃', style: 'destructive', onPress: () => Alert.alert('로그아웃 완료') },
+      { 
+        text: '로그아웃', 
+        style: 'destructive', 
+        onPress: async () => {
+          try {
+            await logout();
+            router.replace('/login');
+          } catch (error) {
+            Alert.alert('오류', '로그아웃 중 문제가 발생했습니다.');
+          }
+        }
+      },
     ]);
   };
 

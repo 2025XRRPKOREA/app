@@ -6,12 +6,14 @@ import { HapticTab } from '@/components/haptic-tab';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { HomeIcon, ArrowLeftRightIcon, RefreshIcon, UserIcon } from '../../components/icons';
+import AuthGuard from '@/components/AuthGuard';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <Tabs
+    <AuthGuard>
+      <Tabs
       screenOptions={{
         tabBarActiveTintColor: '#2563eb',
         tabBarInactiveTintColor: '#6b7280',
@@ -71,5 +73,6 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    </AuthGuard>
   );
 }
