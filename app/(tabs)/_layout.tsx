@@ -25,13 +25,20 @@ export default function TabLayout() {
             shadowOffset: { width: 0, height: -3 },
             shadowOpacity: 0.1,
             shadowRadius: 3,
-            paddingTop: 12,
-            paddingBottom: 12,
-            height: 70,
+            paddingTop: 8,
+            paddingBottom: 8,
+            height: 80,
           },
           tabBarIconStyle: {
-            marginTop: 4,
+            marginTop: 6,
           },
+          tabBarLabelStyle: {
+            fontSize: 10,
+            fontWeight: '500',
+            marginTop: 2,
+            marginBottom: 2,
+          },
+          tabBarLabelPosition: 'below-icon',
           headerShown: true,
           headerStyle: {
             backgroundColor: '#ffffff',
@@ -62,28 +69,28 @@ export default function TabLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: '',
+            title: 'Home',
             tabBarIcon: ({ color }) => <HomeIcon size={28} color={color} />,
           }}
         />
         <Tabs.Screen
           name="transaction"
           options={{
-            title: '',
+            title: 'Transfer',
             tabBarIcon: ({ color }) => <ArrowLeftRightIcon size={28} color={color} />,
           }}
         />
         <Tabs.Screen
           name="exchange"
           options={{
-            title: '',
+            title: 'Swap',
             tabBarIcon: ({ color }) => <RefreshIcon size={28} color={color} />,
           }}
         />
         <Tabs.Screen
           name="profile"
           options={{
-            title: '',
+            title: 'Profile',
             tabBarIcon: ({ color }) => <UserIcon size={28} color={color} />,
           }}
         />
