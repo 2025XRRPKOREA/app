@@ -7,17 +7,17 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  RefreshControl,
 } from 'react-native';
 import { useInAppNotification } from '../../components/InAppNotification';
 import { QRGenerator } from '../../components/QRGenerator';
 import { QRScanner } from '../../components/QRScanner';
-import { ArrowDownLeftIcon, ArrowUpRightIcon, CameraIcon, QRCodeIcon, QRGenerateIcon, ScanQRIcon } from '../../components/icons';
+import { CameraIcon, QRCodeIcon, QRGenerateIcon, ScanQRIcon } from '../../components/icons';
 import { useNotification } from '../../context/NotificationContext';
-import { useTransactionHistory } from '../../hooks/useTransactionHistory';
+import { TransactionList } from '../../components/TransactionList';
 import * as Haptics from 'expo-haptics';
+import apiClient from '../../services/apiClient';
 
-type TransactionMode = 'main' | 'receive' | 'qr-display' | 'qr-scan' | 'confirm';
+type TransactionMode = 'main' | 'receive' | 'qr-display' | 'qr-scan';
 
 interface TransactionData {
   type: 'send' | 'receive';
@@ -40,34 +40,43 @@ export default function TransactionScreen() {
   const { sendTransactionNotification } = useNotification();
   const { showTransactionSuccess } = useInAppNotification();
 
-  // 거래내역 훅 추가
-  const { transactions, loading: historyLoading, error: historyError, refreshTransactions } = useTransactionHistory(5);
 
   const handleReceive = async () => {
     if (!transactionData.amount || loading) return;
 
     setLoading(true);
     try {
-      // API로 오퍼 생성 (실제 API 호출 시)
-      // const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000';
-      // const offerResponse = await fetch(`${API_BASE_URL}/api/transaction/offer/create`, {
-      
-      // 현재는 데모용 - 실제 API 연결 시 위 코드 사용
-      await new Promise(resolve => setTimeout(resolve, 1000)); // 로딩 시뮬레이션
-      
-      // 데모용 오퍼 ID 생성
-      const demoOfferId = `offer_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      
-      // QR 코드에 오퍼 ID 포함
-      const qrData = JSON.stringify({
-        type: 'payment_request',
-        offerId: demoOfferId,
-        currency: transactionData.currency,
-        amount: transactionData.amount,
-        timestamp: Date.now(),
+      // 실제 offer/create API 호출
+      const API_BASE_URL = 'http://122.40.46.59';
+      const offerResponse = await fetch(`${API_BASE_URL}/api/transaction/offer/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiClient.getCurrentToken()}`,
+        },
+        body: JSON.stringify({
+          iou: transactionData.currency, // USD 또는 KRW
+          price: parseInt(transactionData.amount)
+        })
       });
 
-      setTransactionData(prev => ({ ...prev, qrData, offerId: demoOfferId }));
+      if (!offerResponse.ok) {
+        throw new Error(`API Error: ${offerResponse.status}`);
+      }
+
+      const offerData = await offerResponse.json();
+      
+      // 백엔드에서 받은 qrCode UUID 사용
+      const qrCodeUUID = offerData.qrCode;
+      
+      // QR 코드에는 UUID만 포함 (백엔드가 하라는 대로)
+      const qrData = qrCodeUUID;
+
+      setTransactionData(prev => ({ 
+        ...prev, 
+        qrData, 
+        offerId: qrCodeUUID // UUID를 offerId로 사용
+      }));
       setMode('qr-display');
     } catch (error) {
       Alert.alert('오류', '결제 요청 생성에 실패했습니다.');
@@ -134,45 +143,50 @@ export default function TransactionScreen() {
     setMode('qr-scan');
   };
 
-  const handleQRScanned = (data: string) => {
+  const handleQRScanned = async (data: string) => {
+    console.log('transaction.tsx에서 QR 스캔 받음:', data);
     try {
-      const parsed = JSON.parse(data);
-      setTransactionData(prev => ({
-        ...prev,
-        type: 'send',
-        currency: parsed.currency,
-        amount: parsed.amount,
-        qrData: data,
-      }));
-      setMode('confirm');
-    } catch (error) {
-      Alert.alert('오류', '유효하지 않은 QR 코드입니다.');
-    }
-  };
+      // QR 코드는 UUID 문자열이므로 그대로 사용
+      const qrUUID = data.trim();
+      console.log('처리할 UUID:', qrUUID);
+      
+      setLoading(true);
+      
+      // QR 스캔 즉시 서버로 offer/finish 요청
+      const API_BASE_URL = 'http://122.40.46.59';
+      const finishResponse = await fetch(`${API_BASE_URL}/api/transaction/offer/finish`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiClient.getCurrentToken()}`,
+        },
+        body: JSON.stringify({
+          uuid: qrUUID // QR에서 스캔한 UUID 바로 전송
+        })
+      });
 
-  const handleConfirmTransaction = async () => {
-    setLoading(true);
-    try {
-      // 실제 거래 처리 (API 호출 등)
-      await new Promise(resolve => setTimeout(resolve, 2000)); // 모의 처리
-
-      // 거래 완료 후 알림 발송
-      if (transactionData.type === 'send') {
-        // 송금 완료 알림
-        await sendTransactionNotification('sent', transactionData.amount, transactionData.currency);
-        showTransactionSuccess(transactionData.amount, transactionData.currency, 'sent');
+      if (!finishResponse.ok) {
+        throw new Error(`API Error: ${finishResponse.status}`);
       }
 
-      Alert.alert('완료', `${transactionData.amount} ${transactionData.currency} 송금이 완료되었습니다!`);
+      const finishData = await finishResponse.json();
+
+      // 거래 완료 후 알림 발송
+      await sendTransactionNotification('sent', '송금완료', 'QR');
+      showTransactionSuccess('송금완료', 'QR', 'sent');
+
+      Alert.alert('완료', 'QR 송금이 성공적으로 완료되었습니다!');
       setMode('main');
       setTransactionData({ type: 'receive', currency: 'KRW', amount: '' });
+      
     } catch (error) {
-      Alert.alert('오류', '거래 처리 중 문제가 발생했습니다.');
-      console.error('Transaction error:', error);
+      Alert.alert('오류', 'QR 송금 처리 중 문제가 발생했습니다.');
+      console.error('QR Transaction error:', error);
     } finally {
       setLoading(false);
     }
   };
+
 
   if (mode === 'qr-display') {
     return (
@@ -256,81 +270,12 @@ export default function TransactionScreen() {
     );
   }
 
-  if (mode === 'confirm') {
-    return (
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.card}>
-          <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>거래 확인</Text>
-          </View>
-          <View style={styles.cardContent}>
-            <View style={styles.confirmContainer}>
-              <Text style={styles.confirmAmount}>
-                -{transactionData.amount} {transactionData.currency}
-              </Text>
-              <Text style={styles.confirmLabel}>보낼 금액</Text>
-            </View>
 
-            <View style={styles.detailsContainer}>
-              <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>거래 유형:</Text>
-                <Text style={styles.detailValue}>송금</Text>
-              </View>
-              <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>통화:</Text>
-                <Text style={styles.detailValue}>{transactionData.currency}</Text>
-              </View>
-              <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>수수료:</Text>
-                <Text style={styles.detailValue}>0.1 XRP</Text>
-              </View>
-            </View>
-
-            <View style={styles.buttonRow}>
-              <TouchableOpacity
-                style={[styles.outlineButton, { flex: 1 }]}
-                onPress={() => setMode('main')}>
-                <Text style={styles.outlineButtonText}>취소</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.primaryButton, { flex: 1 }, loading && styles.disabledButton]}
-                onPress={() => {
-                  if (loading) return;
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-                  handleConfirmTransaction();
-                }}
-                disabled={loading}>
-                <Text style={styles.primaryButtonText}>
-                  {loading ? '처리 중...' : '확인'}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-    );
-  }
-
-  // 날짜 포맷팅 함수
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    return `${month}월 ${day}일 ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-  };
 
   return (
     <ScrollView
       style={styles.container}
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl
-          refreshing={historyLoading}
-          onRefresh={refreshTransactions}
-        />
-      }>
+      showsVerticalScrollIndicator={false}>
       {/* 메인 거래 옵션 */}
       <View style={styles.optionsGrid}>
         <TouchableOpacity
@@ -447,75 +392,7 @@ export default function TransactionScreen() {
 
 
       {/* 최근 거래 내역 */}
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.cardTitle}>최근 거래</Text>
-        </View>
-        <View style={styles.cardContent}>
-          {historyError ? (
-            <View style={styles.errorContainer}>
-              <Text style={styles.errorText}>거래내역을 불러올 수 없습니다</Text>
-              <TouchableOpacity
-                style={styles.retryButton}
-                onPress={refreshTransactions}>
-                <Text style={styles.retryButtonText}>다시 시도</Text>
-              </TouchableOpacity>
-            </View>
-          ) : transactions.length === 0 && !historyLoading ? (
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>거래내역이 없습니다</Text>
-            </View>
-          ) : (
-            transactions.map(transaction => {
-              const isReceived = transaction.type === 'received';
-              const IconComponent = isReceived ? ArrowDownLeftIcon : ArrowUpRightIcon;
-              const iconColor = isReceived ? '#16a34a' : '#dc2626';
-              const iconBgColor = isReceived ? '#f0fdf4' : '#fef2f2';
-              const amountPrefix = isReceived ? '+' : '-';
-              const amountColor = isReceived ? '#16a34a' : '#dc2626';
-
-              return (
-                <View key={transaction.id} style={styles.recentTransaction}>
-                  <View style={styles.transactionLeft}>
-                    <View style={[styles.receiveIconContainer, { backgroundColor: iconBgColor }]}>
-                      <IconComponent size={16} color={iconColor} />
-                    </View>
-                    <View>
-                      <Text style={styles.transactionType}>
-                        {isReceived ? '받음' : '보냄'}
-                      </Text>
-                      <Text style={styles.transactionTime}>
-                        {formatDate(transaction.timestamp)}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.transactionRight}>
-                    <Text style={[styles.receiveAmount, { color: amountColor }]}>
-                      {amountPrefix}{transaction.amount} {transaction.currency}
-                    </Text>
-                    <View style={[
-                      styles.statusBadge,
-                      transaction.status === 'completed' && styles.completedBadge,
-                      transaction.status === 'pending' && styles.pendingBadge,
-                      transaction.status === 'failed' && styles.failedBadge,
-                    ]}>
-                      <Text style={[
-                        styles.statusText,
-                        transaction.status === 'completed' && styles.completedText,
-                        transaction.status === 'pending' && styles.pendingText,
-                        transaction.status === 'failed' && styles.failedText,
-                      ]}>
-                        {transaction.status === 'completed' ? '완료' :
-                         transaction.status === 'pending' ? '진행중' : '실패'}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              );
-            })
-          )}
-        </View>
-      </View>
+      <TransactionList limit={10} showCard={true} />
     </ScrollView>
   );
 }
@@ -737,106 +614,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#6b7280',
     textAlign: 'center',
-  },
-  recentTransaction: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 12,
-    backgroundColor: '#f9fafb',
-    borderRadius: 12,
-    marginBottom: 12,
-  },
-  transactionLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  receiveIconContainer: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#f0fdf4',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  transactionType: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1f2937',
-    marginBottom: 2,
-  },
-  transactionTime: {
-    fontSize: 12,
-    color: '#6b7280',
-  },
-  transactionRight: {
-    alignItems: 'flex-end',
-  },
-  receiveAmount: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#16a34a',
-    marginBottom: 4,
-  },
-  statusBadge: {
-    backgroundColor: '#e5e7eb',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 12,
-  },
-  statusText: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: '#374151',
-  },
-  errorContainer: {
-    alignItems: 'center',
-    padding: 20,
-  },
-  errorText: {
-    fontSize: 14,
-    color: '#dc2626',
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  retryButton: {
-    backgroundColor: '#2563eb',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  retryButtonText: {
-    color: '#ffffff',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  emptyContainer: {
-    alignItems: 'center',
-    padding: 20,
-  },
-  emptyText: {
-    fontSize: 14,
-    color: '#6b7280',
-    textAlign: 'center',
-  },
-  completedBadge: {
-    backgroundColor: '#d1fae5',
-  },
-  pendingBadge: {
-    backgroundColor: '#fef3c7',
-  },
-  failedBadge: {
-    backgroundColor: '#fecaca',
-  },
-  completedText: {
-    color: '#065f46',
-  },
-  pendingText: {
-    color: '#92400e',
-  },
-  failedText: {
-    color: '#991b1b',
   },
 });

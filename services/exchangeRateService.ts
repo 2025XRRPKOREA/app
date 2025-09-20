@@ -45,9 +45,23 @@ class ExchangeRateService {
       }
 
       const data = await response.json();
+      
+      // 실시간 환율 계산: xrpAmount/krwAmount
+      let rate: number;
+      let convertedAmount: number;
+      
+      if (data.xrpAmount && data.krwAmount && data.krwAmount !== 0) {
+        rate = data.xrpAmount / data.krwAmount;
+        convertedAmount = krwAmount * rate;
+      } else {
+        // API 응답에 필요한 필드가 없거나 0인 경우 fallback 사용
+        rate = data.rate || this.getCurrentRate('KRW', 'XRP');
+        convertedAmount = data.convertedAmount || krwAmount * rate;
+      }
+      
       return {
-        rate: data.rate || this.getCurrentRate('KRW', 'XRP'),
-        convertedAmount: data.convertedAmount || krwAmount * this.getCurrentRate('KRW', 'XRP'),
+        rate,
+        convertedAmount,
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
@@ -76,9 +90,23 @@ class ExchangeRateService {
       }
 
       const data = await response.json();
+      
+      // 실시간 환율 계산: krwAmount/xrpAmount
+      let rate: number;
+      let convertedAmount: number;
+      
+      if (data.krwAmount && data.xrpAmount && data.xrpAmount !== 0) {
+        rate = data.krwAmount / data.xrpAmount;
+        convertedAmount = xrpAmount * rate;
+      } else {
+        // API 응답에 필요한 필드가 없거나 0인 경우 fallback 사용
+        rate = data.rate || this.getCurrentRate('XRP', 'KRW');
+        convertedAmount = data.convertedAmount || xrpAmount * rate;
+      }
+      
       return {
-        rate: data.rate || this.getCurrentRate('XRP', 'KRW'),
-        convertedAmount: data.convertedAmount || xrpAmount * this.getCurrentRate('XRP', 'KRW'),
+        rate,
+        convertedAmount,
         timestamp: new Date().toISOString(),
       };
     } catch (error) {

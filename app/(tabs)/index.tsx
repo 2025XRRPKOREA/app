@@ -1,14 +1,13 @@
 import React from 'react';
 import { useWalletBalance } from '../../hooks/useWalletBalance';
-import { useTransactionHistory } from '../../hooks/useTransactionHistory';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { WalletIcon, ArrowUpRightIcon, ArrowDownLeftIcon } from '../../components/icons';
+import { WalletIcon } from '../../components/icons';
+import { TransactionList } from '../../components/TransactionList';
 
 
 export default function HomeScreen() {
   const { balance, loading } = useWalletBalance();
-  const { transactions } = useTransactionHistory(3);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -52,80 +51,7 @@ export default function HomeScreen() {
 
       {/* 최근 거래내역 */}
       <View style={styles.transactionCard}>
-        <Text style={styles.transactionTitle}>최근 거래내역</Text>
-        <View style={styles.transactionList}>
-          {transactions.length > 0 ? (
-            transactions.map(transaction => (
-              <View key={transaction.id} style={styles.transactionItem}>
-                <View style={styles.transactionLeft}>
-                  <View
-                    style={[
-                      styles.iconContainer,
-                      transaction.type === 'sent'
-                        ? styles.sendIconContainer
-                        : styles.receiveIconContainer,
-                    ]}>
-                    {transaction.type === 'sent' ? (
-                      <ArrowUpRightIcon size={16} color="#dc2626" />
-                    ) : (
-                      <ArrowDownLeftIcon size={16} color="#16a34a" />
-                    )}
-                  </View>
-                  <View>
-                    <Text style={styles.transactionType}>
-                      {transaction.type === 'sent' ? '보냄' : '받음'}
-                    </Text>
-                    <Text style={styles.transactionTime}>
-                      {new Date(transaction.timestamp).toLocaleString('ko-KR', {
-                        month: 'numeric',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.transactionRight}>
-                  <Text
-                    style={[
-                      styles.transactionAmount,
-                      transaction.type === 'sent'
-                        ? styles.sendAmount
-                        : styles.receiveAmount,
-                    ]}>
-                    {transaction.type === 'sent' ? '-' : '+'}
-                    ₩{transaction.price.toLocaleString()}
-                  </Text>
-                  <Text style={styles.transactionCurrency}>
-                    {transaction.currency}
-                  </Text>
-                  <View
-                    style={[
-                      styles.statusBadge,
-                      transaction.status === 'completed'
-                        ? styles.completedBadge
-                        : styles.pendingBadge,
-                    ]}>
-                    <Text
-                      style={[
-                        styles.statusText,
-                        transaction.status === 'completed'
-                          ? styles.completedText
-                          : styles.pendingText,
-                      ]}>
-                      {transaction.status === 'completed' ? '완료' :
-                       transaction.status === 'failed' ? '실패' : '대기중'}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            ))
-          ) : (
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyText}>거래내역이 없습니다</Text>
-            </View>
-          )}
-        </View>
+        <TransactionList limit={3} showCard={false} />
       </View>
     </ScrollView>
   );

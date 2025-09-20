@@ -47,6 +47,27 @@ const mockHistory: ExchangeHistory[] = [
   },
 ];
 
+// 환율 포맷팅 함수 - 소수점 자릿수를 적절히 표시
+const formatExchangeRate = (rate: number): string => {
+  if (rate === 0) return '0';
+  
+  // XRP 관련 환율 (매우 작은 값)은 더 많은 소수점 자릿수 표시
+  if (rate < 0.001) {
+    return rate.toFixed(8); // 8자리 소수점
+  }
+  // KRW 관련 환율 (큰 값)은 소수점 2자리
+  else if (rate > 100) {
+    return rate.toLocaleString(undefined, { 
+      minimumFractionDigits: 2, 
+      maximumFractionDigits: 2 
+    });
+  }
+  // 중간 값은 4자리 소수점
+  else {
+    return rate.toFixed(4);
+  }
+};
+
 export default function ExchangeScreen() {
   const [fromCurrency, setFromCurrency] = useState<'XRP' | 'KRW'>('XRP');
   const [amount, setAmount] = useState('');
@@ -112,7 +133,7 @@ export default function ExchangeScreen() {
 
       Alert.alert(
         '환전 완료',
-        `${amount} ${fromCurrency}를 ${result.convertedAmount.toLocaleString()} ${toCurrency}로 환전 요청이 완료되었습니다.\n\n환율: ${result.rate.toLocaleString()}`
+        `${amount} ${fromCurrency}를 ${result.convertedAmount.toLocaleString()} ${toCurrency}로 환전 요청이 완료되었습니다.\n\n환율: ${formatExchangeRate(result.rate)}`
       );
       setAmount('');
     } catch (error) {
@@ -250,7 +271,7 @@ export default function ExchangeScreen() {
               <View style={styles.exchangeRateRow}>
                 <Text style={styles.exchangeRateLabel}>현재 환율</Text>
                 <Text style={styles.exchangeRateValue}>
-                  1 {fromCurrency} = {getCurrentRate().toLocaleString()} {toCurrency}
+                  1 {fromCurrency} = {formatExchangeRate(getCurrentRate())} {toCurrency}
                 </Text>
               </View>
             </View>
@@ -295,7 +316,7 @@ export default function ExchangeScreen() {
                 <Text style={styles.ratePair}>
                   {rate.from} → {rate.to}
                 </Text>
-                <Text style={styles.rateAmount}>{rate.rate.toLocaleString()}</Text>
+                <Text style={styles.rateAmount}>{formatExchangeRate(rate.rate)}</Text>
               </View>
               <View
                 style={[

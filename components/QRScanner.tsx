@@ -21,8 +21,27 @@ export function QRScanner({ onScan }: QRScannerProps) {
   }, []);
 
   const handleBarCodeScanned = ({ type, data }: { type: string; data: string }) => {
+    if (scanned) return; // 중복 스캔 방지
+    
+    console.log('QR 스캔됨:', { type, data });
     setScanned(true);
-    onScan(data);
+    
+    // QR 코드 데이터가 UUID 형태인지 확인
+    if (data && data.trim().length > 0) {
+      console.log('QR 데이터 전송:', data.trim());
+      onScan(data.trim());
+      
+      // 3초 후 다시 스캔 가능하도록
+      setTimeout(() => {
+        setScanned(false);
+      }, 3000);
+    } else {
+      console.log('빈 QR 데이터');
+      // 1초 후 다시 스캔 가능하도록
+      setTimeout(() => {
+        setScanned(false);
+      }, 1000);
+    }
   };
 
   if (hasPermission === null) {
@@ -64,9 +83,9 @@ export function QRScanner({ onScan }: QRScannerProps) {
       <View style={styles.cameraContainer}>
         <CameraView
           style={styles.camera}
-          onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+          onBarcodeScanned={handleBarCodeScanned}
           barcodeScannerSettings={{
-            barcodeTypes: ['qr', 'pdf417'],
+            barcodeTypes: ['qr'],
           }}
         />
 
@@ -82,18 +101,25 @@ export function QRScanner({ onScan }: QRScannerProps) {
       </View>
 
       <View style={styles.instructions}>
-        <Text style={styles.instructionText}>
-          QR 코드를 스캔 영역에 맞춰주세요
-        </Text>
-
-        {scanned && (
-          <TouchableOpacity
-            style={styles.scanAgainButton}
-            onPress={() => setScanned(false)}
-          >
-            <Text style={styles.scanAgainButtonText}>다시 스캔하기</Text>
-          </TouchableOpacity>
+        {scanned ? (
+          <View style={styles.scannedState}>
+            <Text style={styles.scannedText}>✅ QR 코드 인식됨!</Text>
+            <Text style={styles.scannedSubtext}>송금을 처리하는 중...</Text>
+          </View>
+        ) : (
+          <Text style={styles.instructionText}>
+            QR 코드를 스캔 영역에 맞춰주세요
+          </Text>
         )}
+
+        <TouchableOpacity
+          style={styles.scanAgainButton}
+          onPress={() => setScanned(false)}
+        >
+          <Text style={styles.scanAgainButtonText}>
+            {scanned ? '처리 중...' : '스캔 대기 중'}
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -199,6 +225,21 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   instructionText: {
+    fontSize: 14,
+    color: '#6b7280',
+    textAlign: 'center',
+  },
+  scannedState: {
+    alignItems: 'center',
+    gap: 4,
+  },
+  scannedText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#16a34a',
+    textAlign: 'center',
+  },
+  scannedSubtext: {
     fontSize: 14,
     color: '#6b7280',
     textAlign: 'center',
