@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000",
+      "url": "http://122.40.46.59",
       "description": "Development server"
     }
   ],
