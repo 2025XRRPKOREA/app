@@ -1,4 +1,5 @@
 import { useAuth } from '@/context/AuthContext';
+import { useNotification } from '@/context/NotificationContext';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -32,6 +33,7 @@ interface UserProfile {
 
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
+  const { notificationSettings, updateNotificationSettings } = useNotification();
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<UserProfile>({
     name: user?.name || '사용자',
@@ -42,12 +44,6 @@ export default function ProfileScreen() {
   const [showToast, setShowToast] = useState(false);
   const [toastAnimation] = useState(new Animated.Value(0));
 
-  const [notifications, setNotifications] = useState({
-    transaction: true,
-    exchange: true,
-    security: true,
-    marketing: false,
-  });
 
   const showToastMessage = () => {
     setShowToast(true);
@@ -245,9 +241,9 @@ export default function ProfileScreen() {
               <Text style={styles.notificationSubtitle}>송금/수신 시 알림</Text>
             </View>
             <SwitchComponent
-              value={notifications.transaction}
+              value={notificationSettings.transaction}
               onValueChange={checked =>
-                setNotifications(prev => ({ ...prev, transaction: checked }))
+                updateNotificationSettings({ transaction: checked })
               }
             />
           </View>
@@ -258,9 +254,9 @@ export default function ProfileScreen() {
               <Text style={styles.notificationSubtitle}>환전 완료 시 알림</Text>
             </View>
             <SwitchComponent
-              value={notifications.exchange}
+              value={notificationSettings.exchange}
               onValueChange={checked =>
-                setNotifications(prev => ({ ...prev, exchange: checked }))
+                updateNotificationSettings({ exchange: checked })
               }
             />
           </View>
@@ -271,9 +267,9 @@ export default function ProfileScreen() {
               <Text style={styles.notificationSubtitle}>로그인 및 보안 관련 알림</Text>
             </View>
             <SwitchComponent
-              value={notifications.security}
+              value={notificationSettings.security}
               onValueChange={checked =>
-                setNotifications(prev => ({ ...prev, security: checked }))
+                updateNotificationSettings({ security: checked })
               }
             />
           </View>
@@ -284,9 +280,9 @@ export default function ProfileScreen() {
               <Text style={styles.notificationSubtitle}>이벤트 및 프로모션 알림</Text>
             </View>
             <SwitchComponent
-              value={notifications.marketing}
+              value={notificationSettings.marketing}
               onValueChange={checked =>
-                setNotifications(prev => ({ ...prev, marketing: checked }))
+                updateNotificationSettings({ marketing: checked })
               }
             />
           </View>

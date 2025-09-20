@@ -11,6 +11,8 @@ import {
 import { QRGenerator } from '../../components/QRGenerator';
 import { QRScanner } from '../../components/QRScanner';
 import { ArrowUpRightIcon, ArrowDownLeftIcon, QRCodeIcon, CameraIcon } from '../../components/icons';
+import { useNotification } from '../../context/NotificationContext';
+import { useInAppNotification } from '../../components/InAppNotification';
 
 type TransactionMode = 'main' | 'send' | 'receive' | 'qr-display' | 'qr-scan' | 'confirm';
 
@@ -30,6 +32,10 @@ export default function TransactionScreen() {
     currency: 'KRW',
     amount: '',
   });
+
+  // 알림 훅 추가
+  const { sendTransactionNotification, sendQRPaymentNotification } = useNotification();
+  const { showTransactionSuccess, showQRPaymentSuccess } = useInAppNotification();
 
   const handleReceive = async () => {
     if (!transactionData.amount || loading) return;
@@ -138,10 +144,28 @@ export default function TransactionScreen() {
     }
   };
 
-  const handleConfirmTransaction = () => {
-    Alert.alert('완료', '거래가 완료되었습니다!');
-    setMode('main');
-    setTransactionData({ type: 'receive', currency: 'KRW', amount: '' });
+  const handleConfirmTransaction = async () => {
+    setLoading(true);
+    try {
+      // 실제 거래 처리 (API 호출 등)
+      await new Promise(resolve => setTimeout(resolve, 2000)); // 모의 처리
+
+      // 거래 완료 후 알림 발송
+      if (transactionData.type === 'send') {
+        // 송금 완료 알림
+        await sendTransactionNotification('sent', transactionData.amount, transactionData.currency);
+        showTransactionSuccess(transactionData.amount, transactionData.currency, 'sent');
+      }
+
+      Alert.alert('완료', `${transactionData.amount} ${transactionData.currency} 송금이 완료되었습니다!`);
+      setMode('main');
+      setTransactionData({ type: 'receive', currency: 'KRW', amount: '' });
+    } catch (error) {
+      Alert.alert('오류', '거래 처리 중 문제가 발생했습니다.');
+      console.error('Transaction error:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (mode === 'qr-display') {
@@ -169,14 +193,27 @@ export default function TransactionScreen() {
                 </Text>
               )}
             </View>
-            <TouchableOpacity
-              style={[styles.primaryButton, loading && styles.disabledButton]}
-              onPress={handleCancelOffer}
-              disabled={loading}>
-              <Text style={styles.primaryButtonText}>
-                {loading ? '취소 중...' : '닫기'}
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.buttonRow}>
+              <TouchableOpacity
+                style={[styles.outlineButton, { flex: 1 }, loading && styles.disabledButton]}
+                onPress={handleCancelOffer}
+                disabled={loading}>
+                <Text style={styles.outlineButtonText}>
+                  {loading ? '취소 중...' : '닫기'}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.primaryButton, { flex: 1 }]}
+                onPress={async () => {
+                  // 테스트용: 결제 완료 시뮬레이션
+                  await sendTransactionNotification('received', transactionData.amount, transactionData.currency);
+                  showTransactionSuccess(transactionData.amount, transactionData.currency, 'received');
+                  Alert.alert('테스트', '결제 받기 완료 알림이 전송되었습니다!');
+                }}>
+                <Text style={styles.primaryButtonText}>테스트 결제</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -241,9 +278,12 @@ export default function TransactionScreen() {
                 <Text style={styles.outlineButtonText}>취소</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.primaryButton, { flex: 1 }]}
-                onPress={handleConfirmTransaction}>
-                <Text style={styles.primaryButtonText}>확인</Text>
+                style={[styles.primaryButton, { flex: 1 }, loading && styles.disabledButton]}
+                onPress={handleConfirmTransaction}
+                disabled={loading}>
+                <Text style={styles.primaryButtonText}>
+                  {loading ? '처리 중...' : '확인'}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

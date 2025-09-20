@@ -4,11 +4,13 @@ import { Text, View } from 'react-native';
 
 import AuthGuard from '@/components/AuthGuard';
 import { HapticTab } from '@/components/haptic-tab';
+import { InAppNotification, useInAppNotification } from '@/components/InAppNotification';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { ArrowLeftRightIcon, HomeIcon, RefreshIcon, UserIcon } from '../../components/icons';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { notification, hideNotification } = useInAppNotification();
 
   return (
     <AuthGuard>
@@ -83,6 +85,10 @@ export default function TabLayout() {
           }}
         />
       </Tabs>
+      <InAppNotification
+        notification={notification}
+        onDismiss={hideNotification}
+      />
     </AuthGuard>
   );
 }
