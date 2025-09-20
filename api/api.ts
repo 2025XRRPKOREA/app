@@ -26,6 +26,107 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface ApiAdminDomainBlacklistAddPostRequest
+ */
+export interface ApiAdminDomainBlacklistAddPostRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminDomainBlacklistAddPostRequest
+     */
+    'userAddress': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminDomainBlacklistAddPostRequest
+     */
+    'reason'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminDomainCheckPermissionPostRequest
+ */
+export interface ApiAdminDomainCheckPermissionPostRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminDomainCheckPermissionPostRequest
+     */
+    'userAddress': string;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminDomainKycBatchUpdatePostRequest
+ */
+export interface ApiAdminDomainKycBatchUpdatePostRequest {
+    /**
+     * 
+     * @type {Array<ApiAdminDomainKycBatchUpdatePostRequestUpdatesInner>}
+     * @memberof ApiAdminDomainKycBatchUpdatePostRequest
+     */
+    'updates'?: Array<ApiAdminDomainKycBatchUpdatePostRequestUpdatesInner>;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminDomainKycBatchUpdatePostRequestUpdatesInner
+ */
+export interface ApiAdminDomainKycBatchUpdatePostRequestUpdatesInner {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminDomainKycBatchUpdatePostRequestUpdatesInner
+     */
+    'userAddress'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminDomainKycBatchUpdatePostRequestUpdatesInner
+     */
+    'status'?: ApiAdminDomainKycBatchUpdatePostRequestUpdatesInnerStatusEnum;
+}
+
+export const ApiAdminDomainKycBatchUpdatePostRequestUpdatesInnerStatusEnum = {
+    Pending: 'pending',
+    Verified: 'verified',
+    Rejected: 'rejected'
+} as const;
+
+export type ApiAdminDomainKycBatchUpdatePostRequestUpdatesInnerStatusEnum = typeof ApiAdminDomainKycBatchUpdatePostRequestUpdatesInnerStatusEnum[keyof typeof ApiAdminDomainKycBatchUpdatePostRequestUpdatesInnerStatusEnum];
+
+/**
+ * 
+ * @export
+ * @interface ApiAdminDomainKycUpdatePostRequest
+ */
+export interface ApiAdminDomainKycUpdatePostRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminDomainKycUpdatePostRequest
+     */
+    'userAddress': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminDomainKycUpdatePostRequest
+     */
+    'status': ApiAdminDomainKycUpdatePostRequestStatusEnum;
+}
+
+export const ApiAdminDomainKycUpdatePostRequestStatusEnum = {
+    Pending: 'pending',
+    Verified: 'verified',
+    Rejected: 'rejected'
+} as const;
+
+export type ApiAdminDomainKycUpdatePostRequestStatusEnum = typeof ApiAdminDomainKycUpdatePostRequestStatusEnum[keyof typeof ApiAdminDomainKycUpdatePostRequestStatusEnum];
+
+/**
+ * 
+ * @export
  * @interface ApiAdminDomainSettingsPutRequest
  */
 export interface ApiAdminDomainSettingsPutRequest {
@@ -50,6 +151,275 @@ export const ApiAdminDomainSettingsPutRequestDomainTypeEnum = {
 } as const;
 
 export type ApiAdminDomainSettingsPutRequestDomainTypeEnum = typeof ApiAdminDomainSettingsPutRequestDomainTypeEnum[keyof typeof ApiAdminDomainSettingsPutRequestDomainTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface ApiAdminDomainWhitelistAddPostRequest
+ */
+export interface ApiAdminDomainWhitelistAddPostRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminDomainWhitelistAddPostRequest
+     */
+    'userAddress': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminDomainWhitelistAddPostRequest
+     */
+    'email'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminDomainWhitelistBatchAddPostRequest
+ */
+export interface ApiAdminDomainWhitelistBatchAddPostRequest {
+    /**
+     * 
+     * @type {Array<ApiAdminDomainWhitelistBatchAddPostRequestUsersInner>}
+     * @memberof ApiAdminDomainWhitelistBatchAddPostRequest
+     */
+    'users'?: Array<ApiAdminDomainWhitelistBatchAddPostRequestUsersInner>;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminDomainWhitelistBatchAddPostRequestUsersInner
+ */
+export interface ApiAdminDomainWhitelistBatchAddPostRequestUsersInner {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminDomainWhitelistBatchAddPostRequestUsersInner
+     */
+    'userAddress'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminDomainWhitelistBatchAddPostRequestUsersInner
+     */
+    'email'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminExchangeRateBatchUpdatePostRequest
+ */
+export interface ApiAdminExchangeRateBatchUpdatePostRequest {
+    /**
+     * 
+     * @type {Array<ExchangeRate>}
+     * @memberof ApiAdminExchangeRateBatchUpdatePostRequest
+     */
+    'rates'?: Array<ExchangeRate>;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminExchangeRateConvertPostRequest
+ */
+export interface ApiAdminExchangeRateConvertPostRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiAdminExchangeRateConvertPostRequest
+     */
+    'amount'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminExchangeRateConvertPostRequest
+     */
+    'fromCurrency'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminExchangeRateConvertPostRequest
+     */
+    'toCurrency'?: string;
+    /**
+     * (선택) 특정 환율 ID로 계산, 없으면 현재 활성 환율 사용
+     * @type {string}
+     * @memberof ApiAdminExchangeRateConvertPostRequest
+     */
+    'rateId'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminIouBatchIssuePostRequest
+ */
+export interface ApiAdminIouBatchIssuePostRequest {
+    /**
+     * 
+     * @type {Array<ApiAdminIouBatchIssuePostRequestTransactionsInner>}
+     * @memberof ApiAdminIouBatchIssuePostRequest
+     */
+    'transactions'?: Array<ApiAdminIouBatchIssuePostRequestTransactionsInner>;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminIouBatchIssuePostRequestTransactionsInner
+ */
+export interface ApiAdminIouBatchIssuePostRequestTransactionsInner {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminIouBatchIssuePostRequestTransactionsInner
+     */
+    'userAddress'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiAdminIouBatchIssuePostRequestTransactionsInner
+     */
+    'amount'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminIouBatchProcessSwapPostRequest
+ */
+export interface ApiAdminIouBatchProcessSwapPostRequest {
+    /**
+     * 
+     * @type {Array<ApiAdminIouBatchProcessSwapPostRequestSwapsInner>}
+     * @memberof ApiAdminIouBatchProcessSwapPostRequest
+     */
+    'swaps'?: Array<ApiAdminIouBatchProcessSwapPostRequestSwapsInner>;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminIouBatchProcessSwapPostRequestSwapsInner
+ */
+export interface ApiAdminIouBatchProcessSwapPostRequestSwapsInner {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminIouBatchProcessSwapPostRequestSwapsInner
+     */
+    'userAddress'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiAdminIouBatchProcessSwapPostRequestSwapsInner
+     */
+    'swapAmount'?: number;
+    /**
+     * 
+     * @type {object}
+     * @memberof ApiAdminIouBatchProcessSwapPostRequestSwapsInner
+     */
+    'swapDetails'?: object;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminIouCalculateFeePostRequest
+ */
+export interface ApiAdminIouCalculateFeePostRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiAdminIouCalculateFeePostRequest
+     */
+    'amount': number;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminIouIssuePostRequest
+ */
+export interface ApiAdminIouIssuePostRequest {
+    /**
+     * IOU를 받을 사용자 주소
+     * @type {string}
+     * @memberof ApiAdminIouIssuePostRequest
+     */
+    'userAddress': string;
+    /**
+     * 발행할 IOU 수량
+     * @type {number}
+     * @memberof ApiAdminIouIssuePostRequest
+     */
+    'amount': number;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminIouProcessSwapPostRequest
+ */
+export interface ApiAdminIouProcessSwapPostRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminIouProcessSwapPostRequest
+     */
+    'userAddress': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiAdminIouProcessSwapPostRequest
+     */
+    'swapAmount': number;
+    /**
+     * 
+     * @type {object}
+     * @memberof ApiAdminIouProcessSwapPostRequest
+     */
+    'swapDetails'?: object;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminSwapFeeBatchCreatePostRequest
+ */
+export interface ApiAdminSwapFeeBatchCreatePostRequest {
+    /**
+     * 
+     * @type {Array<SwapFeeConfig>}
+     * @memberof ApiAdminSwapFeeBatchCreatePostRequest
+     */
+    'configs'?: Array<SwapFeeConfig>;
+}
+/**
+ * 
+ * @export
+ * @interface ApiAdminSwapFeeCalculatePostRequest
+ */
+export interface ApiAdminSwapFeeCalculatePostRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiAdminSwapFeeCalculatePostRequest
+     */
+    'swapType'?: ApiAdminSwapFeeCalculatePostRequestSwapTypeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiAdminSwapFeeCalculatePostRequest
+     */
+    'amount'?: number;
+    /**
+     * (선택) 특정 설정 ID로 계산, 없으면 현재 활성 설정 사용
+     * @type {string}
+     * @memberof ApiAdminSwapFeeCalculatePostRequest
+     */
+    'configId'?: string;
+}
+
+export const ApiAdminSwapFeeCalculatePostRequestSwapTypeEnum = {
+    XrpToKrw: 'XRP_TO_KRW',
+    KrwToXrp: 'KRW_TO_XRP',
+    IouTransfer: 'IOU_TRANSFER'
+} as const;
+
+export type ApiAdminSwapFeeCalculatePostRequestSwapTypeEnum = typeof ApiAdminSwapFeeCalculatePostRequestSwapTypeEnum[keyof typeof ApiAdminSwapFeeCalculatePostRequestSwapTypeEnum];
 
 /**
  * 
@@ -113,6 +483,200 @@ export interface ApiAuthRegisterPostRequest {
      * @memberof ApiAuthRegisterPostRequest
      */
     'password': string;
+}
+/**
+ * 
+ * @export
+ * @interface ApiTransactionConvertKrwToXrpPostRequest
+ */
+export interface ApiTransactionConvertKrwToXrpPostRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiTransactionConvertKrwToXrpPostRequest
+     */
+    'krwAmount': number;
+}
+/**
+ * 
+ * @export
+ * @interface ApiTransactionConvertXrpToKrwPostRequest
+ */
+export interface ApiTransactionConvertXrpToKrwPostRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiTransactionConvertXrpToKrwPostRequest
+     */
+    'xrpAmount': number;
+}
+/**
+ * 
+ * @export
+ * @interface ApiTransactionOfferCancelPostRequest
+ */
+export interface ApiTransactionOfferCancelPostRequest {
+    /**
+     * 취소할 오퍼의 시퀀스 번호
+     * @type {number}
+     * @memberof ApiTransactionOfferCancelPostRequest
+     */
+    'offerSequence': number;
+}
+/**
+ * TakerGets와 TakerPays 객체. XRP는 drops 단위(1 XRP = 1,000,000 drops)로 입력해야 합니다.
+ * @export
+ * @interface ApiTransactionOfferCreatePostRequest
+ */
+export interface ApiTransactionOfferCreatePostRequest {
+    /**
+     * 받고자 하는 자산
+     * @type {object}
+     * @memberof ApiTransactionOfferCreatePostRequest
+     */
+    'takerGets'?: object;
+    /**
+     * 지불하고자 하는 자산
+     * @type {object}
+     * @memberof ApiTransactionOfferCreatePostRequest
+     */
+    'takerPays'?: object;
+    /**
+     * (선택) 오퍼 만료 시간 (Unix time)
+     * @type {number}
+     * @memberof ApiTransactionOfferCreatePostRequest
+     */
+    'expiration'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface ApiTransactionSwapCalculateFeePostRequest
+ */
+export interface ApiTransactionSwapCalculateFeePostRequest {
+    /**
+     * 스왑 또는 전송 유형
+     * @type {string}
+     * @memberof ApiTransactionSwapCalculateFeePostRequest
+     */
+    'swapType': ApiTransactionSwapCalculateFeePostRequestSwapTypeEnum;
+    /**
+     * 계산할 수량
+     * @type {number}
+     * @memberof ApiTransactionSwapCalculateFeePostRequest
+     */
+    'amount': number;
+}
+
+export const ApiTransactionSwapCalculateFeePostRequestSwapTypeEnum = {
+    XrpToKrw: 'XRP_TO_KRW',
+    KrwToXrp: 'KRW_TO_XRP',
+    IouTransfer: 'IOU_TRANSFER'
+} as const;
+
+export type ApiTransactionSwapCalculateFeePostRequestSwapTypeEnum = typeof ApiTransactionSwapCalculateFeePostRequestSwapTypeEnum[keyof typeof ApiTransactionSwapCalculateFeePostRequestSwapTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface ApiTransactionSwapKrwToXrpPostRequest
+ */
+export interface ApiTransactionSwapKrwToXrpPostRequest {
+    /**
+     * 스왑할 KRW IOU 수량
+     * @type {number}
+     * @memberof ApiTransactionSwapKrwToXrpPostRequest
+     */
+    'iouAmount': number;
+}
+/**
+ * 
+ * @export
+ * @interface ApiTransactionSwapXrpToKrwPostRequest
+ */
+export interface ApiTransactionSwapXrpToKrwPostRequest {
+    /**
+     * 스왑할 XRP 수량
+     * @type {number}
+     * @memberof ApiTransactionSwapXrpToKrwPostRequest
+     */
+    'xrpAmount': number;
+}
+/**
+ * 
+ * @export
+ * @interface ApiTransactionTransferPostRequest
+ */
+export interface ApiTransactionTransferPostRequest {
+    /**
+     * 받는 사람 주소
+     * @type {string}
+     * @memberof ApiTransactionTransferPostRequest
+     */
+    'recipientAddress': string;
+    /**
+     * 보낼 IOU 수량
+     * @type {number}
+     * @memberof ApiTransactionTransferPostRequest
+     */
+    'amount': number;
+    /**
+     * (선택) 거래 메모
+     * @type {string}
+     * @memberof ApiTransactionTransferPostRequest
+     */
+    'memo'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ApiWalletBalanceGet200Response
+ */
+export interface ApiWalletBalanceGet200Response {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiWalletBalanceGet200Response
+     */
+    'address'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiWalletBalanceGet200Response
+     */
+    'balance'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiWalletBalanceGet200Response
+     */
+    'balanceXRP'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ApiWalletKrwCreateTrustlinePostRequest
+ */
+export interface ApiWalletKrwCreateTrustlinePostRequest {
+    /**
+     * 설정할 Trust Line 한도 (기본값 1,000,000)
+     * @type {string}
+     * @memberof ApiWalletKrwCreateTrustlinePostRequest
+     */
+    'limitAmount'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ApiWalletValidateAddressPostRequest
+ */
+export interface ApiWalletValidateAddressPostRequest {
+    /**
+     * 검증할 XRP 주소
+     * @type {string}
+     * @memberof ApiWalletValidateAddressPostRequest
+     */
+    'address'?: string;
 }
 /**
  * 
@@ -280,6 +844,210 @@ export const AdminDomainApiAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          * 
+         * @summary 블랙리스트에 사용자 추가
+         * @param {ApiAdminDomainBlacklistAddPostRequest} apiAdminDomainBlacklistAddPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainBlacklistAddPost: async (apiAdminDomainBlacklistAddPostRequest: ApiAdminDomainBlacklistAddPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminDomainBlacklistAddPostRequest' is not null or undefined
+            assertParamExists('apiAdminDomainBlacklistAddPost', 'apiAdminDomainBlacklistAddPostRequest', apiAdminDomainBlacklistAddPostRequest)
+            const localVarPath = `/api/admin/domain/blacklist/add`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminDomainBlacklistAddPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 블랙리스트 목록 조회
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainBlacklistGet: async (page?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/admin/domain/blacklist`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 특정 사용자의 Trust Line 권한 확인
+         * @param {ApiAdminDomainCheckPermissionPostRequest} apiAdminDomainCheckPermissionPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainCheckPermissionPost: async (apiAdminDomainCheckPermissionPostRequest: ApiAdminDomainCheckPermissionPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminDomainCheckPermissionPostRequest' is not null or undefined
+            assertParamExists('apiAdminDomainCheckPermissionPost', 'apiAdminDomainCheckPermissionPostRequest', apiAdminDomainCheckPermissionPostRequest)
+            const localVarPath = `/api/admin/domain/check-permission`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminDomainCheckPermissionPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 대량 KYC 상태 업데이트
+         * @param {ApiAdminDomainKycBatchUpdatePostRequest} apiAdminDomainKycBatchUpdatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainKycBatchUpdatePost: async (apiAdminDomainKycBatchUpdatePostRequest: ApiAdminDomainKycBatchUpdatePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminDomainKycBatchUpdatePostRequest' is not null or undefined
+            assertParamExists('apiAdminDomainKycBatchUpdatePost', 'apiAdminDomainKycBatchUpdatePostRequest', apiAdminDomainKycBatchUpdatePostRequest)
+            const localVarPath = `/api/admin/domain/kyc/batch-update`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminDomainKycBatchUpdatePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 사용자의 KYC 상태 업데이트
+         * @param {ApiAdminDomainKycUpdatePostRequest} apiAdminDomainKycUpdatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainKycUpdatePost: async (apiAdminDomainKycUpdatePostRequest: ApiAdminDomainKycUpdatePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminDomainKycUpdatePostRequest' is not null or undefined
+            assertParamExists('apiAdminDomainKycUpdatePost', 'apiAdminDomainKycUpdatePostRequest', apiAdminDomainKycUpdatePostRequest)
+            const localVarPath = `/api/admin/domain/kyc/update`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminDomainKycUpdatePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Domain 설정 조회
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -352,6 +1120,164 @@ export const AdminDomainApiAxiosParamCreator = function (configuration?: Configu
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Domain 통계 정보 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainStatsGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/admin/domain/stats`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 화이트리스트에 사용자 추가
+         * @param {ApiAdminDomainWhitelistAddPostRequest} apiAdminDomainWhitelistAddPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainWhitelistAddPost: async (apiAdminDomainWhitelistAddPostRequest: ApiAdminDomainWhitelistAddPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminDomainWhitelistAddPostRequest' is not null or undefined
+            assertParamExists('apiAdminDomainWhitelistAddPost', 'apiAdminDomainWhitelistAddPostRequest', apiAdminDomainWhitelistAddPostRequest)
+            const localVarPath = `/api/admin/domain/whitelist/add`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminDomainWhitelistAddPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 대량 화이트리스트 추가
+         * @param {ApiAdminDomainWhitelistBatchAddPostRequest} apiAdminDomainWhitelistBatchAddPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainWhitelistBatchAddPost: async (apiAdminDomainWhitelistBatchAddPostRequest: ApiAdminDomainWhitelistBatchAddPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminDomainWhitelistBatchAddPostRequest' is not null or undefined
+            assertParamExists('apiAdminDomainWhitelistBatchAddPost', 'apiAdminDomainWhitelistBatchAddPostRequest', apiAdminDomainWhitelistBatchAddPostRequest)
+            const localVarPath = `/api/admin/domain/whitelist/batch-add`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminDomainWhitelistBatchAddPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 화이트리스트 목록 조회
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainWhitelistGet: async (page?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/admin/domain/whitelist`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -362,6 +1288,72 @@ export const AdminDomainApiAxiosParamCreator = function (configuration?: Configu
 export const AdminDomainApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AdminDomainApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @summary 블랙리스트에 사용자 추가
+         * @param {ApiAdminDomainBlacklistAddPostRequest} apiAdminDomainBlacklistAddPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminDomainBlacklistAddPost(apiAdminDomainBlacklistAddPostRequest: ApiAdminDomainBlacklistAddPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminDomainBlacklistAddPost(apiAdminDomainBlacklistAddPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminDomainApi.apiAdminDomainBlacklistAddPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 블랙리스트 목록 조회
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminDomainBlacklistGet(page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminDomainBlacklistGet(page, limit, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminDomainApi.apiAdminDomainBlacklistGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 특정 사용자의 Trust Line 권한 확인
+         * @param {ApiAdminDomainCheckPermissionPostRequest} apiAdminDomainCheckPermissionPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminDomainCheckPermissionPost(apiAdminDomainCheckPermissionPostRequest: ApiAdminDomainCheckPermissionPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminDomainCheckPermissionPost(apiAdminDomainCheckPermissionPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminDomainApi.apiAdminDomainCheckPermissionPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 대량 KYC 상태 업데이트
+         * @param {ApiAdminDomainKycBatchUpdatePostRequest} apiAdminDomainKycBatchUpdatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminDomainKycBatchUpdatePost(apiAdminDomainKycBatchUpdatePostRequest: ApiAdminDomainKycBatchUpdatePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminDomainKycBatchUpdatePost(apiAdminDomainKycBatchUpdatePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminDomainApi.apiAdminDomainKycBatchUpdatePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 사용자의 KYC 상태 업데이트
+         * @param {ApiAdminDomainKycUpdatePostRequest} apiAdminDomainKycUpdatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminDomainKycUpdatePost(apiAdminDomainKycUpdatePostRequest: ApiAdminDomainKycUpdatePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminDomainKycUpdatePost(apiAdminDomainKycUpdatePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminDomainApi.apiAdminDomainKycUpdatePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
         /**
          * 
          * @summary Domain 설정 조회
@@ -387,6 +1379,58 @@ export const AdminDomainApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['AdminDomainApi.apiAdminDomainSettingsPut']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @summary Domain 통계 정보 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminDomainStatsGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminDomainStatsGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminDomainApi.apiAdminDomainStatsGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 화이트리스트에 사용자 추가
+         * @param {ApiAdminDomainWhitelistAddPostRequest} apiAdminDomainWhitelistAddPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminDomainWhitelistAddPost(apiAdminDomainWhitelistAddPostRequest: ApiAdminDomainWhitelistAddPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminDomainWhitelistAddPost(apiAdminDomainWhitelistAddPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminDomainApi.apiAdminDomainWhitelistAddPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 대량 화이트리스트 추가
+         * @param {ApiAdminDomainWhitelistBatchAddPostRequest} apiAdminDomainWhitelistBatchAddPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminDomainWhitelistBatchAddPost(apiAdminDomainWhitelistBatchAddPostRequest: ApiAdminDomainWhitelistBatchAddPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminDomainWhitelistBatchAddPost(apiAdminDomainWhitelistBatchAddPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminDomainApi.apiAdminDomainWhitelistBatchAddPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 화이트리스트 목록 조회
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminDomainWhitelistGet(page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminDomainWhitelistGet(page, limit, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminDomainApi.apiAdminDomainWhitelistGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -397,6 +1441,57 @@ export const AdminDomainApiFp = function(configuration?: Configuration) {
 export const AdminDomainApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = AdminDomainApiFp(configuration)
     return {
+        /**
+         * 
+         * @summary 블랙리스트에 사용자 추가
+         * @param {ApiAdminDomainBlacklistAddPostRequest} apiAdminDomainBlacklistAddPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainBlacklistAddPost(apiAdminDomainBlacklistAddPostRequest: ApiAdminDomainBlacklistAddPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminDomainBlacklistAddPost(apiAdminDomainBlacklistAddPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 블랙리스트 목록 조회
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainBlacklistGet(page?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminDomainBlacklistGet(page, limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 특정 사용자의 Trust Line 권한 확인
+         * @param {ApiAdminDomainCheckPermissionPostRequest} apiAdminDomainCheckPermissionPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainCheckPermissionPost(apiAdminDomainCheckPermissionPostRequest: ApiAdminDomainCheckPermissionPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminDomainCheckPermissionPost(apiAdminDomainCheckPermissionPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 대량 KYC 상태 업데이트
+         * @param {ApiAdminDomainKycBatchUpdatePostRequest} apiAdminDomainKycBatchUpdatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainKycBatchUpdatePost(apiAdminDomainKycBatchUpdatePostRequest: ApiAdminDomainKycBatchUpdatePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminDomainKycBatchUpdatePost(apiAdminDomainKycBatchUpdatePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 사용자의 KYC 상태 업데이트
+         * @param {ApiAdminDomainKycUpdatePostRequest} apiAdminDomainKycUpdatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainKycUpdatePost(apiAdminDomainKycUpdatePostRequest: ApiAdminDomainKycUpdatePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminDomainKycUpdatePost(apiAdminDomainKycUpdatePostRequest, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @summary Domain 설정 조회
@@ -416,6 +1511,46 @@ export const AdminDomainApiFactory = function (configuration?: Configuration, ba
         apiAdminDomainSettingsPut(apiAdminDomainSettingsPutRequest: ApiAdminDomainSettingsPutRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiAdminDomainSettingsPut(apiAdminDomainSettingsPutRequest, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Domain 통계 정보 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainStatsGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminDomainStatsGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 화이트리스트에 사용자 추가
+         * @param {ApiAdminDomainWhitelistAddPostRequest} apiAdminDomainWhitelistAddPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainWhitelistAddPost(apiAdminDomainWhitelistAddPostRequest: ApiAdminDomainWhitelistAddPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminDomainWhitelistAddPost(apiAdminDomainWhitelistAddPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 대량 화이트리스트 추가
+         * @param {ApiAdminDomainWhitelistBatchAddPostRequest} apiAdminDomainWhitelistBatchAddPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainWhitelistBatchAddPost(apiAdminDomainWhitelistBatchAddPostRequest: ApiAdminDomainWhitelistBatchAddPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminDomainWhitelistBatchAddPost(apiAdminDomainWhitelistBatchAddPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 화이트리스트 목록 조회
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminDomainWhitelistGet(page?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminDomainWhitelistGet(page, limit, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -426,6 +1561,67 @@ export const AdminDomainApiFactory = function (configuration?: Configuration, ba
  * @extends {BaseAPI}
  */
 export class AdminDomainApi extends BaseAPI {
+    /**
+     * 
+     * @summary 블랙리스트에 사용자 추가
+     * @param {ApiAdminDomainBlacklistAddPostRequest} apiAdminDomainBlacklistAddPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminDomainApi
+     */
+    public apiAdminDomainBlacklistAddPost(apiAdminDomainBlacklistAddPostRequest: ApiAdminDomainBlacklistAddPostRequest, options?: RawAxiosRequestConfig) {
+        return AdminDomainApiFp(this.configuration).apiAdminDomainBlacklistAddPost(apiAdminDomainBlacklistAddPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 블랙리스트 목록 조회
+     * @param {number} [page] 
+     * @param {number} [limit] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminDomainApi
+     */
+    public apiAdminDomainBlacklistGet(page?: number, limit?: number, options?: RawAxiosRequestConfig) {
+        return AdminDomainApiFp(this.configuration).apiAdminDomainBlacklistGet(page, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 특정 사용자의 Trust Line 권한 확인
+     * @param {ApiAdminDomainCheckPermissionPostRequest} apiAdminDomainCheckPermissionPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminDomainApi
+     */
+    public apiAdminDomainCheckPermissionPost(apiAdminDomainCheckPermissionPostRequest: ApiAdminDomainCheckPermissionPostRequest, options?: RawAxiosRequestConfig) {
+        return AdminDomainApiFp(this.configuration).apiAdminDomainCheckPermissionPost(apiAdminDomainCheckPermissionPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 대량 KYC 상태 업데이트
+     * @param {ApiAdminDomainKycBatchUpdatePostRequest} apiAdminDomainKycBatchUpdatePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminDomainApi
+     */
+    public apiAdminDomainKycBatchUpdatePost(apiAdminDomainKycBatchUpdatePostRequest: ApiAdminDomainKycBatchUpdatePostRequest, options?: RawAxiosRequestConfig) {
+        return AdminDomainApiFp(this.configuration).apiAdminDomainKycBatchUpdatePost(apiAdminDomainKycBatchUpdatePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 사용자의 KYC 상태 업데이트
+     * @param {ApiAdminDomainKycUpdatePostRequest} apiAdminDomainKycUpdatePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminDomainApi
+     */
+    public apiAdminDomainKycUpdatePost(apiAdminDomainKycUpdatePostRequest: ApiAdminDomainKycUpdatePostRequest, options?: RawAxiosRequestConfig) {
+        return AdminDomainApiFp(this.configuration).apiAdminDomainKycUpdatePost(apiAdminDomainKycUpdatePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Domain 설정 조회
@@ -448,8 +1644,2020 @@ export class AdminDomainApi extends BaseAPI {
     public apiAdminDomainSettingsPut(apiAdminDomainSettingsPutRequest: ApiAdminDomainSettingsPutRequest, options?: RawAxiosRequestConfig) {
         return AdminDomainApiFp(this.configuration).apiAdminDomainSettingsPut(apiAdminDomainSettingsPutRequest, options).then((request) => request(this.axios, this.basePath));
     }
+
+    /**
+     * 
+     * @summary Domain 통계 정보 조회
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminDomainApi
+     */
+    public apiAdminDomainStatsGet(options?: RawAxiosRequestConfig) {
+        return AdminDomainApiFp(this.configuration).apiAdminDomainStatsGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 화이트리스트에 사용자 추가
+     * @param {ApiAdminDomainWhitelistAddPostRequest} apiAdminDomainWhitelistAddPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminDomainApi
+     */
+    public apiAdminDomainWhitelistAddPost(apiAdminDomainWhitelistAddPostRequest: ApiAdminDomainWhitelistAddPostRequest, options?: RawAxiosRequestConfig) {
+        return AdminDomainApiFp(this.configuration).apiAdminDomainWhitelistAddPost(apiAdminDomainWhitelistAddPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 대량 화이트리스트 추가
+     * @param {ApiAdminDomainWhitelistBatchAddPostRequest} apiAdminDomainWhitelistBatchAddPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminDomainApi
+     */
+    public apiAdminDomainWhitelistBatchAddPost(apiAdminDomainWhitelistBatchAddPostRequest: ApiAdminDomainWhitelistBatchAddPostRequest, options?: RawAxiosRequestConfig) {
+        return AdminDomainApiFp(this.configuration).apiAdminDomainWhitelistBatchAddPost(apiAdminDomainWhitelistBatchAddPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 화이트리스트 목록 조회
+     * @param {number} [page] 
+     * @param {number} [limit] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminDomainApi
+     */
+    public apiAdminDomainWhitelistGet(page?: number, limit?: number, options?: RawAxiosRequestConfig) {
+        return AdminDomainApiFp(this.configuration).apiAdminDomainWhitelistGet(page, limit, options).then((request) => request(this.axios, this.basePath));
+    }
 }
 
+
+
+/**
+ * AdminExchangeRateApi - axios parameter creator
+ * @export
+ */
+export const AdminExchangeRateApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary 대량 환율 설정
+         * @param {ApiAdminExchangeRateBatchUpdatePostRequest} apiAdminExchangeRateBatchUpdatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateBatchUpdatePost: async (apiAdminExchangeRateBatchUpdatePostRequest: ApiAdminExchangeRateBatchUpdatePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminExchangeRateBatchUpdatePostRequest' is not null or undefined
+            assertParamExists('apiAdminExchangeRateBatchUpdatePost', 'apiAdminExchangeRateBatchUpdatePostRequest', apiAdminExchangeRateBatchUpdatePostRequest)
+            const localVarPath = `/api/admin/exchange-rate/batch-update`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminExchangeRateBatchUpdatePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 환율 계산 시뮬레이션
+         * @param {ApiAdminExchangeRateConvertPostRequest} apiAdminExchangeRateConvertPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateConvertPost: async (apiAdminExchangeRateConvertPostRequest: ApiAdminExchangeRateConvertPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminExchangeRateConvertPostRequest' is not null or undefined
+            assertParamExists('apiAdminExchangeRateConvertPost', 'apiAdminExchangeRateConvertPostRequest', apiAdminExchangeRateConvertPostRequest)
+            const localVarPath = `/api/admin/exchange-rate/convert`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminExchangeRateConvertPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 특정 통화쌍의 현재 활성 환율 조회
+         * @param {string} baseCurrency 
+         * @param {string} quoteCurrency 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateCurrentBaseCurrencyQuoteCurrencyGet: async (baseCurrency: string, quoteCurrency: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'baseCurrency' is not null or undefined
+            assertParamExists('apiAdminExchangeRateCurrentBaseCurrencyQuoteCurrencyGet', 'baseCurrency', baseCurrency)
+            // verify required parameter 'quoteCurrency' is not null or undefined
+            assertParamExists('apiAdminExchangeRateCurrentBaseCurrencyQuoteCurrencyGet', 'quoteCurrency', quoteCurrency)
+            const localVarPath = `/api/admin/exchange-rate/current/{baseCurrency}/{quoteCurrency}`
+                .replace(`{${"baseCurrency"}}`, encodeURIComponent(String(baseCurrency)))
+                .replace(`{${"quoteCurrency"}}`, encodeURIComponent(String(quoteCurrency)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 모든 환율 설정 조회
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [baseCurrency] 
+         * @param {string} [quoteCurrency] 
+         * @param {boolean} [isActive] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateRatesGet: async (page?: number, limit?: number, baseCurrency?: string, quoteCurrency?: string, isActive?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/admin/exchange-rate/rates`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (baseCurrency !== undefined) {
+                localVarQueryParameter['baseCurrency'] = baseCurrency;
+            }
+
+            if (quoteCurrency !== undefined) {
+                localVarQueryParameter['quoteCurrency'] = quoteCurrency;
+            }
+
+            if (isActive !== undefined) {
+                localVarQueryParameter['isActive'] = isActive;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 환율 비활성화
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateRatesIdDeactivatePost: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiAdminExchangeRateRatesIdDeactivatePost', 'id', id)
+            const localVarPath = `/api/admin/exchange-rate/rates/{id}/deactivate`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 환율 정보 업데이트
+         * @param {string} id 
+         * @param {ExchangeRate} exchangeRate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateRatesIdPut: async (id: string, exchangeRate: ExchangeRate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiAdminExchangeRateRatesIdPut', 'id', id)
+            // verify required parameter 'exchangeRate' is not null or undefined
+            assertParamExists('apiAdminExchangeRateRatesIdPut', 'exchangeRate', exchangeRate)
+            const localVarPath = `/api/admin/exchange-rate/rates/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(exchangeRate, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 새 환율 생성 (기존 활성 환율은 비활성화됨)
+         * @param {ExchangeRate} exchangeRate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateRatesPost: async (exchangeRate: ExchangeRate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'exchangeRate' is not null or undefined
+            assertParamExists('apiAdminExchangeRateRatesPost', 'exchangeRate', exchangeRate)
+            const localVarPath = `/api/admin/exchange-rate/rates`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(exchangeRate, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 환율 통계 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateStatsGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/admin/exchange-rate/stats`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AdminExchangeRateApi - functional programming interface
+ * @export
+ */
+export const AdminExchangeRateApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AdminExchangeRateApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary 대량 환율 설정
+         * @param {ApiAdminExchangeRateBatchUpdatePostRequest} apiAdminExchangeRateBatchUpdatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminExchangeRateBatchUpdatePost(apiAdminExchangeRateBatchUpdatePostRequest: ApiAdminExchangeRateBatchUpdatePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminExchangeRateBatchUpdatePost(apiAdminExchangeRateBatchUpdatePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminExchangeRateApi.apiAdminExchangeRateBatchUpdatePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 환율 계산 시뮬레이션
+         * @param {ApiAdminExchangeRateConvertPostRequest} apiAdminExchangeRateConvertPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminExchangeRateConvertPost(apiAdminExchangeRateConvertPostRequest: ApiAdminExchangeRateConvertPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminExchangeRateConvertPost(apiAdminExchangeRateConvertPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminExchangeRateApi.apiAdminExchangeRateConvertPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 특정 통화쌍의 현재 활성 환율 조회
+         * @param {string} baseCurrency 
+         * @param {string} quoteCurrency 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminExchangeRateCurrentBaseCurrencyQuoteCurrencyGet(baseCurrency: string, quoteCurrency: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminExchangeRateCurrentBaseCurrencyQuoteCurrencyGet(baseCurrency, quoteCurrency, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminExchangeRateApi.apiAdminExchangeRateCurrentBaseCurrencyQuoteCurrencyGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 모든 환율 설정 조회
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [baseCurrency] 
+         * @param {string} [quoteCurrency] 
+         * @param {boolean} [isActive] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminExchangeRateRatesGet(page?: number, limit?: number, baseCurrency?: string, quoteCurrency?: string, isActive?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminExchangeRateRatesGet(page, limit, baseCurrency, quoteCurrency, isActive, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminExchangeRateApi.apiAdminExchangeRateRatesGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 환율 비활성화
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminExchangeRateRatesIdDeactivatePost(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminExchangeRateRatesIdDeactivatePost(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminExchangeRateApi.apiAdminExchangeRateRatesIdDeactivatePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 환율 정보 업데이트
+         * @param {string} id 
+         * @param {ExchangeRate} exchangeRate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminExchangeRateRatesIdPut(id: string, exchangeRate: ExchangeRate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminExchangeRateRatesIdPut(id, exchangeRate, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminExchangeRateApi.apiAdminExchangeRateRatesIdPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 새 환율 생성 (기존 활성 환율은 비활성화됨)
+         * @param {ExchangeRate} exchangeRate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminExchangeRateRatesPost(exchangeRate: ExchangeRate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminExchangeRateRatesPost(exchangeRate, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminExchangeRateApi.apiAdminExchangeRateRatesPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 환율 통계 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminExchangeRateStatsGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminExchangeRateStatsGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminExchangeRateApi.apiAdminExchangeRateStatsGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * AdminExchangeRateApi - factory interface
+ * @export
+ */
+export const AdminExchangeRateApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AdminExchangeRateApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary 대량 환율 설정
+         * @param {ApiAdminExchangeRateBatchUpdatePostRequest} apiAdminExchangeRateBatchUpdatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateBatchUpdatePost(apiAdminExchangeRateBatchUpdatePostRequest: ApiAdminExchangeRateBatchUpdatePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminExchangeRateBatchUpdatePost(apiAdminExchangeRateBatchUpdatePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 환율 계산 시뮬레이션
+         * @param {ApiAdminExchangeRateConvertPostRequest} apiAdminExchangeRateConvertPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateConvertPost(apiAdminExchangeRateConvertPostRequest: ApiAdminExchangeRateConvertPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminExchangeRateConvertPost(apiAdminExchangeRateConvertPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 특정 통화쌍의 현재 활성 환율 조회
+         * @param {string} baseCurrency 
+         * @param {string} quoteCurrency 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateCurrentBaseCurrencyQuoteCurrencyGet(baseCurrency: string, quoteCurrency: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminExchangeRateCurrentBaseCurrencyQuoteCurrencyGet(baseCurrency, quoteCurrency, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 모든 환율 설정 조회
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [baseCurrency] 
+         * @param {string} [quoteCurrency] 
+         * @param {boolean} [isActive] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateRatesGet(page?: number, limit?: number, baseCurrency?: string, quoteCurrency?: string, isActive?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminExchangeRateRatesGet(page, limit, baseCurrency, quoteCurrency, isActive, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 환율 비활성화
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateRatesIdDeactivatePost(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminExchangeRateRatesIdDeactivatePost(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 환율 정보 업데이트
+         * @param {string} id 
+         * @param {ExchangeRate} exchangeRate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateRatesIdPut(id: string, exchangeRate: ExchangeRate, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminExchangeRateRatesIdPut(id, exchangeRate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 새 환율 생성 (기존 활성 환율은 비활성화됨)
+         * @param {ExchangeRate} exchangeRate 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateRatesPost(exchangeRate: ExchangeRate, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminExchangeRateRatesPost(exchangeRate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 환율 통계 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminExchangeRateStatsGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminExchangeRateStatsGet(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AdminExchangeRateApi - object-oriented interface
+ * @export
+ * @class AdminExchangeRateApi
+ * @extends {BaseAPI}
+ */
+export class AdminExchangeRateApi extends BaseAPI {
+    /**
+     * 
+     * @summary 대량 환율 설정
+     * @param {ApiAdminExchangeRateBatchUpdatePostRequest} apiAdminExchangeRateBatchUpdatePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminExchangeRateApi
+     */
+    public apiAdminExchangeRateBatchUpdatePost(apiAdminExchangeRateBatchUpdatePostRequest: ApiAdminExchangeRateBatchUpdatePostRequest, options?: RawAxiosRequestConfig) {
+        return AdminExchangeRateApiFp(this.configuration).apiAdminExchangeRateBatchUpdatePost(apiAdminExchangeRateBatchUpdatePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 환율 계산 시뮬레이션
+     * @param {ApiAdminExchangeRateConvertPostRequest} apiAdminExchangeRateConvertPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminExchangeRateApi
+     */
+    public apiAdminExchangeRateConvertPost(apiAdminExchangeRateConvertPostRequest: ApiAdminExchangeRateConvertPostRequest, options?: RawAxiosRequestConfig) {
+        return AdminExchangeRateApiFp(this.configuration).apiAdminExchangeRateConvertPost(apiAdminExchangeRateConvertPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 특정 통화쌍의 현재 활성 환율 조회
+     * @param {string} baseCurrency 
+     * @param {string} quoteCurrency 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminExchangeRateApi
+     */
+    public apiAdminExchangeRateCurrentBaseCurrencyQuoteCurrencyGet(baseCurrency: string, quoteCurrency: string, options?: RawAxiosRequestConfig) {
+        return AdminExchangeRateApiFp(this.configuration).apiAdminExchangeRateCurrentBaseCurrencyQuoteCurrencyGet(baseCurrency, quoteCurrency, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 모든 환율 설정 조회
+     * @param {number} [page] 
+     * @param {number} [limit] 
+     * @param {string} [baseCurrency] 
+     * @param {string} [quoteCurrency] 
+     * @param {boolean} [isActive] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminExchangeRateApi
+     */
+    public apiAdminExchangeRateRatesGet(page?: number, limit?: number, baseCurrency?: string, quoteCurrency?: string, isActive?: boolean, options?: RawAxiosRequestConfig) {
+        return AdminExchangeRateApiFp(this.configuration).apiAdminExchangeRateRatesGet(page, limit, baseCurrency, quoteCurrency, isActive, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 환율 비활성화
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminExchangeRateApi
+     */
+    public apiAdminExchangeRateRatesIdDeactivatePost(id: string, options?: RawAxiosRequestConfig) {
+        return AdminExchangeRateApiFp(this.configuration).apiAdminExchangeRateRatesIdDeactivatePost(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 환율 정보 업데이트
+     * @param {string} id 
+     * @param {ExchangeRate} exchangeRate 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminExchangeRateApi
+     */
+    public apiAdminExchangeRateRatesIdPut(id: string, exchangeRate: ExchangeRate, options?: RawAxiosRequestConfig) {
+        return AdminExchangeRateApiFp(this.configuration).apiAdminExchangeRateRatesIdPut(id, exchangeRate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 새 환율 생성 (기존 활성 환율은 비활성화됨)
+     * @param {ExchangeRate} exchangeRate 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminExchangeRateApi
+     */
+    public apiAdminExchangeRateRatesPost(exchangeRate: ExchangeRate, options?: RawAxiosRequestConfig) {
+        return AdminExchangeRateApiFp(this.configuration).apiAdminExchangeRateRatesPost(exchangeRate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 환율 통계 조회
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminExchangeRateApi
+     */
+    public apiAdminExchangeRateStatsGet(options?: RawAxiosRequestConfig) {
+        return AdminExchangeRateApiFp(this.configuration).apiAdminExchangeRateStatsGet(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * AdminIOUApi - axios parameter creator
+ * @export
+ */
+export const AdminIOUApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary 대량 IOU 발행
+         * @param {ApiAdminIouBatchIssuePostRequest} apiAdminIouBatchIssuePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminIouBatchIssuePost: async (apiAdminIouBatchIssuePostRequest: ApiAdminIouBatchIssuePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminIouBatchIssuePostRequest' is not null or undefined
+            assertParamExists('apiAdminIouBatchIssuePost', 'apiAdminIouBatchIssuePostRequest', apiAdminIouBatchIssuePostRequest)
+            const localVarPath = `/api/admin/iou/batch-issue`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminIouBatchIssuePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 대량 스왑 처리
+         * @param {ApiAdminIouBatchProcessSwapPostRequest} apiAdminIouBatchProcessSwapPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminIouBatchProcessSwapPost: async (apiAdminIouBatchProcessSwapPostRequest: ApiAdminIouBatchProcessSwapPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminIouBatchProcessSwapPostRequest' is not null or undefined
+            assertParamExists('apiAdminIouBatchProcessSwapPost', 'apiAdminIouBatchProcessSwapPostRequest', apiAdminIouBatchProcessSwapPostRequest)
+            const localVarPath = `/api/admin/iou/batch-process-swap`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminIouBatchProcessSwapPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 수수료 계산 (관리자용)
+         * @param {ApiAdminIouCalculateFeePostRequest} apiAdminIouCalculateFeePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminIouCalculateFeePost: async (apiAdminIouCalculateFeePostRequest: ApiAdminIouCalculateFeePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminIouCalculateFeePostRequest' is not null or undefined
+            assertParamExists('apiAdminIouCalculateFeePost', 'apiAdminIouCalculateFeePostRequest', apiAdminIouCalculateFeePostRequest)
+            const localVarPath = `/api/admin/iou/calculate-fee`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminIouCalculateFeePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary KRW IOU 직접 발행
+         * @param {ApiAdminIouIssuePostRequest} apiAdminIouIssuePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminIouIssuePost: async (apiAdminIouIssuePostRequest: ApiAdminIouIssuePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminIouIssuePostRequest' is not null or undefined
+            assertParamExists('apiAdminIouIssuePost', 'apiAdminIouIssuePostRequest', apiAdminIouIssuePostRequest)
+            const localVarPath = `/api/admin/iou/issue`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminIouIssuePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 외부 스왑 처리 후 IOU 발행
+         * @param {ApiAdminIouProcessSwapPostRequest} apiAdminIouProcessSwapPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminIouProcessSwapPost: async (apiAdminIouProcessSwapPostRequest: ApiAdminIouProcessSwapPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminIouProcessSwapPostRequest' is not null or undefined
+            assertParamExists('apiAdminIouProcessSwapPost', 'apiAdminIouProcessSwapPostRequest', apiAdminIouProcessSwapPostRequest)
+            const localVarPath = `/api/admin/iou/process-swap`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminIouProcessSwapPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary IOU 설정 정보 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminIouSettingsGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/admin/iou/settings`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 총 발행된 IOU 수량 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminIouTotalIssuedGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/admin/iou/total-issued`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AdminIOUApi - functional programming interface
+ * @export
+ */
+export const AdminIOUApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AdminIOUApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary 대량 IOU 발행
+         * @param {ApiAdminIouBatchIssuePostRequest} apiAdminIouBatchIssuePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminIouBatchIssuePost(apiAdminIouBatchIssuePostRequest: ApiAdminIouBatchIssuePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminIouBatchIssuePost(apiAdminIouBatchIssuePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminIOUApi.apiAdminIouBatchIssuePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 대량 스왑 처리
+         * @param {ApiAdminIouBatchProcessSwapPostRequest} apiAdminIouBatchProcessSwapPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminIouBatchProcessSwapPost(apiAdminIouBatchProcessSwapPostRequest: ApiAdminIouBatchProcessSwapPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminIouBatchProcessSwapPost(apiAdminIouBatchProcessSwapPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminIOUApi.apiAdminIouBatchProcessSwapPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 수수료 계산 (관리자용)
+         * @param {ApiAdminIouCalculateFeePostRequest} apiAdminIouCalculateFeePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminIouCalculateFeePost(apiAdminIouCalculateFeePostRequest: ApiAdminIouCalculateFeePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminIouCalculateFeePost(apiAdminIouCalculateFeePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminIOUApi.apiAdminIouCalculateFeePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary KRW IOU 직접 발행
+         * @param {ApiAdminIouIssuePostRequest} apiAdminIouIssuePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminIouIssuePost(apiAdminIouIssuePostRequest: ApiAdminIouIssuePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminIouIssuePost(apiAdminIouIssuePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminIOUApi.apiAdminIouIssuePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 외부 스왑 처리 후 IOU 발행
+         * @param {ApiAdminIouProcessSwapPostRequest} apiAdminIouProcessSwapPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminIouProcessSwapPost(apiAdminIouProcessSwapPostRequest: ApiAdminIouProcessSwapPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminIouProcessSwapPost(apiAdminIouProcessSwapPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminIOUApi.apiAdminIouProcessSwapPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary IOU 설정 정보 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminIouSettingsGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminIouSettingsGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminIOUApi.apiAdminIouSettingsGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 총 발행된 IOU 수량 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminIouTotalIssuedGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminIouTotalIssuedGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminIOUApi.apiAdminIouTotalIssuedGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * AdminIOUApi - factory interface
+ * @export
+ */
+export const AdminIOUApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AdminIOUApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary 대량 IOU 발행
+         * @param {ApiAdminIouBatchIssuePostRequest} apiAdminIouBatchIssuePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminIouBatchIssuePost(apiAdminIouBatchIssuePostRequest: ApiAdminIouBatchIssuePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminIouBatchIssuePost(apiAdminIouBatchIssuePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 대량 스왑 처리
+         * @param {ApiAdminIouBatchProcessSwapPostRequest} apiAdminIouBatchProcessSwapPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminIouBatchProcessSwapPost(apiAdminIouBatchProcessSwapPostRequest: ApiAdminIouBatchProcessSwapPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminIouBatchProcessSwapPost(apiAdminIouBatchProcessSwapPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 수수료 계산 (관리자용)
+         * @param {ApiAdminIouCalculateFeePostRequest} apiAdminIouCalculateFeePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminIouCalculateFeePost(apiAdminIouCalculateFeePostRequest: ApiAdminIouCalculateFeePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminIouCalculateFeePost(apiAdminIouCalculateFeePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary KRW IOU 직접 발행
+         * @param {ApiAdminIouIssuePostRequest} apiAdminIouIssuePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminIouIssuePost(apiAdminIouIssuePostRequest: ApiAdminIouIssuePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminIouIssuePost(apiAdminIouIssuePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 외부 스왑 처리 후 IOU 발행
+         * @param {ApiAdminIouProcessSwapPostRequest} apiAdminIouProcessSwapPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminIouProcessSwapPost(apiAdminIouProcessSwapPostRequest: ApiAdminIouProcessSwapPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminIouProcessSwapPost(apiAdminIouProcessSwapPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary IOU 설정 정보 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminIouSettingsGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminIouSettingsGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 총 발행된 IOU 수량 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminIouTotalIssuedGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminIouTotalIssuedGet(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AdminIOUApi - object-oriented interface
+ * @export
+ * @class AdminIOUApi
+ * @extends {BaseAPI}
+ */
+export class AdminIOUApi extends BaseAPI {
+    /**
+     * 
+     * @summary 대량 IOU 발행
+     * @param {ApiAdminIouBatchIssuePostRequest} apiAdminIouBatchIssuePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminIOUApi
+     */
+    public apiAdminIouBatchIssuePost(apiAdminIouBatchIssuePostRequest: ApiAdminIouBatchIssuePostRequest, options?: RawAxiosRequestConfig) {
+        return AdminIOUApiFp(this.configuration).apiAdminIouBatchIssuePost(apiAdminIouBatchIssuePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 대량 스왑 처리
+     * @param {ApiAdminIouBatchProcessSwapPostRequest} apiAdminIouBatchProcessSwapPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminIOUApi
+     */
+    public apiAdminIouBatchProcessSwapPost(apiAdminIouBatchProcessSwapPostRequest: ApiAdminIouBatchProcessSwapPostRequest, options?: RawAxiosRequestConfig) {
+        return AdminIOUApiFp(this.configuration).apiAdminIouBatchProcessSwapPost(apiAdminIouBatchProcessSwapPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 수수료 계산 (관리자용)
+     * @param {ApiAdminIouCalculateFeePostRequest} apiAdminIouCalculateFeePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminIOUApi
+     */
+    public apiAdminIouCalculateFeePost(apiAdminIouCalculateFeePostRequest: ApiAdminIouCalculateFeePostRequest, options?: RawAxiosRequestConfig) {
+        return AdminIOUApiFp(this.configuration).apiAdminIouCalculateFeePost(apiAdminIouCalculateFeePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary KRW IOU 직접 발행
+     * @param {ApiAdminIouIssuePostRequest} apiAdminIouIssuePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminIOUApi
+     */
+    public apiAdminIouIssuePost(apiAdminIouIssuePostRequest: ApiAdminIouIssuePostRequest, options?: RawAxiosRequestConfig) {
+        return AdminIOUApiFp(this.configuration).apiAdminIouIssuePost(apiAdminIouIssuePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 외부 스왑 처리 후 IOU 발행
+     * @param {ApiAdminIouProcessSwapPostRequest} apiAdminIouProcessSwapPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminIOUApi
+     */
+    public apiAdminIouProcessSwapPost(apiAdminIouProcessSwapPostRequest: ApiAdminIouProcessSwapPostRequest, options?: RawAxiosRequestConfig) {
+        return AdminIOUApiFp(this.configuration).apiAdminIouProcessSwapPost(apiAdminIouProcessSwapPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary IOU 설정 정보 조회
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminIOUApi
+     */
+    public apiAdminIouSettingsGet(options?: RawAxiosRequestConfig) {
+        return AdminIOUApiFp(this.configuration).apiAdminIouSettingsGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 총 발행된 IOU 수량 조회
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminIOUApi
+     */
+    public apiAdminIouTotalIssuedGet(options?: RawAxiosRequestConfig) {
+        return AdminIOUApiFp(this.configuration).apiAdminIouTotalIssuedGet(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * AdminSwapConfigApi - axios parameter creator
+ * @export
+ */
+export const AdminSwapConfigApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary 대량 수수료 설정 생성
+         * @param {ApiAdminSwapFeeBatchCreatePostRequest} apiAdminSwapFeeBatchCreatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeBatchCreatePost: async (apiAdminSwapFeeBatchCreatePostRequest: ApiAdminSwapFeeBatchCreatePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminSwapFeeBatchCreatePostRequest' is not null or undefined
+            assertParamExists('apiAdminSwapFeeBatchCreatePost', 'apiAdminSwapFeeBatchCreatePostRequest', apiAdminSwapFeeBatchCreatePostRequest)
+            const localVarPath = `/api/admin/swap-fee/batch-create`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminSwapFeeBatchCreatePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 수수료 계산 시뮬레이션
+         * @param {ApiAdminSwapFeeCalculatePostRequest} apiAdminSwapFeeCalculatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeCalculatePost: async (apiAdminSwapFeeCalculatePostRequest: ApiAdminSwapFeeCalculatePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiAdminSwapFeeCalculatePostRequest' is not null or undefined
+            assertParamExists('apiAdminSwapFeeCalculatePost', 'apiAdminSwapFeeCalculatePostRequest', apiAdminSwapFeeCalculatePostRequest)
+            const localVarPath = `/api/admin/swap-fee/calculate`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiAdminSwapFeeCalculatePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 모든 수수료 설정 조회
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {ApiAdminSwapFeeConfigsGetSwapTypeEnum} [swapType] 
+         * @param {boolean} [isActive] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeConfigsGet: async (page?: number, limit?: number, swapType?: ApiAdminSwapFeeConfigsGetSwapTypeEnum, isActive?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/admin/swap-fee/configs`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (swapType !== undefined) {
+                localVarQueryParameter['swapType'] = swapType;
+            }
+
+            if (isActive !== undefined) {
+                localVarQueryParameter['isActive'] = isActive;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 수수료 설정 비활성화
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeConfigsIdDeactivatePost: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiAdminSwapFeeConfigsIdDeactivatePost', 'id', id)
+            const localVarPath = `/api/admin/swap-fee/configs/{id}/deactivate`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 특정 수수료 설정 조회
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeConfigsIdGet: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiAdminSwapFeeConfigsIdGet', 'id', id)
+            const localVarPath = `/api/admin/swap-fee/configs/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 수수료 설정 업데이트
+         * @param {string} id 
+         * @param {SwapFeeConfig} swapFeeConfig 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeConfigsIdPut: async (id: string, swapFeeConfig: SwapFeeConfig, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiAdminSwapFeeConfigsIdPut', 'id', id)
+            // verify required parameter 'swapFeeConfig' is not null or undefined
+            assertParamExists('apiAdminSwapFeeConfigsIdPut', 'swapFeeConfig', swapFeeConfig)
+            const localVarPath = `/api/admin/swap-fee/configs/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(swapFeeConfig, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 새 수수료 설정 생성
+         * @param {SwapFeeConfig} swapFeeConfig 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeConfigsPost: async (swapFeeConfig: SwapFeeConfig, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'swapFeeConfig' is not null or undefined
+            assertParamExists('apiAdminSwapFeeConfigsPost', 'swapFeeConfig', swapFeeConfig)
+            const localVarPath = `/api/admin/swap-fee/configs`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(swapFeeConfig, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 현재 활성화된 수수료 설정 조회
+         * @param {ApiAdminSwapFeeCurrentSwapTypeGetSwapTypeEnum} swapType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeCurrentSwapTypeGet: async (swapType: ApiAdminSwapFeeCurrentSwapTypeGetSwapTypeEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'swapType' is not null or undefined
+            assertParamExists('apiAdminSwapFeeCurrentSwapTypeGet', 'swapType', swapType)
+            const localVarPath = `/api/admin/swap-fee/current/{swapType}`
+                .replace(`{${"swapType"}}`, encodeURIComponent(String(swapType)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 수수료 설정 통계 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeStatsGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/admin/swap-fee/stats`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AdminSwapConfigApi - functional programming interface
+ * @export
+ */
+export const AdminSwapConfigApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AdminSwapConfigApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary 대량 수수료 설정 생성
+         * @param {ApiAdminSwapFeeBatchCreatePostRequest} apiAdminSwapFeeBatchCreatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminSwapFeeBatchCreatePost(apiAdminSwapFeeBatchCreatePostRequest: ApiAdminSwapFeeBatchCreatePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminSwapFeeBatchCreatePost(apiAdminSwapFeeBatchCreatePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminSwapConfigApi.apiAdminSwapFeeBatchCreatePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 수수료 계산 시뮬레이션
+         * @param {ApiAdminSwapFeeCalculatePostRequest} apiAdminSwapFeeCalculatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminSwapFeeCalculatePost(apiAdminSwapFeeCalculatePostRequest: ApiAdminSwapFeeCalculatePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminSwapFeeCalculatePost(apiAdminSwapFeeCalculatePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminSwapConfigApi.apiAdminSwapFeeCalculatePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 모든 수수료 설정 조회
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {ApiAdminSwapFeeConfigsGetSwapTypeEnum} [swapType] 
+         * @param {boolean} [isActive] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminSwapFeeConfigsGet(page?: number, limit?: number, swapType?: ApiAdminSwapFeeConfigsGetSwapTypeEnum, isActive?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminSwapFeeConfigsGet(page, limit, swapType, isActive, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminSwapConfigApi.apiAdminSwapFeeConfigsGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 수수료 설정 비활성화
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminSwapFeeConfigsIdDeactivatePost(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminSwapFeeConfigsIdDeactivatePost(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminSwapConfigApi.apiAdminSwapFeeConfigsIdDeactivatePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 특정 수수료 설정 조회
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminSwapFeeConfigsIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminSwapFeeConfigsIdGet(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminSwapConfigApi.apiAdminSwapFeeConfigsIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 수수료 설정 업데이트
+         * @param {string} id 
+         * @param {SwapFeeConfig} swapFeeConfig 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminSwapFeeConfigsIdPut(id: string, swapFeeConfig: SwapFeeConfig, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminSwapFeeConfigsIdPut(id, swapFeeConfig, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminSwapConfigApi.apiAdminSwapFeeConfigsIdPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 새 수수료 설정 생성
+         * @param {SwapFeeConfig} swapFeeConfig 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminSwapFeeConfigsPost(swapFeeConfig: SwapFeeConfig, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminSwapFeeConfigsPost(swapFeeConfig, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminSwapConfigApi.apiAdminSwapFeeConfigsPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 현재 활성화된 수수료 설정 조회
+         * @param {ApiAdminSwapFeeCurrentSwapTypeGetSwapTypeEnum} swapType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminSwapFeeCurrentSwapTypeGet(swapType: ApiAdminSwapFeeCurrentSwapTypeGetSwapTypeEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminSwapFeeCurrentSwapTypeGet(swapType, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminSwapConfigApi.apiAdminSwapFeeCurrentSwapTypeGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 수수료 설정 통계 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAdminSwapFeeStatsGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminSwapFeeStatsGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminSwapConfigApi.apiAdminSwapFeeStatsGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * AdminSwapConfigApi - factory interface
+ * @export
+ */
+export const AdminSwapConfigApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AdminSwapConfigApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary 대량 수수료 설정 생성
+         * @param {ApiAdminSwapFeeBatchCreatePostRequest} apiAdminSwapFeeBatchCreatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeBatchCreatePost(apiAdminSwapFeeBatchCreatePostRequest: ApiAdminSwapFeeBatchCreatePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminSwapFeeBatchCreatePost(apiAdminSwapFeeBatchCreatePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 수수료 계산 시뮬레이션
+         * @param {ApiAdminSwapFeeCalculatePostRequest} apiAdminSwapFeeCalculatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeCalculatePost(apiAdminSwapFeeCalculatePostRequest: ApiAdminSwapFeeCalculatePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminSwapFeeCalculatePost(apiAdminSwapFeeCalculatePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 모든 수수료 설정 조회
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {ApiAdminSwapFeeConfigsGetSwapTypeEnum} [swapType] 
+         * @param {boolean} [isActive] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeConfigsGet(page?: number, limit?: number, swapType?: ApiAdminSwapFeeConfigsGetSwapTypeEnum, isActive?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminSwapFeeConfigsGet(page, limit, swapType, isActive, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 수수료 설정 비활성화
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeConfigsIdDeactivatePost(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminSwapFeeConfigsIdDeactivatePost(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 특정 수수료 설정 조회
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeConfigsIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminSwapFeeConfigsIdGet(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 수수료 설정 업데이트
+         * @param {string} id 
+         * @param {SwapFeeConfig} swapFeeConfig 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeConfigsIdPut(id: string, swapFeeConfig: SwapFeeConfig, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminSwapFeeConfigsIdPut(id, swapFeeConfig, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 새 수수료 설정 생성
+         * @param {SwapFeeConfig} swapFeeConfig 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeConfigsPost(swapFeeConfig: SwapFeeConfig, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminSwapFeeConfigsPost(swapFeeConfig, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 현재 활성화된 수수료 설정 조회
+         * @param {ApiAdminSwapFeeCurrentSwapTypeGetSwapTypeEnum} swapType 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeCurrentSwapTypeGet(swapType: ApiAdminSwapFeeCurrentSwapTypeGetSwapTypeEnum, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminSwapFeeCurrentSwapTypeGet(swapType, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 수수료 설정 통계 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAdminSwapFeeStatsGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAdminSwapFeeStatsGet(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AdminSwapConfigApi - object-oriented interface
+ * @export
+ * @class AdminSwapConfigApi
+ * @extends {BaseAPI}
+ */
+export class AdminSwapConfigApi extends BaseAPI {
+    /**
+     * 
+     * @summary 대량 수수료 설정 생성
+     * @param {ApiAdminSwapFeeBatchCreatePostRequest} apiAdminSwapFeeBatchCreatePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminSwapConfigApi
+     */
+    public apiAdminSwapFeeBatchCreatePost(apiAdminSwapFeeBatchCreatePostRequest: ApiAdminSwapFeeBatchCreatePostRequest, options?: RawAxiosRequestConfig) {
+        return AdminSwapConfigApiFp(this.configuration).apiAdminSwapFeeBatchCreatePost(apiAdminSwapFeeBatchCreatePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 수수료 계산 시뮬레이션
+     * @param {ApiAdminSwapFeeCalculatePostRequest} apiAdminSwapFeeCalculatePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminSwapConfigApi
+     */
+    public apiAdminSwapFeeCalculatePost(apiAdminSwapFeeCalculatePostRequest: ApiAdminSwapFeeCalculatePostRequest, options?: RawAxiosRequestConfig) {
+        return AdminSwapConfigApiFp(this.configuration).apiAdminSwapFeeCalculatePost(apiAdminSwapFeeCalculatePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 모든 수수료 설정 조회
+     * @param {number} [page] 
+     * @param {number} [limit] 
+     * @param {ApiAdminSwapFeeConfigsGetSwapTypeEnum} [swapType] 
+     * @param {boolean} [isActive] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminSwapConfigApi
+     */
+    public apiAdminSwapFeeConfigsGet(page?: number, limit?: number, swapType?: ApiAdminSwapFeeConfigsGetSwapTypeEnum, isActive?: boolean, options?: RawAxiosRequestConfig) {
+        return AdminSwapConfigApiFp(this.configuration).apiAdminSwapFeeConfigsGet(page, limit, swapType, isActive, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 수수료 설정 비활성화
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminSwapConfigApi
+     */
+    public apiAdminSwapFeeConfigsIdDeactivatePost(id: string, options?: RawAxiosRequestConfig) {
+        return AdminSwapConfigApiFp(this.configuration).apiAdminSwapFeeConfigsIdDeactivatePost(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 특정 수수료 설정 조회
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminSwapConfigApi
+     */
+    public apiAdminSwapFeeConfigsIdGet(id: string, options?: RawAxiosRequestConfig) {
+        return AdminSwapConfigApiFp(this.configuration).apiAdminSwapFeeConfigsIdGet(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 수수료 설정 업데이트
+     * @param {string} id 
+     * @param {SwapFeeConfig} swapFeeConfig 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminSwapConfigApi
+     */
+    public apiAdminSwapFeeConfigsIdPut(id: string, swapFeeConfig: SwapFeeConfig, options?: RawAxiosRequestConfig) {
+        return AdminSwapConfigApiFp(this.configuration).apiAdminSwapFeeConfigsIdPut(id, swapFeeConfig, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 새 수수료 설정 생성
+     * @param {SwapFeeConfig} swapFeeConfig 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminSwapConfigApi
+     */
+    public apiAdminSwapFeeConfigsPost(swapFeeConfig: SwapFeeConfig, options?: RawAxiosRequestConfig) {
+        return AdminSwapConfigApiFp(this.configuration).apiAdminSwapFeeConfigsPost(swapFeeConfig, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 현재 활성화된 수수료 설정 조회
+     * @param {ApiAdminSwapFeeCurrentSwapTypeGetSwapTypeEnum} swapType 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminSwapConfigApi
+     */
+    public apiAdminSwapFeeCurrentSwapTypeGet(swapType: ApiAdminSwapFeeCurrentSwapTypeGetSwapTypeEnum, options?: RawAxiosRequestConfig) {
+        return AdminSwapConfigApiFp(this.configuration).apiAdminSwapFeeCurrentSwapTypeGet(swapType, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 수수료 설정 통계 조회
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminSwapConfigApi
+     */
+    public apiAdminSwapFeeStatsGet(options?: RawAxiosRequestConfig) {
+        return AdminSwapConfigApiFp(this.configuration).apiAdminSwapFeeStatsGet(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+/**
+ * @export
+ */
+export const ApiAdminSwapFeeConfigsGetSwapTypeEnum = {
+    XrpToKrw: 'XRP_TO_KRW',
+    KrwToXrp: 'KRW_TO_XRP',
+    IouTransfer: 'IOU_TRANSFER'
+} as const;
+export type ApiAdminSwapFeeConfigsGetSwapTypeEnum = typeof ApiAdminSwapFeeConfigsGetSwapTypeEnum[keyof typeof ApiAdminSwapFeeConfigsGetSwapTypeEnum];
+/**
+ * @export
+ */
+export const ApiAdminSwapFeeCurrentSwapTypeGetSwapTypeEnum = {
+    XrpToKrw: 'XRP_TO_KRW',
+    KrwToXrp: 'KRW_TO_XRP',
+    IouTransfer: 'IOU_TRANSFER'
+} as const;
+export type ApiAdminSwapFeeCurrentSwapTypeGetSwapTypeEnum = typeof ApiAdminSwapFeeCurrentSwapTypeGetSwapTypeEnum[keyof typeof ApiAdminSwapFeeCurrentSwapTypeGetSwapTypeEnum];
 
 
 /**
@@ -636,6 +3844,1898 @@ export class AuthApi extends BaseAPI {
      */
     public apiAuthRegisterPost(apiAuthRegisterPostRequest: ApiAuthRegisterPostRequest, options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).apiAuthRegisterPost(apiAuthRegisterPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * MarketApi - axios parameter creator
+ * @export
+ */
+export const MarketApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary KRW를 XRP로 환산 (실시간 환율 기준)
+         * @param {ApiTransactionConvertKrwToXrpPostRequest} apiTransactionConvertKrwToXrpPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionConvertKrwToXrpPost: async (apiTransactionConvertKrwToXrpPostRequest: ApiTransactionConvertKrwToXrpPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiTransactionConvertKrwToXrpPostRequest' is not null or undefined
+            assertParamExists('apiTransactionConvertKrwToXrpPost', 'apiTransactionConvertKrwToXrpPostRequest', apiTransactionConvertKrwToXrpPostRequest)
+            const localVarPath = `/api/transaction/convert/krw-to-xrp`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiTransactionConvertKrwToXrpPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary XRP를 KRW로 환산 (실시간 환율 기준)
+         * @param {ApiTransactionConvertXrpToKrwPostRequest} apiTransactionConvertXrpToKrwPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionConvertXrpToKrwPost: async (apiTransactionConvertXrpToKrwPostRequest: ApiTransactionConvertXrpToKrwPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiTransactionConvertXrpToKrwPostRequest' is not null or undefined
+            assertParamExists('apiTransactionConvertXrpToKrwPost', 'apiTransactionConvertXrpToKrwPostRequest', apiTransactionConvertXrpToKrwPostRequest)
+            const localVarPath = `/api/transaction/convert/xrp-to-krw`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiTransactionConvertXrpToKrwPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 나의 IOU 거래 내역 조회
+         * @param {number} [limit] 조회할 거래 내역 수
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionHistoryGet: async (limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/transaction/history`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary KRW IOU 시장 정보 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionMarketInfoGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/transaction/market/info`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 거래 가능한 통화쌍 목록 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionMarketPairsGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/transaction/market/pairs`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 현재 시장가 조회
+         * @param {string} [base] 
+         * @param {string} [counter] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionMarketPriceGet: async (base?: string, counter?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/transaction/market/price`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (base !== undefined) {
+                localVarQueryParameter['base'] = base;
+            }
+
+            if (counter !== undefined) {
+                localVarQueryParameter['counter'] = counter;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 나의 거래 통계 조회
+         * @param {string} [period] 조회 기간 (e.g., 24h, 7d, 30d)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionStatsGet: async (period?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/transaction/stats`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (period !== undefined) {
+                localVarQueryParameter['period'] = period;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MarketApi - functional programming interface
+ * @export
+ */
+export const MarketApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MarketApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary KRW를 XRP로 환산 (실시간 환율 기준)
+         * @param {ApiTransactionConvertKrwToXrpPostRequest} apiTransactionConvertKrwToXrpPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionConvertKrwToXrpPost(apiTransactionConvertKrwToXrpPostRequest: ApiTransactionConvertKrwToXrpPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionConvertKrwToXrpPost(apiTransactionConvertKrwToXrpPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MarketApi.apiTransactionConvertKrwToXrpPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary XRP를 KRW로 환산 (실시간 환율 기준)
+         * @param {ApiTransactionConvertXrpToKrwPostRequest} apiTransactionConvertXrpToKrwPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionConvertXrpToKrwPost(apiTransactionConvertXrpToKrwPostRequest: ApiTransactionConvertXrpToKrwPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionConvertXrpToKrwPost(apiTransactionConvertXrpToKrwPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MarketApi.apiTransactionConvertXrpToKrwPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 나의 IOU 거래 내역 조회
+         * @param {number} [limit] 조회할 거래 내역 수
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionHistoryGet(limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionHistoryGet(limit, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MarketApi.apiTransactionHistoryGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary KRW IOU 시장 정보 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionMarketInfoGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionMarketInfoGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MarketApi.apiTransactionMarketInfoGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 거래 가능한 통화쌍 목록 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionMarketPairsGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionMarketPairsGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MarketApi.apiTransactionMarketPairsGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 현재 시장가 조회
+         * @param {string} [base] 
+         * @param {string} [counter] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionMarketPriceGet(base?: string, counter?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionMarketPriceGet(base, counter, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MarketApi.apiTransactionMarketPriceGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 나의 거래 통계 조회
+         * @param {string} [period] 조회 기간 (e.g., 24h, 7d, 30d)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionStatsGet(period?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionStatsGet(period, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MarketApi.apiTransactionStatsGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * MarketApi - factory interface
+ * @export
+ */
+export const MarketApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MarketApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary KRW를 XRP로 환산 (실시간 환율 기준)
+         * @param {ApiTransactionConvertKrwToXrpPostRequest} apiTransactionConvertKrwToXrpPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionConvertKrwToXrpPost(apiTransactionConvertKrwToXrpPostRequest: ApiTransactionConvertKrwToXrpPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionConvertKrwToXrpPost(apiTransactionConvertKrwToXrpPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary XRP를 KRW로 환산 (실시간 환율 기준)
+         * @param {ApiTransactionConvertXrpToKrwPostRequest} apiTransactionConvertXrpToKrwPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionConvertXrpToKrwPost(apiTransactionConvertXrpToKrwPostRequest: ApiTransactionConvertXrpToKrwPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionConvertXrpToKrwPost(apiTransactionConvertXrpToKrwPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 나의 IOU 거래 내역 조회
+         * @param {number} [limit] 조회할 거래 내역 수
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionHistoryGet(limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionHistoryGet(limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary KRW IOU 시장 정보 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionMarketInfoGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionMarketInfoGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 거래 가능한 통화쌍 목록 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionMarketPairsGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionMarketPairsGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 현재 시장가 조회
+         * @param {string} [base] 
+         * @param {string} [counter] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionMarketPriceGet(base?: string, counter?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionMarketPriceGet(base, counter, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 나의 거래 통계 조회
+         * @param {string} [period] 조회 기간 (e.g., 24h, 7d, 30d)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionStatsGet(period?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionStatsGet(period, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MarketApi - object-oriented interface
+ * @export
+ * @class MarketApi
+ * @extends {BaseAPI}
+ */
+export class MarketApi extends BaseAPI {
+    /**
+     * 
+     * @summary KRW를 XRP로 환산 (실시간 환율 기준)
+     * @param {ApiTransactionConvertKrwToXrpPostRequest} apiTransactionConvertKrwToXrpPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MarketApi
+     */
+    public apiTransactionConvertKrwToXrpPost(apiTransactionConvertKrwToXrpPostRequest: ApiTransactionConvertKrwToXrpPostRequest, options?: RawAxiosRequestConfig) {
+        return MarketApiFp(this.configuration).apiTransactionConvertKrwToXrpPost(apiTransactionConvertKrwToXrpPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary XRP를 KRW로 환산 (실시간 환율 기준)
+     * @param {ApiTransactionConvertXrpToKrwPostRequest} apiTransactionConvertXrpToKrwPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MarketApi
+     */
+    public apiTransactionConvertXrpToKrwPost(apiTransactionConvertXrpToKrwPostRequest: ApiTransactionConvertXrpToKrwPostRequest, options?: RawAxiosRequestConfig) {
+        return MarketApiFp(this.configuration).apiTransactionConvertXrpToKrwPost(apiTransactionConvertXrpToKrwPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 나의 IOU 거래 내역 조회
+     * @param {number} [limit] 조회할 거래 내역 수
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MarketApi
+     */
+    public apiTransactionHistoryGet(limit?: number, options?: RawAxiosRequestConfig) {
+        return MarketApiFp(this.configuration).apiTransactionHistoryGet(limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary KRW IOU 시장 정보 조회
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MarketApi
+     */
+    public apiTransactionMarketInfoGet(options?: RawAxiosRequestConfig) {
+        return MarketApiFp(this.configuration).apiTransactionMarketInfoGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 거래 가능한 통화쌍 목록 조회
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MarketApi
+     */
+    public apiTransactionMarketPairsGet(options?: RawAxiosRequestConfig) {
+        return MarketApiFp(this.configuration).apiTransactionMarketPairsGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 현재 시장가 조회
+     * @param {string} [base] 
+     * @param {string} [counter] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MarketApi
+     */
+    public apiTransactionMarketPriceGet(base?: string, counter?: string, options?: RawAxiosRequestConfig) {
+        return MarketApiFp(this.configuration).apiTransactionMarketPriceGet(base, counter, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 나의 거래 통계 조회
+     * @param {string} [period] 조회 기간 (e.g., 24h, 7d, 30d)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MarketApi
+     */
+    public apiTransactionStatsGet(period?: string, options?: RawAxiosRequestConfig) {
+        return MarketApiFp(this.configuration).apiTransactionStatsGet(period, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * SwapApi - axios parameter creator
+ * @export
+ */
+export const SwapApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary 스왑 수수료 미리보기 계산
+         * @param {ApiTransactionSwapCalculateFeePostRequest} apiTransactionSwapCalculateFeePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionSwapCalculateFeePost: async (apiTransactionSwapCalculateFeePostRequest: ApiTransactionSwapCalculateFeePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiTransactionSwapCalculateFeePostRequest' is not null or undefined
+            assertParamExists('apiTransactionSwapCalculateFeePost', 'apiTransactionSwapCalculateFeePostRequest', apiTransactionSwapCalculateFeePostRequest)
+            const localVarPath = `/api/transaction/swap/calculate-fee`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiTransactionSwapCalculateFeePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary KRW IOU를 XRP로 스왑
+         * @param {ApiTransactionSwapKrwToXrpPostRequest} apiTransactionSwapKrwToXrpPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionSwapKrwToXrpPost: async (apiTransactionSwapKrwToXrpPostRequest: ApiTransactionSwapKrwToXrpPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiTransactionSwapKrwToXrpPostRequest' is not null or undefined
+            assertParamExists('apiTransactionSwapKrwToXrpPost', 'apiTransactionSwapKrwToXrpPostRequest', apiTransactionSwapKrwToXrpPostRequest)
+            const localVarPath = `/api/transaction/swap/krw-to-xrp`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiTransactionSwapKrwToXrpPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary XRP를 KRW IOU로 스왑
+         * @param {ApiTransactionSwapXrpToKrwPostRequest} apiTransactionSwapXrpToKrwPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionSwapXrpToKrwPost: async (apiTransactionSwapXrpToKrwPostRequest: ApiTransactionSwapXrpToKrwPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiTransactionSwapXrpToKrwPostRequest' is not null or undefined
+            assertParamExists('apiTransactionSwapXrpToKrwPost', 'apiTransactionSwapXrpToKrwPostRequest', apiTransactionSwapXrpToKrwPostRequest)
+            const localVarPath = `/api/transaction/swap/xrp-to-krw`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiTransactionSwapXrpToKrwPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SwapApi - functional programming interface
+ * @export
+ */
+export const SwapApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SwapApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary 스왑 수수료 미리보기 계산
+         * @param {ApiTransactionSwapCalculateFeePostRequest} apiTransactionSwapCalculateFeePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionSwapCalculateFeePost(apiTransactionSwapCalculateFeePostRequest: ApiTransactionSwapCalculateFeePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionSwapCalculateFeePost(apiTransactionSwapCalculateFeePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SwapApi.apiTransactionSwapCalculateFeePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary KRW IOU를 XRP로 스왑
+         * @param {ApiTransactionSwapKrwToXrpPostRequest} apiTransactionSwapKrwToXrpPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionSwapKrwToXrpPost(apiTransactionSwapKrwToXrpPostRequest: ApiTransactionSwapKrwToXrpPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionSwapKrwToXrpPost(apiTransactionSwapKrwToXrpPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SwapApi.apiTransactionSwapKrwToXrpPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary XRP를 KRW IOU로 스왑
+         * @param {ApiTransactionSwapXrpToKrwPostRequest} apiTransactionSwapXrpToKrwPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionSwapXrpToKrwPost(apiTransactionSwapXrpToKrwPostRequest: ApiTransactionSwapXrpToKrwPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionSwapXrpToKrwPost(apiTransactionSwapXrpToKrwPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SwapApi.apiTransactionSwapXrpToKrwPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * SwapApi - factory interface
+ * @export
+ */
+export const SwapApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SwapApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary 스왑 수수료 미리보기 계산
+         * @param {ApiTransactionSwapCalculateFeePostRequest} apiTransactionSwapCalculateFeePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionSwapCalculateFeePost(apiTransactionSwapCalculateFeePostRequest: ApiTransactionSwapCalculateFeePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionSwapCalculateFeePost(apiTransactionSwapCalculateFeePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary KRW IOU를 XRP로 스왑
+         * @param {ApiTransactionSwapKrwToXrpPostRequest} apiTransactionSwapKrwToXrpPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionSwapKrwToXrpPost(apiTransactionSwapKrwToXrpPostRequest: ApiTransactionSwapKrwToXrpPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionSwapKrwToXrpPost(apiTransactionSwapKrwToXrpPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary XRP를 KRW IOU로 스왑
+         * @param {ApiTransactionSwapXrpToKrwPostRequest} apiTransactionSwapXrpToKrwPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionSwapXrpToKrwPost(apiTransactionSwapXrpToKrwPostRequest: ApiTransactionSwapXrpToKrwPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionSwapXrpToKrwPost(apiTransactionSwapXrpToKrwPostRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SwapApi - object-oriented interface
+ * @export
+ * @class SwapApi
+ * @extends {BaseAPI}
+ */
+export class SwapApi extends BaseAPI {
+    /**
+     * 
+     * @summary 스왑 수수료 미리보기 계산
+     * @param {ApiTransactionSwapCalculateFeePostRequest} apiTransactionSwapCalculateFeePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SwapApi
+     */
+    public apiTransactionSwapCalculateFeePost(apiTransactionSwapCalculateFeePostRequest: ApiTransactionSwapCalculateFeePostRequest, options?: RawAxiosRequestConfig) {
+        return SwapApiFp(this.configuration).apiTransactionSwapCalculateFeePost(apiTransactionSwapCalculateFeePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary KRW IOU를 XRP로 스왑
+     * @param {ApiTransactionSwapKrwToXrpPostRequest} apiTransactionSwapKrwToXrpPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SwapApi
+     */
+    public apiTransactionSwapKrwToXrpPost(apiTransactionSwapKrwToXrpPostRequest: ApiTransactionSwapKrwToXrpPostRequest, options?: RawAxiosRequestConfig) {
+        return SwapApiFp(this.configuration).apiTransactionSwapKrwToXrpPost(apiTransactionSwapKrwToXrpPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary XRP를 KRW IOU로 스왑
+     * @param {ApiTransactionSwapXrpToKrwPostRequest} apiTransactionSwapXrpToKrwPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SwapApi
+     */
+    public apiTransactionSwapXrpToKrwPost(apiTransactionSwapXrpToKrwPostRequest: ApiTransactionSwapXrpToKrwPostRequest, options?: RawAxiosRequestConfig) {
+        return SwapApiFp(this.configuration).apiTransactionSwapXrpToKrwPost(apiTransactionSwapXrpToKrwPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TransactionApi - axios parameter creator
+ * @export
+ */
+export const TransactionApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary 오퍼 취소
+         * @param {ApiTransactionOfferCancelPostRequest} apiTransactionOfferCancelPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionOfferCancelPost: async (apiTransactionOfferCancelPostRequest: ApiTransactionOfferCancelPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiTransactionOfferCancelPostRequest' is not null or undefined
+            assertParamExists('apiTransactionOfferCancelPost', 'apiTransactionOfferCancelPostRequest', apiTransactionOfferCancelPostRequest)
+            const localVarPath = `/api/transaction/offer/cancel`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiTransactionOfferCancelPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary P2P 거래 오퍼 생성
+         * @param {ApiTransactionOfferCreatePostRequest} apiTransactionOfferCreatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionOfferCreatePost: async (apiTransactionOfferCreatePostRequest: ApiTransactionOfferCreatePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiTransactionOfferCreatePostRequest' is not null or undefined
+            assertParamExists('apiTransactionOfferCreatePost', 'apiTransactionOfferCreatePostRequest', apiTransactionOfferCreatePostRequest)
+            const localVarPath = `/api/transaction/offer/create`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiTransactionOfferCreatePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 나의 활성 오퍼 목록 조회
+         * @param {number} [limit] 조회할 오퍼 수
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionOffersGet: async (limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/transaction/offers`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 오더북 조회
+         * @param {string} [base] 기준 통화
+         * @param {string} [counter] 상대 통화
+         * @param {number} [limit] 조회할 오더 수
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionOrderbookGet: async (base?: string, counter?: string, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/transaction/orderbook`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (base !== undefined) {
+                localVarQueryParameter['base'] = base;
+            }
+
+            if (counter !== undefined) {
+                localVarQueryParameter['counter'] = counter;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary KRW IOU P2P 전송
+         * @param {ApiTransactionTransferPostRequest} apiTransactionTransferPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionTransferPost: async (apiTransactionTransferPostRequest: ApiTransactionTransferPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiTransactionTransferPostRequest' is not null or undefined
+            assertParamExists('apiTransactionTransferPost', 'apiTransactionTransferPostRequest', apiTransactionTransferPostRequest)
+            const localVarPath = `/api/transaction/transfer`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiTransactionTransferPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TransactionApi - functional programming interface
+ * @export
+ */
+export const TransactionApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TransactionApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary 오퍼 취소
+         * @param {ApiTransactionOfferCancelPostRequest} apiTransactionOfferCancelPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionOfferCancelPost(apiTransactionOfferCancelPostRequest: ApiTransactionOfferCancelPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionOfferCancelPost(apiTransactionOfferCancelPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TransactionApi.apiTransactionOfferCancelPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary P2P 거래 오퍼 생성
+         * @param {ApiTransactionOfferCreatePostRequest} apiTransactionOfferCreatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionOfferCreatePost(apiTransactionOfferCreatePostRequest: ApiTransactionOfferCreatePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionOfferCreatePost(apiTransactionOfferCreatePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TransactionApi.apiTransactionOfferCreatePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 나의 활성 오퍼 목록 조회
+         * @param {number} [limit] 조회할 오퍼 수
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionOffersGet(limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionOffersGet(limit, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TransactionApi.apiTransactionOffersGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 오더북 조회
+         * @param {string} [base] 기준 통화
+         * @param {string} [counter] 상대 통화
+         * @param {number} [limit] 조회할 오더 수
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionOrderbookGet(base?: string, counter?: string, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionOrderbookGet(base, counter, limit, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TransactionApi.apiTransactionOrderbookGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary KRW IOU P2P 전송
+         * @param {ApiTransactionTransferPostRequest} apiTransactionTransferPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTransactionTransferPost(apiTransactionTransferPostRequest: ApiTransactionTransferPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionTransferPost(apiTransactionTransferPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TransactionApi.apiTransactionTransferPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TransactionApi - factory interface
+ * @export
+ */
+export const TransactionApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TransactionApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary 오퍼 취소
+         * @param {ApiTransactionOfferCancelPostRequest} apiTransactionOfferCancelPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionOfferCancelPost(apiTransactionOfferCancelPostRequest: ApiTransactionOfferCancelPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionOfferCancelPost(apiTransactionOfferCancelPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary P2P 거래 오퍼 생성
+         * @param {ApiTransactionOfferCreatePostRequest} apiTransactionOfferCreatePostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionOfferCreatePost(apiTransactionOfferCreatePostRequest: ApiTransactionOfferCreatePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionOfferCreatePost(apiTransactionOfferCreatePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 나의 활성 오퍼 목록 조회
+         * @param {number} [limit] 조회할 오퍼 수
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionOffersGet(limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionOffersGet(limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 오더북 조회
+         * @param {string} [base] 기준 통화
+         * @param {string} [counter] 상대 통화
+         * @param {number} [limit] 조회할 오더 수
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionOrderbookGet(base?: string, counter?: string, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionOrderbookGet(base, counter, limit, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary KRW IOU P2P 전송
+         * @param {ApiTransactionTransferPostRequest} apiTransactionTransferPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTransactionTransferPost(apiTransactionTransferPostRequest: ApiTransactionTransferPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiTransactionTransferPost(apiTransactionTransferPostRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TransactionApi - object-oriented interface
+ * @export
+ * @class TransactionApi
+ * @extends {BaseAPI}
+ */
+export class TransactionApi extends BaseAPI {
+    /**
+     * 
+     * @summary 오퍼 취소
+     * @param {ApiTransactionOfferCancelPostRequest} apiTransactionOfferCancelPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionApi
+     */
+    public apiTransactionOfferCancelPost(apiTransactionOfferCancelPostRequest: ApiTransactionOfferCancelPostRequest, options?: RawAxiosRequestConfig) {
+        return TransactionApiFp(this.configuration).apiTransactionOfferCancelPost(apiTransactionOfferCancelPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary P2P 거래 오퍼 생성
+     * @param {ApiTransactionOfferCreatePostRequest} apiTransactionOfferCreatePostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionApi
+     */
+    public apiTransactionOfferCreatePost(apiTransactionOfferCreatePostRequest: ApiTransactionOfferCreatePostRequest, options?: RawAxiosRequestConfig) {
+        return TransactionApiFp(this.configuration).apiTransactionOfferCreatePost(apiTransactionOfferCreatePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 나의 활성 오퍼 목록 조회
+     * @param {number} [limit] 조회할 오퍼 수
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionApi
+     */
+    public apiTransactionOffersGet(limit?: number, options?: RawAxiosRequestConfig) {
+        return TransactionApiFp(this.configuration).apiTransactionOffersGet(limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 오더북 조회
+     * @param {string} [base] 기준 통화
+     * @param {string} [counter] 상대 통화
+     * @param {number} [limit] 조회할 오더 수
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionApi
+     */
+    public apiTransactionOrderbookGet(base?: string, counter?: string, limit?: number, options?: RawAxiosRequestConfig) {
+        return TransactionApiFp(this.configuration).apiTransactionOrderbookGet(base, counter, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary KRW IOU P2P 전송
+     * @param {ApiTransactionTransferPostRequest} apiTransactionTransferPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionApi
+     */
+    public apiTransactionTransferPost(apiTransactionTransferPostRequest: ApiTransactionTransferPostRequest, options?: RawAxiosRequestConfig) {
+        return TransactionApiFp(this.configuration).apiTransactionTransferPost(apiTransactionTransferPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * WalletApi - axios parameter creator
+ * @export
+ */
+export const WalletApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary XRP 계정 정보 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletAccountGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/wallet/account`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary XRP 잔액 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletBalanceGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/wallet/balance`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary KRW IOU 잔액 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletKrwBalanceGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/wallet/krw/balance`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary KRW IOU 거래 가능 여부 확인
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletKrwCanTradeGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/wallet/krw/can-trade`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary KRW IOU Trust Line 권한 확인
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletKrwCheckPermissionGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/wallet/krw/check-permission`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary KRW IOU Trust Line 생성
+         * @param {ApiWalletKrwCreateTrustlinePostRequest} [apiWalletKrwCreateTrustlinePostRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletKrwCreateTrustlinePost: async (apiWalletKrwCreateTrustlinePostRequest?: ApiWalletKrwCreateTrustlinePostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/wallet/krw/create-trustline`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiWalletKrwCreateTrustlinePostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 지갑 요약 정보 조회 (XRP 및 IOU 잔액 포함)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletSummaryGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/wallet/summary`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 모든 Trust Line 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletTrustlinesGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/wallet/trustlines`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary XRP 주소 유효성 검증
+         * @param {ApiWalletValidateAddressPostRequest} apiWalletValidateAddressPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletValidateAddressPost: async (apiWalletValidateAddressPostRequest: ApiWalletValidateAddressPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiWalletValidateAddressPostRequest' is not null or undefined
+            assertParamExists('apiWalletValidateAddressPost', 'apiWalletValidateAddressPostRequest', apiWalletValidateAddressPostRequest)
+            const localVarPath = `/api/wallet/validate-address`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiWalletValidateAddressPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * WalletApi - functional programming interface
+ * @export
+ */
+export const WalletApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = WalletApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary XRP 계정 정보 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiWalletAccountGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiWalletAccountGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WalletApi.apiWalletAccountGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary XRP 잔액 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiWalletBalanceGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiWalletBalanceGet200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiWalletBalanceGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WalletApi.apiWalletBalanceGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary KRW IOU 잔액 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiWalletKrwBalanceGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiWalletKrwBalanceGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WalletApi.apiWalletKrwBalanceGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary KRW IOU 거래 가능 여부 확인
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiWalletKrwCanTradeGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiWalletKrwCanTradeGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WalletApi.apiWalletKrwCanTradeGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary KRW IOU Trust Line 권한 확인
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiWalletKrwCheckPermissionGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiWalletKrwCheckPermissionGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WalletApi.apiWalletKrwCheckPermissionGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary KRW IOU Trust Line 생성
+         * @param {ApiWalletKrwCreateTrustlinePostRequest} [apiWalletKrwCreateTrustlinePostRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiWalletKrwCreateTrustlinePost(apiWalletKrwCreateTrustlinePostRequest?: ApiWalletKrwCreateTrustlinePostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiWalletKrwCreateTrustlinePost(apiWalletKrwCreateTrustlinePostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WalletApi.apiWalletKrwCreateTrustlinePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 지갑 요약 정보 조회 (XRP 및 IOU 잔액 포함)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiWalletSummaryGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiWalletSummaryGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WalletApi.apiWalletSummaryGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary 모든 Trust Line 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiWalletTrustlinesGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiWalletTrustlinesGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WalletApi.apiWalletTrustlinesGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary XRP 주소 유효성 검증
+         * @param {ApiWalletValidateAddressPostRequest} apiWalletValidateAddressPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiWalletValidateAddressPost(apiWalletValidateAddressPostRequest: ApiWalletValidateAddressPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiWalletValidateAddressPost(apiWalletValidateAddressPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WalletApi.apiWalletValidateAddressPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * WalletApi - factory interface
+ * @export
+ */
+export const WalletApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = WalletApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary XRP 계정 정보 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletAccountGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiWalletAccountGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary XRP 잔액 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletBalanceGet(options?: RawAxiosRequestConfig): AxiosPromise<ApiWalletBalanceGet200Response> {
+            return localVarFp.apiWalletBalanceGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary KRW IOU 잔액 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletKrwBalanceGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiWalletKrwBalanceGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary KRW IOU 거래 가능 여부 확인
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletKrwCanTradeGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiWalletKrwCanTradeGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary KRW IOU Trust Line 권한 확인
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletKrwCheckPermissionGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiWalletKrwCheckPermissionGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary KRW IOU Trust Line 생성
+         * @param {ApiWalletKrwCreateTrustlinePostRequest} [apiWalletKrwCreateTrustlinePostRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletKrwCreateTrustlinePost(apiWalletKrwCreateTrustlinePostRequest?: ApiWalletKrwCreateTrustlinePostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiWalletKrwCreateTrustlinePost(apiWalletKrwCreateTrustlinePostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 지갑 요약 정보 조회 (XRP 및 IOU 잔액 포함)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletSummaryGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiWalletSummaryGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 모든 Trust Line 조회
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletTrustlinesGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiWalletTrustlinesGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary XRP 주소 유효성 검증
+         * @param {ApiWalletValidateAddressPostRequest} apiWalletValidateAddressPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiWalletValidateAddressPost(apiWalletValidateAddressPostRequest: ApiWalletValidateAddressPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiWalletValidateAddressPost(apiWalletValidateAddressPostRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * WalletApi - object-oriented interface
+ * @export
+ * @class WalletApi
+ * @extends {BaseAPI}
+ */
+export class WalletApi extends BaseAPI {
+    /**
+     * 
+     * @summary XRP 계정 정보 조회
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WalletApi
+     */
+    public apiWalletAccountGet(options?: RawAxiosRequestConfig) {
+        return WalletApiFp(this.configuration).apiWalletAccountGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary XRP 잔액 조회
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WalletApi
+     */
+    public apiWalletBalanceGet(options?: RawAxiosRequestConfig) {
+        return WalletApiFp(this.configuration).apiWalletBalanceGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary KRW IOU 잔액 조회
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WalletApi
+     */
+    public apiWalletKrwBalanceGet(options?: RawAxiosRequestConfig) {
+        return WalletApiFp(this.configuration).apiWalletKrwBalanceGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary KRW IOU 거래 가능 여부 확인
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WalletApi
+     */
+    public apiWalletKrwCanTradeGet(options?: RawAxiosRequestConfig) {
+        return WalletApiFp(this.configuration).apiWalletKrwCanTradeGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary KRW IOU Trust Line 권한 확인
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WalletApi
+     */
+    public apiWalletKrwCheckPermissionGet(options?: RawAxiosRequestConfig) {
+        return WalletApiFp(this.configuration).apiWalletKrwCheckPermissionGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary KRW IOU Trust Line 생성
+     * @param {ApiWalletKrwCreateTrustlinePostRequest} [apiWalletKrwCreateTrustlinePostRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WalletApi
+     */
+    public apiWalletKrwCreateTrustlinePost(apiWalletKrwCreateTrustlinePostRequest?: ApiWalletKrwCreateTrustlinePostRequest, options?: RawAxiosRequestConfig) {
+        return WalletApiFp(this.configuration).apiWalletKrwCreateTrustlinePost(apiWalletKrwCreateTrustlinePostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 지갑 요약 정보 조회 (XRP 및 IOU 잔액 포함)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WalletApi
+     */
+    public apiWalletSummaryGet(options?: RawAxiosRequestConfig) {
+        return WalletApiFp(this.configuration).apiWalletSummaryGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary 모든 Trust Line 조회
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WalletApi
+     */
+    public apiWalletTrustlinesGet(options?: RawAxiosRequestConfig) {
+        return WalletApiFp(this.configuration).apiWalletTrustlinesGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary XRP 주소 유효성 검증
+     * @param {ApiWalletValidateAddressPostRequest} apiWalletValidateAddressPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WalletApi
+     */
+    public apiWalletValidateAddressPost(apiWalletValidateAddressPostRequest: ApiWalletValidateAddressPostRequest, options?: RawAxiosRequestConfig) {
+        return WalletApiFp(this.configuration).apiWalletValidateAddressPost(apiWalletValidateAddressPostRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
