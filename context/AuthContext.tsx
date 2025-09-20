@@ -1,10 +1,14 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import apiClient from '@/services/apiClient';
 
 interface User {
-  id: string;
+  id?: string;
   email: string;
   name?: string;
+  walletAddress?: string;
+  // 추가 사용자 필드들
+  [key: string]: any;
 }
 
 interface AuthContextType {
@@ -12,7 +16,9 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  register: (email: string, password: string) => Promise<void>;
   isAuthenticated: boolean;
+  token: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,8 +30,9 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [token, setToken] = useState<string | null>(null);
 
-  const isAuthenticated = !!user;
+  const isAuthenticated = !!user && !!token;
 
   // 앱 시작 시 저장된 세션 확인
   useEffect(() => {
@@ -34,12 +41,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const checkStoredSession = async () => {
     try {
-      const storedUser = await AsyncStorage.getItem('user');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+      // API 클라이언트에서 토큰 확인
+      const storedToken = apiClient.getCurrentToken();
+      const storedUser = await apiClient.getStoredUserData();
+
+      if (storedToken && storedUser) {
+        setToken(storedToken);
+        setUser(storedUser);
       }
     } catch (error) {
       console.error('Failed to load stored session:', error);
+      // 저장된 세션이 손상된 경우 정리
+      await apiClient.logout();
     } finally {
       setIsLoading(false);
     }
@@ -47,28 +60,38 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const login = async (email: string, password: string) => {
     try {
-      // TODO: 실제 API 호출로 교체
-      // 임시 사용자 데이터
-      const userData: User = {
-        id: '1',
-        email,
-        name: email.split('@')[0],
-      };
+      const response = await apiClient.login(email, password);
 
-      // 사용자 정보 저장
-      await AsyncStorage.setItem('user', JSON.stringify(userData));
-      setUser(userData);
+      setToken(response.token);
+      setUser(response.user);
     } catch (error) {
-      throw new Error('로그인에 실패했습니다.');
+      console.error('Login error in AuthContext:', error);
+      throw error; // 에러를 다시 throw하여 UI에서 처리할 수 있도록 함
+    }
+  };
+
+  const register = async (email: string, password: string) => {
+    try {
+      const response = await apiClient.register(email, password);
+
+      setToken(response.token);
+      setUser(response.user);
+    } catch (error) {
+      console.error('Registration error in AuthContext:', error);
+      throw error;
     }
   };
 
   const logout = async () => {
     try {
-      await AsyncStorage.removeItem('user');
+      await apiClient.logout();
+      setToken(null);
       setUser(null);
     } catch (error) {
       console.error('Failed to logout:', error);
+      // 로그아웃 실패해도 로컬 상태는 정리
+      setToken(null);
+      setUser(null);
     }
   };
 
@@ -77,7 +100,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     isLoading,
     login,
     logout,
+    register,
     isAuthenticated,
+    token,
   };
 
   return (
