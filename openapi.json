@@ -1,0 +1,324 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "XRP IOU Server API",
+    "version": "1.0.0",
+    "description": "XRP 지갑 관리 및 KRW IOU 거래 시스템 API 문서"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "ExchangeRate": {
+        "type": "object",
+        "properties": {
+          "baseCurrency": {
+            "type": "string",
+            "example": "XRP"
+          },
+          "quoteCurrency": {
+            "type": "string",
+            "example": "KRW"
+          },
+          "rate": {
+            "type": "number",
+            "example": 500.5
+          },
+          "spread": {
+            "type": "number",
+            "example": 0.001
+          },
+          "source": {
+            "type": "string",
+            "example": "MANUAL"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isActive": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "SwapFeeConfig": {
+        "type": "object",
+        "properties": {
+          "swapType": {
+            "type": "string",
+            "enum": [
+              "XRP_TO_KRW",
+              "KRW_TO_XRP",
+              "IOU_TRANSFER"
+            ]
+          },
+          "feeType": {
+            "type": "string",
+            "enum": [
+              "PERCENTAGE",
+              "FIXED",
+              "TIERED"
+            ]
+          },
+          "baseFee": {
+            "type": "number",
+            "description": "PERCENTAGE: 0.003 (0.3%), FIXED: 10 (10 KRW)"
+          },
+          "minFee": {
+            "type": "number"
+          },
+          "maxFee": {
+            "type": "number"
+          },
+          "tieredRates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "threshold": {
+                  "type": "number"
+                },
+                "fee": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "effectiveFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "effectiveTo": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isActive": {
+            "type": "boolean",
+            "default": true
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "summary": "신규 사용자 등록 및 XRP 지갑 생성",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "사용자 이메일"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "description": "사용자 비밀번호 (6자 이상)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "사용자 등록 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "token": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 요청 (이메일, 비밀번호 누락 또는 형식 오류)"
+          },
+          "409": {
+            "description": "이미 존재하는 사용자"
+          },
+          "500": {
+            "description": "서버 내부 오류"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "사용자 로그인",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "사용자 이메일"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "description": "사용자 비밀번호"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "로그인 성공, JWT 토큰 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "token": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 요청 (이메일 또는 비밀번호 누락)"
+          },
+          "401": {
+            "description": "인증 실패 (잘못된 자격 증명)"
+          },
+          "500": {
+            "description": "서버 내부 오류"
+          }
+        }
+      }
+    },
+    "/api/admin/domain/settings": {
+      "get": {
+        "summary": "Domain 설정 조회",
+        "tags": [
+          "Admin-Domain"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Domain 설정 조회 성공"
+          },
+          "403": {
+            "description": "관리자 권한 없음"
+          }
+        }
+      },
+      "put": {
+        "summary": "Domain 설정 업데이트",
+        "tags": [
+          "Admin-Domain"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "autoWhitelist": {
+                    "type": "boolean"
+                  },
+                  "domainType": {
+                    "type": "string",
+                    "enum": [
+                      "whitelist",
+                      "blacklist",
+                      "open"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Domain 설정 업데이트 성공"
+          },
+          "403": {
+            "description": "관리자 권한 없음"
+          }
+        }
+      }
+    }
+  }
+}
