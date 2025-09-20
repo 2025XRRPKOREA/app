@@ -19,28 +19,103 @@ interface TransactionData {
   currency: 'KRW' | 'USD';
   amount: string;
   qrData?: string;
+  offerId?: string;
 }
 
 export default function TransactionScreen() {
   const [mode, setMode] = useState<TransactionMode>('main');
+  const [loading, setLoading] = useState(false);
   const [transactionData, setTransactionData] = useState<TransactionData>({
     type: 'receive',
     currency: 'KRW',
     amount: '',
   });
 
-  const handleReceive = () => {
-    if (!transactionData.amount) return;
+  const handleReceive = async () => {
+    if (!transactionData.amount || loading) return;
 
-    const qrData = JSON.stringify({
-      type: 'payment_request',
-      currency: transactionData.currency,
-      amount: transactionData.amount,
-      timestamp: Date.now(),
-    });
+    setLoading(true);
+    try {
+      // API로 오퍼 생성 (실제 API 호출 시)
+      // const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000';
+      // const offerResponse = await fetch(`${API_BASE_URL}/api/transaction/offer/create`, {
+      
+      // 현재는 데모용 - 실제 API 연결 시 위 코드 사용
+      await new Promise(resolve => setTimeout(resolve, 1000)); // 로딩 시뮬레이션
+      
+      // 데모용 오퍼 ID 생성
+      const demoOfferId = `offer_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      // QR 코드에 오퍼 ID 포함
+      const qrData = JSON.stringify({
+        type: 'payment_request',
+        offerId: demoOfferId,
+        currency: transactionData.currency,
+        amount: transactionData.amount,
+        timestamp: Date.now(),
+      });
 
-    setTransactionData(prev => ({ ...prev, qrData }));
-    setMode('qr-display');
+      setTransactionData(prev => ({ ...prev, qrData, offerId: demoOfferId }));
+      setMode('qr-display');
+    } catch (error) {
+      Alert.alert('오류', '결제 요청 생성에 실패했습니다.');
+      console.error('Offer creation error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancelOffer = async () => {
+    if (!transactionData.offerId) {
+      setMode('main');
+      setTransactionData({ type: 'receive', currency: 'KRW', amount: '' });
+      return;
+    }
+
+    // 취소 확인 다이얼로그
+    Alert.alert(
+      '결제 요청 취소',
+      '생성된 QR 코드와 결제 요청을 취소하시겠습니까?',
+      [
+        {
+          text: '아니요',
+          style: 'cancel',
+        },
+        {
+          text: '네, 취소합니다',
+          style: 'destructive',
+          onPress: async () => {
+            setLoading(true);
+            try {
+              // API로 오퍼 취소 (실제 API 호출 시)
+              // const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000';
+              // const cancelResponse = await fetch(`${API_BASE_URL}/api/transaction/offer/cancel`, {
+              //   method: 'POST',
+              //   headers: {
+              //     'Content-Type': 'application/json',
+              //   },
+              //   body: JSON.stringify({
+              //     offerSequence: 0  // API 스펙에 따른 필드
+              //   })
+              // });
+
+              // 현재는 데모용 - 실제 API 연결 시 위 코드 사용
+              await new Promise(resolve => setTimeout(resolve, 500)); // 로딩 시뮬레이션
+              
+              console.log(`오퍼 취소됨: ${transactionData.offerId}`);
+              
+              setMode('main');
+              setTransactionData({ type: 'receive', currency: 'KRW', amount: '' });
+            } catch (error) {
+              Alert.alert('오류', '오퍼 취소에 실패했습니다.');
+              console.error('Offer cancellation error:', error);
+            } finally {
+              setLoading(false);
+            }
+          }
+        }
+      ]
+    );
   };
 
   const handleSend = () => {
@@ -88,11 +163,19 @@ export default function TransactionScreen() {
               <Text style={styles.qrDescription}>
                 상대방이 이 QR 코드를 스캔하여 결제할 수 있습니다
               </Text>
+              {transactionData.offerId && (
+                <Text style={styles.offerIdText}>
+                  오퍼 ID: {transactionData.offerId}
+                </Text>
+              )}
             </View>
             <TouchableOpacity
-              style={styles.primaryButton}
-              onPress={() => setMode('main')}>
-              <Text style={styles.primaryButtonText}>닫기</Text>
+              style={[styles.primaryButton, loading && styles.disabledButton]}
+              onPress={handleCancelOffer}
+              disabled={loading}>
+              <Text style={styles.primaryButtonText}>
+                {loading ? '취소 중...' : '닫기'}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -258,11 +341,13 @@ export default function TransactionScreen() {
                 style={[
                   styles.primaryButton,
                   { flex: 1 },
-                  !transactionData.amount && styles.disabledButton,
+                  (!transactionData.amount || loading) && styles.disabledButton,
                 ]}
                 onPress={handleReceive}
-                disabled={!transactionData.amount}>
-                <Text style={styles.primaryButtonText}>QR 생성</Text>
+                disabled={!transactionData.amount || loading}>
+                <Text style={styles.primaryButtonText}>
+                  {loading ? '생성 중...' : 'QR 생성'}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -479,6 +564,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#6b7280',
     textAlign: 'center',
+  },
+  offerIdText: {
+    fontSize: 12,
+    color: '#9ca3af',
+    textAlign: 'center',
+    marginTop: 8,
+    fontFamily: 'monospace',
   },
   confirmContainer: {
     backgroundColor: '#f3f4f6',
