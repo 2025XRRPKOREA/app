@@ -1,4 +1,4 @@
-import { AuthApi, Configuration } from '@/api';
+import { AuthApi, WalletApi, MarketApi, Configuration } from '@/api';
 import { API_CONFIG, STORAGE_KEYS } from '@/constants/config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
@@ -6,6 +6,8 @@ import { Platform } from 'react-native';
 class ApiClient {
   private configuration: Configuration;
   private authApi: AuthApi;
+  private walletApi: WalletApi;
+  private marketApi: MarketApi;
   private token: string | null = null;
 
   constructor() {
@@ -20,13 +22,15 @@ class ApiClient {
       },
     });
     this.authApi = new AuthApi(this.configuration);
+    this.walletApi = new WalletApi(this.configuration);
+    this.marketApi = new MarketApi(this.configuration);
     this.loadTokenFromStorage();
   }
 
   // 토큰 관리 메서드들
   private async loadTokenFromStorage(): Promise<void> {
     try {
-      if (Platform.OS === 'web') {
+      if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
         // 웹에서는 localStorage 사용
         const storedToken = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
         if (storedToken) {
@@ -48,7 +52,7 @@ class ApiClient {
 
   private async saveTokenToStorage(token: string): Promise<void> {
     try {
-      if (Platform.OS === 'web') {
+      if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
         // 웹에서는 localStorage 사용
         localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
       } else {
@@ -65,7 +69,7 @@ class ApiClient {
 
   private async removeTokenFromStorage(): Promise<void> {
     try {
-      if (Platform.OS === 'web') {
+      if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
         // 웹에서는 localStorage 사용
         localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
         localStorage.removeItem(STORAGE_KEYS.USER_DATA);
@@ -93,10 +97,12 @@ class ApiClient {
       },
     });
     this.authApi = new AuthApi(this.configuration);
+    this.walletApi = new WalletApi(this.configuration);
+    this.marketApi = new MarketApi(this.configuration);
   }
 
   private getToken(): string {
-    return this.token ? `Bearer ${this.token}` : '';
+    return this.token ? this.token : '';
   }
 
   // 인증 관련 메서드들
@@ -132,7 +138,7 @@ class ApiClient {
 
         // 사용자 정보도 저장
         if (data.user) {
-          if (Platform.OS === 'web') {
+          if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
             localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(data.user));
           } else {
             await AsyncStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(data.user));
@@ -181,7 +187,7 @@ class ApiClient {
         await this.saveTokenToStorage(data.token);
 
         if (data.user) {
-          if (Platform.OS === 'web') {
+          if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
             localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(data.user));
           } else {
             await AsyncStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(data.user));
@@ -225,7 +231,7 @@ class ApiClient {
     try {
       let userData: string | null = null;
 
-      if (Platform.OS === 'web') {
+      if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
         userData = localStorage.getItem(STORAGE_KEYS.USER_DATA);
       } else {
         userData = await AsyncStorage.getItem(STORAGE_KEYS.USER_DATA);
@@ -236,6 +242,24 @@ class ApiClient {
       console.error('Failed to load user data:', error);
       return null;
     }
+  }
+
+  // 지갑 관련 메서드들
+  async getWalletBalance() {
+    return this.walletApi.apiWalletBalanceGet();
+  }
+
+  async getWalletAccount() {
+    return this.walletApi.apiWalletAccountGet();
+  }
+
+  async getKrwBalance() {
+    return this.walletApi.apiWalletKrwBalanceGet();
+  }
+
+  // 거래 관련 메서드들
+  async getTransactionHistory(limit?: number) {
+    return this.marketApi.apiTransactionHistoryGet(limit);
   }
 
   // API 설정 업데이트 (개발/프로덕션 환경 변경 시)
@@ -251,6 +275,8 @@ class ApiClient {
       },
     });
     this.authApi = new AuthApi(this.configuration);
+    this.walletApi = new WalletApi(this.configuration);
+    this.marketApi = new MarketApi(this.configuration);
   }
 }
 

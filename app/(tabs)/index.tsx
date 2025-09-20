@@ -1,51 +1,14 @@
 import React from 'react';
 import { useWalletBalance } from '../../hooks/useWalletBalance';
+import { useTransactionHistory } from '../../hooks/useTransactionHistory';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { WalletIcon, ArrowUpRightIcon, ArrowDownLeftIcon } from '../../components/icons';
 
-interface Transaction {
-  id: string;
-  type: 'send' | 'receive';
-  amount: string;
-  currency: 'XRP' | 'KRW' | 'USD';
-  timestamp: string;
-  status: 'completed' | 'pending';
-  recipient?: string;
-}
-
-const mockTransactions: Transaction[] = [
-  {
-    id: '1',
-    type: 'receive',
-    amount: '1,500.00',
-    currency: 'KRW',
-    timestamp: '2025-09-20 14:30',
-    status: 'completed',
-    recipient: 'user123',
-  },
-  {
-    id: '2',
-    type: 'send',
-    amount: '25.5',
-    currency: 'XRP',
-    timestamp: '2025-09-20 12:15',
-    status: 'completed',
-    recipient: 'user456',
-  },
-  {
-    id: '3',
-    type: 'receive',
-    amount: '10.00',
-    currency: 'USD',
-    timestamp: '2025-09-19 16:45',
-    status: 'pending',
-    recipient: 'user789',
-  },
-];
 
 export default function HomeScreen() {
   const { balance, loading } = useWalletBalance();
+  const { transactions } = useTransactionHistory(3);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -85,62 +48,74 @@ export default function HomeScreen() {
       <View style={styles.transactionCard}>
         <Text style={styles.transactionTitle}>최근 거래내역</Text>
         <View style={styles.transactionList}>
-          {mockTransactions.map(transaction => (
-            <View key={transaction.id} style={styles.transactionItem}>
-              <View style={styles.transactionLeft}>
-                <View
-                  style={[
-                    styles.iconContainer,
-                    transaction.type === 'send'
-                      ? styles.sendIconContainer
-                      : styles.receiveIconContainer,
-                  ]}>
-                  {transaction.type === 'send' ? (
-                    <ArrowUpRightIcon size={16} color="#dc2626" />
-                  ) : (
-                    <ArrowDownLeftIcon size={16} color="#16a34a" />
-                  )}
+          {transactions.length > 0 ? (
+            transactions.map(transaction => (
+              <View key={transaction.id} style={styles.transactionItem}>
+                <View style={styles.transactionLeft}>
+                  <View
+                    style={[
+                      styles.iconContainer,
+                      transaction.type === 'sent'
+                        ? styles.sendIconContainer
+                        : styles.receiveIconContainer,
+                    ]}>
+                    {transaction.type === 'sent' ? (
+                      <ArrowUpRightIcon size={16} color="#dc2626" />
+                    ) : (
+                      <ArrowDownLeftIcon size={16} color="#16a34a" />
+                    )}
+                  </View>
+                  <View>
+                    <Text style={styles.transactionType}>
+                      {transaction.type === 'sent' ? '보냄' : '받음'}
+                    </Text>
+                    <Text style={styles.transactionTime}>
+                      {new Date(transaction.timestamp).toLocaleString('ko-KR', {
+                        month: 'numeric',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.transactionType}>
-                    {transaction.type === 'send' ? '보냄' : '받음'}
-                  </Text>
-                  <Text style={styles.transactionTime}>
-                    {transaction.timestamp}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.transactionRight}>
-                <Text
-                  style={[
-                    styles.transactionAmount,
-                    transaction.type === 'send'
-                      ? styles.sendAmount
-                      : styles.receiveAmount,
-                  ]}>
-                  {transaction.type === 'send' ? '-' : '+'}
-                  {transaction.amount} {transaction.currency}
-                </Text>
-                <View
-                  style={[
-                    styles.statusBadge,
-                    transaction.status === 'completed'
-                      ? styles.completedBadge
-                      : styles.pendingBadge,
-                  ]}>
+                <View style={styles.transactionRight}>
                   <Text
                     style={[
-                      styles.statusText,
-                      transaction.status === 'completed'
-                        ? styles.completedText
-                        : styles.pendingText,
+                      styles.transactionAmount,
+                      transaction.type === 'sent'
+                        ? styles.sendAmount
+                        : styles.receiveAmount,
                     ]}>
-                    {transaction.status === 'completed' ? '완료' : '대기중'}
+                    {transaction.type === 'sent' ? '-' : '+'}
+                    {transaction.amount} {transaction.currency}
                   </Text>
+                  <View
+                    style={[
+                      styles.statusBadge,
+                      transaction.status === 'completed'
+                        ? styles.completedBadge
+                        : styles.pendingBadge,
+                    ]}>
+                    <Text
+                      style={[
+                        styles.statusText,
+                        transaction.status === 'completed'
+                          ? styles.completedText
+                          : styles.pendingText,
+                      ]}>
+                      {transaction.status === 'completed' ? '완료' :
+                       transaction.status === 'failed' ? '실패' : '대기중'}
+                    </Text>
+                  </View>
                 </View>
               </View>
+            ))
+          ) : (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>거래내역이 없습니다</Text>
             </View>
-          ))}
+          )}
         </View>
       </View>
     </ScrollView>
@@ -307,6 +282,15 @@ const styles = StyleSheet.create({
     color: '#374151',
   },
   pendingText: {
+    color: '#6b7280',
+  },
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 32,
+  },
+  emptyText: {
+    fontSize: 14,
     color: '#6b7280',
   },
 });

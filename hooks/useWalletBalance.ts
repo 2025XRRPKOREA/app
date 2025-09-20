@@ -1,19 +1,14 @@
 import { useState, useEffect } from 'react';
 import { apiClient } from '../services/apiClient';
-
-interface WalletBalance {
-  address: string;
-  XRP: number;
-  KRW: number;
-}
+import { ApiWalletBalanceGet200Response } from '../api';
 
 export const useWalletBalance = () => {
-  const [balance, setBalance] = useState<WalletBalance | null>(null);
+  const [balance, setBalance] = useState<ApiWalletBalanceGet200Response | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchBalance = async () => {
     try {
-      const response = await apiClient.get('/wallet/balance');
+      const response = await apiClient.getWalletBalance();
       setBalance(response.data);
       setLoading(false);
     } catch (error) {
@@ -25,7 +20,7 @@ export const useWalletBalance = () => {
   useEffect(() => {
     fetchBalance();
 
-    const interval = setInterval(fetchBalance, 3000);
+    const interval = setInterval(fetchBalance, 30000); // 30초로 변경
 
     return () => clearInterval(interval);
   }, []);

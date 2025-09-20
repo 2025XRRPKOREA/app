@@ -3,9 +3,7 @@ import Constants from 'expo-constants';
 // API 설정
 export const API_CONFIG = {
   // 환경 변수에서 서버 호스트를 가져오고, 없으면 기본값 사용
-  BASE_URL: Constants.expoConfig?.extra?.serverHost || (__DEV__
-    ? 'http://122.40.46.59'  // 해커톤 서버로 변경
-    : 'https://your-production-api.com'),  // 프로덕션 서버
+  BASE_URL: 'http://122.40.46.59',
 
   // API 엔드포인트들
   ENDPOINTS: {

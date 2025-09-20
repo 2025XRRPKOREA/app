@@ -113,8 +113,8 @@ export function NotificationProvider({ children }: NotificationProviderProps): R
     });
 
     return () => {
-      Notifications.removeNotificationSubscription(notificationListener);
-      Notifications.removeNotificationSubscription(responseListener);
+      // Notifications.removeNotificationSubscription(notificationListener);
+      // Notifications.removeNotificationSubscription(responseListener);
     };
   }, []);
 
