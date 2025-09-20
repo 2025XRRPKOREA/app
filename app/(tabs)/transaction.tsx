@@ -176,7 +176,7 @@ export default function TransactionScreen() {
 
   if (mode === 'qr-display') {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.card}>
           <View style={styles.cardHeader}>
             <QRCodeIcon size={20} color="#1f2937" />
@@ -237,7 +237,7 @@ export default function TransactionScreen() {
 
   if (mode === 'qr-scan') {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.card}>
           <View style={styles.cardHeader}>
             <CameraIcon size={20} color="#1f2937" />
@@ -258,7 +258,7 @@ export default function TransactionScreen() {
 
   if (mode === 'confirm') {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.card}>
           <View style={styles.cardHeader}>
             <Text style={styles.cardTitle}>거래 확인</Text>
@@ -324,6 +324,7 @@ export default function TransactionScreen() {
   return (
     <ScrollView
       style={styles.container}
+      showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl
           refreshing={historyLoading}

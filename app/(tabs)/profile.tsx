@@ -117,7 +117,7 @@ export default function ProfileScreen() {
   );
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* 프로필 정보 */}
       <View style={styles.card}>
         <View style={styles.cardHeader}>

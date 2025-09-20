@@ -189,7 +189,7 @@ export default function ExchangeScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* 환전 폼 */}
       <View style={styles.card}>
         <View style={styles.cardHeader}>
