@@ -25,8 +25,6 @@ import { router } from 'expo-router';
 interface UserProfile {
   name: string;
   email: string;
-  phone: string;
-  displayName: string;
   walletAddress: string;
 }
 
@@ -36,8 +34,6 @@ export default function ProfileScreen() {
   const [profile, setProfile] = useState<UserProfile>({
     name: user?.name || '사용자',
     email: user?.email || 'user@example.com',
-    phone: '010-1234-5678',
-    displayName: user?.name || '사용자',
     walletAddress: 'rN7n7otQDd6FczFgLdSqtcsAUxDkw6fzRH',
   });
   const [editProfile, setEditProfile] = useState<UserProfile>(profile);
@@ -166,37 +162,6 @@ export default function ProfileScreen() {
               )}
             </View>
 
-            <View style={styles.field}>
-              <Text style={styles.fieldLabel}>전화번호</Text>
-              {isEditing ? (
-                <TextInput
-                  style={styles.textInput}
-                  value={editProfile.phone}
-                  onChangeText={text => setEditProfile(prev => ({ ...prev, phone: text }))}
-                  keyboardType="phone-pad"
-                />
-              ) : (
-                <View style={styles.fieldValue}>
-                  <Text style={styles.fieldValueText}>{profile.phone}</Text>
-                </View>
-              )}
-            </View>
-
-            <View style={styles.field}>
-              <Text style={styles.fieldLabel}>거래시 표시 이름</Text>
-              {isEditing ? (
-                <TextInput
-                  style={styles.textInput}
-                  value={editProfile.displayName}
-                  onChangeText={text => setEditProfile(prev => ({ ...prev, displayName: text }))}
-                  placeholder="다른 사용자에게 보여질 이름"
-                />
-              ) : (
-                <View style={styles.fieldValue}>
-                  <Text style={styles.fieldValueText}>{profile.displayName}</Text>
-                </View>
-              )}
-            </View>
           </View>
         </View>
       </View>
