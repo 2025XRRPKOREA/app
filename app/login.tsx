@@ -42,12 +42,15 @@ export default function LoginScreen() {
       await login(email, password);
       // 로그인 성공 시 메인 화면으로 이동
       router.replace('/(tabs)');
-    } catch (error) {
-      Alert.alert('로그인 실패', '이메일 또는 비밀번호를 확인해주세요.');
+    } catch (error: any) {
+      // API 클라이언트에서 처리된 에러 메시지 사용
+      const errorMessage = error.message || '로그인 중 오류가 발생했습니다.';
+      Alert.alert('로그인 실패', errorMessage);
     } finally {
       setIsLoading(false);
     }
   };
+
 
   const styles = StyleSheet.create({
     container: {

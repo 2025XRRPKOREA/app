@@ -1,52 +1,74 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { IconSymbol } from '@/components/ui/icon-symbol';
+import { Camera, CameraView } from 'expo-camera';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface QRScannerProps {
   onScan: (data: string) => void;
 }
 
 export function QRScanner({ onScan }: QRScannerProps) {
-  const [isScanning, setIsScanning] = useState(false);
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [scanned, setScanned] = useState(false);
 
-  const startScanning = async () => {
-    setIsScanning(true);
-    // React Native에서는 카메라 권한이 필요하므로 데모용으로 시뮬레이션
-    Alert.alert(
-      '카메라 권한',
-      '실제 앱에서는 카메라 권한이 필요합니다. 데모용으로 가상 스캔을 진행합니다.',
-      [
-        { text: '확인', onPress: simulateScan }
-      ]
+  useEffect(() => {
+    const getCameraPermissions = async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === 'granted');
+    };
+
+    getCameraPermissions();
+  }, []);
+
+  const handleBarCodeScanned = ({ type, data }: { type: string; data: string }) => {
+    setScanned(true);
+    onScan(data);
+  };
+
+  if (hasPermission === null) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.permissionContainer}>
+          <IconSymbol name="camera" size={64} color="#6b7280" />
+          <Text style={styles.permissionText}>카메라 권한을 확인하는 중...</Text>
+        </View>
+      </View>
     );
-  };
+  }
 
-  const simulateScan = () => {
-    // 데모용 가짜 QR 스캔
-    setTimeout(() => {
-      onScan(JSON.stringify({
-        type: 'payment_request',
-        currency: 'KRW',
-        amount: '5000',
-        timestamp: Date.now()
-      }));
-      setIsScanning(false);
-    }, 1500);
-  };
+  if (hasPermission === false) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.permissionContainer}>
+          <IconSymbol name="camera.fill" size={64} color="#ef4444" />
+          <Text style={styles.permissionText}>카메라 권한이 필요합니다</Text>
+          <Text style={styles.permissionSubtext}>
+            설정에서 카메라 접근 권한을 허용해주세요
+          </Text>
+          <TouchableOpacity
+            style={styles.permissionButton}
+            onPress={async () => {
+              const { status } = await Camera.requestCameraPermissionsAsync();
+              setHasPermission(status === 'granted');
+            }}
+          >
+            <Text style={styles.permissionButtonText}>권한 요청</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      <View style={styles.scannerArea}>
-        {isScanning ? (
-          <View style={styles.scanningContainer}>
-            <IconSymbol name="camera" size={48} color="#ffffff" />
-            <Text style={styles.scanningText}>스캔 중...</Text>
-          </View>
-        ) : (
-          <View style={styles.cameraPlaceholder}>
-            <IconSymbol name="camera" size={64} color="#6b7280" />
-          </View>
-        )}
+      <View style={styles.cameraContainer}>
+        <CameraView
+          style={styles.camera}
+          onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+          barcodeScannerSettings={{
+            barcodeTypes: ['qr', 'pdf417'],
+          }}
+        />
 
         {/* 스캔 오버레이 */}
         <View style={styles.overlay}>
@@ -64,13 +86,12 @@ export function QRScanner({ onScan }: QRScannerProps) {
           QR 코드를 스캔 영역에 맞춰주세요
         </Text>
 
-        {!isScanning ? (
-          <TouchableOpacity style={styles.startButton} onPress={startScanning}>
-            <Text style={styles.startButtonText}>카메라 시작</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity style={styles.simulateButton} onPress={simulateScan}>
-            <Text style={styles.simulateButtonText}>스캔 시뮬레이션 (데모)</Text>
+        {scanned && (
+          <TouchableOpacity
+            style={styles.scanAgainButton}
+            onPress={() => setScanned(false)}
+          >
+            <Text style={styles.scanAgainButtonText}>다시 스캔하기</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -82,28 +103,47 @@ const styles = StyleSheet.create({
   container: {
     gap: 16,
   },
-  scannerArea: {
+  cameraContainer: {
     aspectRatio: 1,
-    backgroundColor: '#1f2937',
     borderRadius: 8,
     overflow: 'hidden',
     position: 'relative',
   },
-  scanningContainer: {
+  camera: {
     flex: 1,
+  },
+  permissionContainer: {
+    aspectRatio: 1,
+    backgroundColor: '#f3f4f6',
+    borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000000',
+    padding: 20,
   },
-  scanningText: {
+  permissionText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#374151',
+    marginTop: 16,
+    textAlign: 'center',
+  },
+  permissionSubtext: {
+    fontSize: 14,
+    color: '#6b7280',
+    marginTop: 8,
+    textAlign: 'center',
+  },
+  permissionButton: {
+    backgroundColor: '#2563eb',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  permissionButtonText: {
     color: '#ffffff',
     fontSize: 16,
-    marginTop: 12,
-  },
-  cameraPlaceholder: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    fontWeight: '600',
   },
   overlay: {
     position: 'absolute',
@@ -115,14 +155,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scanFrame: {
-    width: 128,
-    height: 128,
+    width: 200,
+    height: 200,
     position: 'relative',
   },
   corner: {
     position: 'absolute',
-    width: 32,
-    height: 32,
+    width: 40,
+    height: 40,
     borderColor: '#2563eb',
     borderWidth: 4,
   },
@@ -163,7 +203,7 @@ const styles = StyleSheet.create({
     color: '#6b7280',
     textAlign: 'center',
   },
-  startButton: {
+  scanAgainButton: {
     backgroundColor: '#2563eb',
     paddingVertical: 12,
     paddingHorizontal: 24,
@@ -171,20 +211,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
   },
-  startButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  simulateButton: {
-    backgroundColor: '#2563eb',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    width: '100%',
-    alignItems: 'center',
-  },
-  simulateButtonText: {
+  scanAgainButtonText: {
     color: '#ffffff',
     fontSize: 16,
     fontWeight: '600',

@@ -38,6 +38,12 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "앱에서 QR 코드를 스캔하기 위해 카메라에 접근합니다."
+        }
       ]
     ],
     "experiments": {
