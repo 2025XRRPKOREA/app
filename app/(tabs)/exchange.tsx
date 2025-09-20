@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
-  Alert,
   ActivityIndicator,
+  Animated,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
-import { RefreshIcon, ArrowLeftRightIcon, ChartIcon } from '../../components/icons';
+import { ArrowLeftRightIcon, ChartIcon, RefreshIcon } from '../../components/icons';
 import exchangeRateService, { ExchangeRate } from '../../services/exchangeRateService';
 
 interface ExchangeHistory {
@@ -75,9 +75,34 @@ export default function ExchangeScreen() {
   const [exchangeRates, setExchangeRates] = useState<ExchangeRate[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<string>('');
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const [toastAnimation] = useState(new Animated.Value(0));
 
   // 자동으로 받을 통화 결정: KRW -> XRP, XRP -> KRW
   const toCurrency = fromCurrency === 'KRW' ? 'XRP' : 'KRW';
+
+  const showToastMessage = (message: string, type: 'success' | 'error' = 'success') => {
+    setToastMessage(message);
+    setToastType(type);
+    setShowToast(true);
+    Animated.sequence([
+      Animated.timing(toastAnimation, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.delay(3000), // 3초 동안 표시
+      Animated.timing(toastAnimation, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setShowToast(false);
+    });
+  };
 
   // 환율 서비스 초기화 및 구독
   useEffect(() => {
@@ -131,13 +156,17 @@ export default function ExchangeScreen() {
         result = await exchangeRateService.convertXrpToKrw(amountNum);
       }
 
-      Alert.alert(
-        '환전 완료',
-        `${amount} ${fromCurrency}를 ${result.convertedAmount.toLocaleString()} ${toCurrency}로 환전 요청이 완료되었습니다.\n\n환율: ${formatExchangeRate(result.rate)}`
+      const convertedAmountStr = result.convertedAmount < 0.001 
+        ? formatExchangeRate(result.convertedAmount)
+        : result.convertedAmount.toLocaleString();
+      
+      showToastMessage(
+        `✅ ${amount} ${fromCurrency} → ${convertedAmountStr} ${toCurrency} 환전 완료!`,
+        'success'
       );
       setAmount('');
     } catch (error) {
-      Alert.alert('환전 실패', '환전 처리 중 오류가 발생했습니다. 다시 시도해 주세요.');
+      showToastMessage('❌ 환전 실패, 다시 시도해주세요', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -247,7 +276,7 @@ export default function ExchangeScreen() {
             {/* 스왑 버튼 */}
             <View style={styles.swapButtonContainer}>
               <TouchableOpacity style={styles.swapButton} onPress={handleSwapCurrencies}>
-                <ArrowLeftRightIcon size={16} color="#6b7280" />
+                <ArrowLeftRightIcon size={20} color="#6b7280" />
               </TouchableOpacity>
             </View>
 
@@ -389,6 +418,28 @@ export default function ExchangeScreen() {
           ))}
         </View>
       </View>
+
+      {/* Toast Notification */}
+      {showToast && (
+        <Animated.View
+          style={[
+            styles.toast,
+            toastType === 'success' ? styles.toastSuccess : styles.toastError,
+            {
+              opacity: toastAnimation,
+              transform: [
+                {
+                  translateY: toastAnimation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [-20, 0],
+                  }),
+                },
+              ],
+            },
+          ]}>
+          <Text style={styles.toastText}>{toastMessage}</Text>
+        </Animated.View>
+      )}
     </ScrollView>
   );
 }
@@ -752,5 +803,32 @@ const styles = StyleSheet.create({
   },
   failedText: {
     color: '#dc2626',
+  },
+  toast: {
+    position: 'absolute',
+    top: 60,
+    left: 20,
+    right: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 12,
+    zIndex: 1000,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  toastSuccess: {
+    backgroundColor: '#16a34a',
+  },
+  toastError: {
+    backgroundColor: '#dc2626',
+  },
+  toastText: {
+    color: '#ffffff',
+    fontSize: 15,
+    fontWeight: '600',
+    textAlign: 'center',
   },
 });

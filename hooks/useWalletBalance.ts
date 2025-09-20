@@ -4,11 +4,16 @@ import { ApiWalletBalanceGet200Response } from '../api';
 
 export const useWalletBalance = () => {
   const [balance, setBalance] = useState<ApiWalletBalanceGet200Response | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const fetchBalance = async () => {
+  const fetchBalance = async (isInitial = false) => {
     try {
-      setLoading(true);
+      if (isInitial) {
+        setIsInitialLoading(true);
+      } else {
+        setIsRefreshing(true);
+      }
       
       // 직접 API 호출로 변경 (거래내역과 동일한 방식)
       const apiUrl = 'http://122.40.46.59/api/wallet/balance';
@@ -18,7 +23,8 @@ export const useWalletBalance = () => {
       
       if (!token) {
         console.error('토큰이 없습니다. 로그인이 필요합니다.');
-        setLoading(false);
+        setIsInitialLoading(false);
+        setIsRefreshing(false);
         return;
       }
       
@@ -39,20 +45,22 @@ export const useWalletBalance = () => {
 
       const data = await response.json();
       setBalance(data);
-      setLoading(false);
+      setIsInitialLoading(false);
+      setIsRefreshing(false);
     } catch (error) {
       console.error('잔고 조회 실패:', error);
-      setLoading(false);
+      setIsInitialLoading(false);
+      setIsRefreshing(false);
     }
   };
 
   useEffect(() => {
-    fetchBalance();
+    fetchBalance(true); // 초기 로딩
 
-    const interval = setInterval(fetchBalance, 30000); // 30초로 변경
+    const interval = setInterval(() => fetchBalance(false), 30000); // 백그라운드 새로고침
 
     return () => clearInterval(interval);
   }, []);
 
-  return { balance, loading };
+  return { balance, isInitialLoading, isRefreshing };
 };

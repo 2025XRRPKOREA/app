@@ -7,7 +7,7 @@ import { TransactionList } from '../../components/TransactionList';
 
 
 export default function HomeScreen() {
-  const { balance, loading } = useWalletBalance();
+  const { balance, isInitialLoading } = useWalletBalance();
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -27,7 +27,7 @@ export default function HomeScreen() {
           <View style={styles.balanceLeft}>
             <Text style={styles.currencyLabel}>XRP</Text>
             <Text style={styles.balanceAmount}>
-              {loading ? '로딩 중...' : balance?.XRP?.toFixed(2) || '0.00'}
+              {isInitialLoading ? '로딩 중...' : balance?.XRP?.toFixed(2) || '0.00'}
             </Text>
           </View>
         </View>
@@ -37,13 +37,13 @@ export default function HomeScreen() {
           <View style={styles.stablecoinItem}>
             <Text style={styles.stablecoinLabel}>KRW</Text>
             <Text style={styles.stablecoinAmount}>
-              {loading ? '로딩 중...' : `₩${balance?.KRW?.toLocaleString() || '0'}`}
+              {isInitialLoading ? '로딩 중...' : `₩${balance?.KRW?.toLocaleString() || '0'}`}
             </Text>
           </View>
           <View style={styles.stablecoinItem}>
             <Text style={styles.stablecoinLabel}>USD</Text>
             <Text style={styles.stablecoinAmount}>
-              {loading ? '로딩 중...' : `$${balance?.USD?.toLocaleString() || '0'}`}
+              {isInitialLoading ? '로딩 중...' : `$${balance?.USD?.toLocaleString() || '0'}`}
             </Text>
           </View>
         </View>
