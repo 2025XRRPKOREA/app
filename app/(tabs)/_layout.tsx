@@ -1,10 +1,11 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { View, Text } from 'react-native';
 
 import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { HomeIcon, ArrowLeftRightIcon, RefreshIcon, UserIcon } from '../../components/icons';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -12,22 +13,61 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
+        tabBarActiveTintColor: '#2563eb',
+        tabBarInactiveTintColor: '#6b7280',
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: '#ffffff',
+        },
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontSize: 20,
+        },
+        headerTitle: 'XRP Wallet',
+        headerRight: () => (
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginRight: 16
+          }}>
+            <View style={{
+              width: 8,
+              height: 8,
+              borderRadius: 4,
+              backgroundColor: '#10b981',
+              marginRight: 8
+            }} />
+            <Text style={{ fontSize: 14, color: '#6b7280' }}>연결됨</Text>
+          </View>
+        ),
         tabBarButton: HapticTab,
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: '홈',
+          tabBarIcon: ({ color }) => <HomeIcon size={24} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="transaction"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: '거래',
+          tabBarIcon: ({ color }) => <ArrowLeftRightIcon size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="exchange"
+        options={{
+          title: '환전',
+          tabBarIcon: ({ color }) => <RefreshIcon size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: '마이페이지',
+          tabBarIcon: ({ color }) => <UserIcon size={24} color={color} />,
         }}
       />
     </Tabs>
