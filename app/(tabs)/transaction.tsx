@@ -7,12 +7,14 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  RefreshControl,
 } from 'react-native';
 import { useInAppNotification } from '../../components/InAppNotification';
 import { QRGenerator } from '../../components/QRGenerator';
 import { QRScanner } from '../../components/QRScanner';
-import { ArrowDownLeftIcon, CameraIcon, QRCodeIcon, QRGenerateIcon, ScanQRIcon } from '../../components/icons';
+import { ArrowDownLeftIcon, ArrowUpRightIcon, CameraIcon, QRCodeIcon, QRGenerateIcon, ScanQRIcon } from '../../components/icons';
 import { useNotification } from '../../context/NotificationContext';
+import { useTransactionHistory } from '../../hooks/useTransactionHistory';
 import * as Haptics from 'expo-haptics';
 
 type TransactionMode = 'main' | 'receive' | 'qr-display' | 'qr-scan' | 'confirm';
@@ -35,8 +37,11 @@ export default function TransactionScreen() {
   });
 
   // 알림 훅 추가
-  const { sendTransactionNotification, sendQRPaymentNotification } = useNotification();
-  const { showTransactionSuccess, showQRPaymentSuccess } = useInAppNotification();
+  const { sendTransactionNotification } = useNotification();
+  const { showTransactionSuccess } = useInAppNotification();
+
+  // 거래내역 훅 추가
+  const { transactions, loading: historyLoading, error: historyError, refreshTransactions } = useTransactionHistory(5);
 
   const handleReceive = async () => {
     if (!transactionData.amount || loading) return;
@@ -306,8 +311,25 @@ export default function TransactionScreen() {
     );
   }
 
+  // 날짜 포맷팅 함수
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${month}월 ${day}일 ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  };
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl
+          refreshing={historyLoading}
+          onRefresh={refreshTransactions}
+        />
+      }>
       {/* 메인 거래 옵션 */}
       <View style={styles.optionsGrid}>
         <TouchableOpacity
@@ -429,25 +451,68 @@ export default function TransactionScreen() {
           <Text style={styles.cardTitle}>최근 거래</Text>
         </View>
         <View style={styles.cardContent}>
-          {[1, 2, 3].map(i => (
-            <View key={i} style={styles.recentTransaction}>
-              <View style={styles.transactionLeft}>
-                <View style={styles.receiveIconContainer}>
-                  <ArrowDownLeftIcon size={16} color="#16a34a" />
-                </View>
-                <View>
-                  <Text style={styles.transactionType}>받음</Text>
-                  <Text style={styles.transactionTime}>9월 20일 14:30</Text>
-                </View>
-              </View>
-              <View style={styles.transactionRight}>
-                <Text style={styles.receiveAmount}>+1,500 KRW</Text>
-                <View style={styles.statusBadge}>
-                  <Text style={styles.statusText}>완료</Text>
-                </View>
-              </View>
+          {historyError ? (
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>거래내역을 불러올 수 없습니다</Text>
+              <TouchableOpacity
+                style={styles.retryButton}
+                onPress={refreshTransactions}>
+                <Text style={styles.retryButtonText}>다시 시도</Text>
+              </TouchableOpacity>
             </View>
-          ))}
+          ) : transactions.length === 0 && !historyLoading ? (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>거래내역이 없습니다</Text>
+            </View>
+          ) : (
+            transactions.map(transaction => {
+              const isReceived = transaction.type === 'received';
+              const IconComponent = isReceived ? ArrowDownLeftIcon : ArrowUpRightIcon;
+              const iconColor = isReceived ? '#16a34a' : '#dc2626';
+              const iconBgColor = isReceived ? '#f0fdf4' : '#fef2f2';
+              const amountPrefix = isReceived ? '+' : '-';
+              const amountColor = isReceived ? '#16a34a' : '#dc2626';
+
+              return (
+                <View key={transaction.id} style={styles.recentTransaction}>
+                  <View style={styles.transactionLeft}>
+                    <View style={[styles.receiveIconContainer, { backgroundColor: iconBgColor }]}>
+                      <IconComponent size={16} color={iconColor} />
+                    </View>
+                    <View>
+                      <Text style={styles.transactionType}>
+                        {isReceived ? '받음' : '보냄'}
+                      </Text>
+                      <Text style={styles.transactionTime}>
+                        {formatDate(transaction.timestamp)}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.transactionRight}>
+                    <Text style={[styles.receiveAmount, { color: amountColor }]}>
+                      {amountPrefix}{transaction.amount} {transaction.currency}
+                    </Text>
+                    <View style={[
+                      styles.statusBadge,
+                      transaction.status === 'completed' && styles.completedBadge,
+                      transaction.status === 'pending' && styles.pendingBadge,
+                      transaction.status === 'failed' && styles.failedBadge,
+                    ]}>
+                      <Text style={[
+                        styles.statusText,
+                        transaction.status === 'completed' && styles.completedText,
+                        transaction.status === 'pending' && styles.pendingText,
+                        transaction.status === 'failed' && styles.failedText,
+                      ]}>
+                        {transaction.status === 'completed' ? '완료' :
+                         transaction.status === 'pending' ? '진행중' : '실패'}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              );
+            })
+          )}
         </View>
       </View>
     </ScrollView>
@@ -724,5 +789,53 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '600',
     color: '#374151',
+  },
+  errorContainer: {
+    alignItems: 'center',
+    padding: 20,
+  },
+  errorText: {
+    fontSize: 14,
+    color: '#dc2626',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  retryButton: {
+    backgroundColor: '#2563eb',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    padding: 20,
+  },
+  emptyText: {
+    fontSize: 14,
+    color: '#6b7280',
+    textAlign: 'center',
+  },
+  completedBadge: {
+    backgroundColor: '#d1fae5',
+  },
+  pendingBadge: {
+    backgroundColor: '#fef3c7',
+  },
+  failedBadge: {
+    backgroundColor: '#fecaca',
+  },
+  completedText: {
+    color: '#065f46',
+  },
+  pendingText: {
+    color: '#92400e',
+  },
+  failedText: {
+    color: '#991b1b',
   },
 });

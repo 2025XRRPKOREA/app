@@ -1,4 +1,4 @@
-import { AuthApi, WalletApi, Configuration } from '@/api';
+import { AuthApi, WalletApi, MarketApi, Configuration } from '@/api';
 import { API_CONFIG, STORAGE_KEYS } from '@/constants/config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
@@ -7,6 +7,7 @@ class ApiClient {
   private configuration: Configuration;
   private authApi: AuthApi;
   private walletApi: WalletApi;
+  private marketApi: MarketApi;
   private token: string | null = null;
 
   constructor() {
@@ -22,6 +23,7 @@ class ApiClient {
     });
     this.authApi = new AuthApi(this.configuration);
     this.walletApi = new WalletApi(this.configuration);
+    this.marketApi = new MarketApi(this.configuration);
     this.loadTokenFromStorage();
   }
 
@@ -96,6 +98,7 @@ class ApiClient {
     });
     this.authApi = new AuthApi(this.configuration);
     this.walletApi = new WalletApi(this.configuration);
+    this.marketApi = new MarketApi(this.configuration);
   }
 
   private getToken(): string {
@@ -254,6 +257,11 @@ class ApiClient {
     return this.walletApi.apiWalletKrwBalanceGet();
   }
 
+  // 거래 관련 메서드들
+  async getTransactionHistory(limit?: number) {
+    return this.marketApi.apiTransactionHistoryGet(limit);
+  }
+
   // API 설정 업데이트 (개발/프로덕션 환경 변경 시)
   updateBaseUrl(baseUrl: string): void {
     this.configuration = new Configuration({
@@ -268,6 +276,7 @@ class ApiClient {
     });
     this.authApi = new AuthApi(this.configuration);
     this.walletApi = new WalletApi(this.configuration);
+    this.marketApi = new MarketApi(this.configuration);
   }
 }
 
