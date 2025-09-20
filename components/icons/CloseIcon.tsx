@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { Path } from 'react-native-svg';
+import { Ionicons } from '@expo/vector-icons';
 
 interface IconProps {
   size?: number;
@@ -7,13 +7,9 @@ interface IconProps {
 }
 
 export const CloseIcon = ({ size = 24, color = '#000000' }: IconProps) => (
-  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <Path
-      d="M18 6L6 18M6 6L18 18"
-      stroke={color}
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </Svg>
+  <Ionicons
+    name="close-outline"
+    size={size}
+    color={color}
+  />
 );
