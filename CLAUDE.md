@@ -23,8 +23,8 @@ RipplePay is a React Native mobile wallet application built with Expo for XRP an
 ### Technology Stack
 - **Framework**: React Native with Expo (~54.0.9)
 - **Router**: Expo Router v6 with file-based routing and typed routes
-- **UI**: Custom themed components with expo-symbols icons
-- **State**: React Context API for authentication
+- **UI**: Custom themed components with @expo/vector-icons
+- **State**: React Context API for authentication and notifications
 - **Storage**: AsyncStorage for mobile, localStorage for web
 - **API**: Auto-generated TypeScript client from OpenAPI 3.0 spec
 - **Crypto**: XRP Ledger integration for blockchain transactions
@@ -33,7 +33,7 @@ RipplePay is a React Native mobile wallet application built with Expo for XRP an
 - `app/` - File-based routing pages (tabs layout with index, exchange, transaction, profile)
 - `api/` - Auto-generated API client from OpenAPI spec
 - `components/` - Reusable UI components and icons
-- `context/` - React Context providers (AuthContext)
+- `context/` - React Context providers (AuthContext, NotificationContext)
 - `services/` - API client wrapper and business logic
 - `constants/` - Configuration and theme definitions
 - `hooks/` - Custom React hooks for theming
@@ -73,10 +73,10 @@ app/
 ## API Code Generation
 
 The project uses OpenAPI Generator to create TypeScript API clients:
-- Source spec: `openapi.json` 
+- Source spec: `openapi.json`
 - Generated files: `api/` directory
 - Generator config: `openapitools.json`
-- Regenerate API client when OpenAPI spec changes
+- Regenerate API client: `npx openapi-generator-cli generate -i openapi.json -g typescript-axios -o api`
 
 ## Development Notes
 
@@ -92,5 +92,12 @@ The project uses OpenAPI Generator to create TypeScript API clients:
 
 ### State Management
 - Authentication state in AuthContext
+- Push notification state in NotificationContext with local and remote notification support
 - API client maintains token state with automatic storage persistence
 - Configuration constants for app-wide settings
+
+### Notification System
+- Push notifications via expo-notifications with automatic token registration
+- Local notifications for transaction events (sent/received/exchange/QR payments)
+- Notification settings management with user preferences
+- Integration with QR payment flow for instant payment confirmations

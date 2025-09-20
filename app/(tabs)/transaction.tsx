@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
   Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import { useInAppNotification } from '../../components/InAppNotification';
 import { QRGenerator } from '../../components/QRGenerator';
 import { QRScanner } from '../../components/QRScanner';
-import { ArrowUpRightIcon, ArrowDownLeftIcon, QRCodeIcon, CameraIcon } from '../../components/icons';
+import { ArrowDownLeftIcon, CameraIcon, QRCodeIcon, QRGenerateIcon, ScanQRIcon } from '../../components/icons';
 import { useNotification } from '../../context/NotificationContext';
-import { useInAppNotification } from '../../components/InAppNotification';
 
 type TransactionMode = 'main' | 'receive' | 'qr-display' | 'qr-scan' | 'confirm';
 
@@ -299,17 +299,17 @@ export default function TransactionScreen() {
         <TouchableOpacity
           style={styles.optionCard}
           onPress={() => setMode('receive')}>
-          <ArrowDownLeftIcon size={32} color="#16a34a" />
-          <Text style={styles.optionTitle}>받기</Text>
-          <Text style={styles.optionSubtitle}>QR 생성</Text>
+          <QRGenerateIcon size={36} color="#10b981" />
+          <Text style={styles.optionTitle}>QR 생성하기</Text>
+          <Text style={styles.optionSubtitle}>결제 요청</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.optionCard}
           onPress={handleSend}>
-          <ArrowUpRightIcon size={32} color="#dc2626" />
-          <Text style={styles.optionTitle}>보내기</Text>
-          <Text style={styles.optionSubtitle}>QR 스캔</Text>
+          <ScanQRIcon size={36} color="#3b82f6" />
+          <Text style={styles.optionTitle}>QR 송금하기</Text>
+          <Text style={styles.optionSubtitle}>즉시 결제</Text>
         </TouchableOpacity>
       </View>
 
@@ -317,7 +317,8 @@ export default function TransactionScreen() {
       {mode === 'receive' && (
         <View style={styles.card}>
           <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>받기</Text>
+            <QRGenerateIcon size={20} color="#16a34a" />
+            <Text style={styles.cardTitle}>QR 생성하기</Text>
           </View>
           <View style={styles.cardContent}>
             <View style={styles.inputGroup}>
@@ -385,7 +386,7 @@ export default function TransactionScreen() {
                 onPress={handleReceive}
                 disabled={!transactionData.amount || loading}>
                 <Text style={styles.primaryButtonText}>
-                  {loading ? '생성 중...' : 'QR 생성'}
+                  {loading ? '생성 중...' : '⚡ QR 생성'}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -439,25 +440,30 @@ const styles = StyleSheet.create({
   optionCard: {
     flex: 1,
     backgroundColor: '#ffffff',
-    borderRadius: 16,
-    padding: 24,
+    borderRadius: 20,
+    padding: 28,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 8,
+    borderWidth: 1,
+    borderColor: '#f3f4f6',
   },
   optionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginTop: 8,
+    fontSize: 17,
+    fontWeight: '700',
+    marginTop: 12,
     color: '#1f2937',
+    textAlign: 'center',
   },
   optionSubtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#6b7280',
-    marginTop: 4,
+    marginTop: 6,
+    fontWeight: '500',
+    textAlign: 'center',
   },
   card: {
     backgroundColor: '#ffffff',
@@ -530,15 +536,21 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     backgroundColor: '#2563eb',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
+    paddingVertical: 16,
+    paddingHorizontal: 28,
+    borderRadius: 12,
     alignItems: 'center',
+    shadowColor: '#2563eb',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
   },
   primaryButtonText: {
     color: '#ffffff',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
   outlineButton: {
     borderWidth: 1,

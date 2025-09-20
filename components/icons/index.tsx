@@ -17,3 +17,7 @@ export { GearIcon } from './GearIcon';
 export { ChevronRightIcon } from './ChevronRightIcon';
 export { EyeIcon } from './EyeIcon';
 export { ChartIcon } from './ChartIcon';
+export { QRGenerateIcon } from './QRGenerateIcon';
+export { SendPaymentIcon } from './SendPaymentIcon';
+export { ScanQRIcon } from './ScanQRIcon';
+export { FlashIcon } from './FlashIcon';

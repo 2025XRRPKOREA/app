@@ -22,7 +22,8 @@ import {
   EyeIcon,
   GearIcon,
   PersonIcon,
-  ShieldIcon
+  ShieldIcon,
+  WalletIcon
 } from '../../components/icons';
 
 interface UserProfile {
@@ -197,7 +198,7 @@ export default function ProfileScreen() {
       <View style={styles.card}>
         <View style={styles.cardHeader}>
           <View style={styles.cardTitleRow}>
-            <ShieldIcon size={20} color="#1f2937" />
+            <WalletIcon size={20} color="#1f2937" />            
             <Text style={styles.cardTitle}>지갑 정보</Text>
           </View>
         </View>
