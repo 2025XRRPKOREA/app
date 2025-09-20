@@ -4,12 +4,13 @@ import { apiClient } from '../services/apiClient';
 export interface TransactionHistoryItem {
   id: string;
   type: 'sent' | 'received';
-  amount: string;
+  amount: number;
   currency: string;
   timestamp: string;
   status: 'completed' | 'pending' | 'failed';
-  fromAddress?: string;
-  toAddress?: string;
+  price: number;
+  isSuccess: boolean;
+  isReceiver: boolean;
 }
 
 export const useTransactionHistory = (limit: number = 10) => {
@@ -21,18 +22,36 @@ export const useTransactionHistory = (limit: number = 10) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await apiClient.getTransactionHistory(limit);
+      
+      // 직접 API 호출로 변경 (해커톤 모드)
+      const apiUrl = `http://122.40.46.59/api/transaction/history?page=1&size=${limit}`;
+      const token = apiClient.getCurrentToken();
+      
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`API 요청 실패: ${response.status}`);
+      }
+
+      const data = await response.json();
 
       // API 응답을 우리 인터페이스에 맞게 변환
-      const formattedTransactions: TransactionHistoryItem[] = response.data.map((item: any) => ({
-        id: item.id || item.transactionId || Math.random().toString(),
-        type: item.type === 'debit' ? 'sent' : 'received',
-        amount: item.amount || '0',
-        currency: item.currency || 'KRW',
-        timestamp: item.timestamp || item.createdAt || new Date().toISOString(),
-        status: item.status === 'success' ? 'completed' : item.status || 'completed',
-        fromAddress: item.fromAddress,
-        toAddress: item.toAddress,
+      const formattedTransactions: TransactionHistoryItem[] = data.map((item: any, index: number) => ({
+        id: `${item.transactionDate}-${index}`, // 고유 ID 생성
+        type: item.isReceiver ? 'received' : 'sent',
+        amount: item.amount,
+        currency: item.iou,
+        timestamp: item.transactionDate,
+        status: item.isSuccess ? 'completed' : 'failed',
+        price: item.price,
+        isSuccess: item.isSuccess,
+        isReceiver: item.isReceiver,
       }));
 
       setTransactions(formattedTransactions);

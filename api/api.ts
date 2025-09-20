@@ -641,16 +641,22 @@ export interface ApiWalletBalanceGet200Response {
     'address'?: string;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof ApiWalletBalanceGet200Response
      */
-    'balance'?: string;
+    'XRP'?: number;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof ApiWalletBalanceGet200Response
      */
-    'balanceXRP'?: string;
+    'KRW'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiWalletBalanceGet200Response
+     */
+    'USD'?: number;
 }
 /**
  * 

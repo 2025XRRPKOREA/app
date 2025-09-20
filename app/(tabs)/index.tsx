@@ -33,12 +33,18 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* KRW 잔고 */}
+        {/* KRW & USD 잔고 */}
         <View style={styles.stablecoinContainer}>
           <View style={styles.stablecoinItem}>
             <Text style={styles.stablecoinLabel}>KRW</Text>
             <Text style={styles.stablecoinAmount}>
               {loading ? '로딩 중...' : `₩${balance?.KRW?.toLocaleString() || '0'}`}
+            </Text>
+          </View>
+          <View style={styles.stablecoinItem}>
+            <Text style={styles.stablecoinLabel}>USD</Text>
+            <Text style={styles.stablecoinAmount}>
+              {loading ? '로딩 중...' : `$${balance?.USD?.toLocaleString() || '0'}`}
             </Text>
           </View>
         </View>
@@ -88,7 +94,10 @@ export default function HomeScreen() {
                         : styles.receiveAmount,
                     ]}>
                     {transaction.type === 'sent' ? '-' : '+'}
-                    {transaction.amount} {transaction.currency}
+                    ₩{transaction.price.toLocaleString()}
+                  </Text>
+                  <Text style={styles.transactionCurrency}>
+                    {transaction.currency}
                   </Text>
                   <View
                     style={[
@@ -255,6 +264,11 @@ const styles = StyleSheet.create({
   transactionAmount: {
     fontSize: 14,
     fontWeight: '600',
+    marginBottom: 2,
+  },
+  transactionCurrency: {
+    fontSize: 12,
+    color: '#6b7280',
     marginBottom: 4,
   },
   sendAmount: {
