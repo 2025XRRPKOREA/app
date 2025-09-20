@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,15 +7,10 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { RefreshIcon, ArrowLeftRightIcon, ChartIcon } from '../../components/icons';
-
-interface ExchangeRate {
-  from: string;
-  to: string;
-  rate: number;
-  change: number;
-}
+import exchangeRateService, { ExchangeRate } from '../../services/exchangeRateService';
 
 interface ExchangeHistory {
   id: string;
@@ -28,12 +23,6 @@ interface ExchangeHistory {
   status: 'completed' | 'pending' | 'failed';
 }
 
-const exchangeRates: ExchangeRate[] = [
-  { from: 'XRP', to: 'KRW', rate: 1504.5, change: 2.3 },
-  { from: 'XRP', to: 'USD', rate: 1.12, change: -0.8 },
-  { from: 'KRW', to: 'XRP', rate: 0.000665, change: -2.3 },
-  { from: 'USD', to: 'XRP', rate: 0.893, change: 0.8 },
-];
 
 const mockHistory: ExchangeHistory[] = [
   {
@@ -56,23 +45,39 @@ const mockHistory: ExchangeHistory[] = [
     timestamp: '2025-09-19 16:20',
     status: 'completed',
   },
-  {
-    id: '3',
-    from: 'XRP',
-    to: 'USD',
-    fromAmount: '75',
-    toAmount: '84.00',
-    rate: 1.12,
-    timestamp: '2025-09-19 10:15',
-    status: 'pending',
-  },
 ];
 
 export default function ExchangeScreen() {
-  const [fromCurrency, setFromCurrency] = useState<'XRP' | 'KRW' | 'USD'>('XRP');
-  const [toCurrency, setToCurrency] = useState<'XRP' | 'KRW' | 'USD'>('KRW');
+  const [fromCurrency, setFromCurrency] = useState<'XRP' | 'KRW'>('XRP');
   const [amount, setAmount] = useState('');
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [exchangeRates, setExchangeRates] = useState<ExchangeRate[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<string>('');
+
+  // 자동으로 받을 통화 결정: KRW -> XRP, XRP -> KRW
+  const toCurrency = fromCurrency === 'KRW' ? 'XRP' : 'KRW';
+
+  // 환율 서비스 초기화 및 구독
+  useEffect(() => {
+    // 초기 환율 로드
+    setExchangeRates(exchangeRateService.getAllRates());
+    
+    // 환율 업데이트 구독
+    const unsubscribe = exchangeRateService.subscribe((rates) => {
+      setExchangeRates(rates);
+      setLastUpdated(new Date().toLocaleTimeString());
+      setIsLoading(false);
+    });
+
+    // 자동 업데이트 시작
+    exchangeRateService.startAutoUpdate();
+
+    return () => {
+      unsubscribe();
+      exchangeRateService.stopAutoUpdate();
+    };
+  }, []);
 
   const getCurrentRate = () => {
     const rate = exchangeRates.find(r => r.from === fromCurrency && r.to === toCurrency);
@@ -87,23 +92,39 @@ export default function ExchangeScreen() {
   };
 
   const handleSwapCurrencies = () => {
-    if (fromCurrency === 'XRP' && (toCurrency === 'KRW' || toCurrency === 'USD')) {
-      setFromCurrency(toCurrency);
-      setToCurrency('XRP');
-    } else if ((fromCurrency === 'KRW' || fromCurrency === 'USD') && toCurrency === 'XRP') {
-      setFromCurrency('XRP');
-      setToCurrency(fromCurrency);
+    // 토글 방식: KRW ↔ XRP
+    setFromCurrency(fromCurrency === 'KRW' ? 'XRP' : 'KRW');
+  };
+
+  const handleExchange = async () => {
+    if (!amount) return;
+
+    setIsLoading(true);
+    try {
+      const amountNum = parseFloat(amount);
+      let result;
+      
+      if (fromCurrency === 'KRW') {
+        result = await exchangeRateService.convertKrwToXrp(amountNum);
+      } else {
+        result = await exchangeRateService.convertXrpToKrw(amountNum);
+      }
+
+      Alert.alert(
+        '환전 완료',
+        `${amount} ${fromCurrency}를 ${result.convertedAmount.toLocaleString()} ${toCurrency}로 환전 요청이 완료되었습니다.\n\n환율: ${result.rate.toLocaleString()}`
+      );
+      setAmount('');
+    } catch (error) {
+      Alert.alert('환전 실패', '환전 처리 중 오류가 발생했습니다. 다시 시도해 주세요.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleExchange = () => {
-    if (!amount) return;
-
-    Alert.alert(
-      '환전 완료',
-      `${amount} ${fromCurrency}를 ${getEstimatedAmount()} ${toCurrency}로 환전 요청이 완료되었습니다.`
-    );
-    setAmount('');
+  const handleRefreshRates = async () => {
+    setIsLoading(true);
+    await exchangeRateService.refresh();
   };
 
   const CurrencySelector = ({
@@ -112,17 +133,17 @@ export default function ExchangeScreen() {
     id,
   }: {
     value: string;
-    onSelect: (currency: 'XRP' | 'KRW' | 'USD') => void;
+    onSelect: (currency: 'XRP' | 'KRW') => void;
     id: string;
   }) => {
-    const currencies = ['XRP', 'KRW', 'USD'];
+    const currencies = ['XRP', 'KRW'];
     const isOpen = activeDropdown === id;
 
     const handleToggle = () => {
       setActiveDropdown(isOpen ? null : id);
     };
 
-    const handleSelect = (currency: 'XRP' | 'KRW' | 'USD') => {
+    const handleSelect = (currency: 'XRP' | 'KRW') => {
       onSelect(currency);
       setActiveDropdown(null);
     };
@@ -148,7 +169,7 @@ export default function ExchangeScreen() {
                   styles.currencyDropdownItem,
                   currency === value && styles.currencyDropdownItemSelected
                 ]}
-                onPress={() => handleSelect(currency as 'XRP' | 'KRW' | 'USD')}
+                onPress={() => handleSelect(currency as 'XRP' | 'KRW')}
               >
                 <Text style={[
                   styles.currencyDropdownText,
@@ -174,6 +195,9 @@ export default function ExchangeScreen() {
         <View style={styles.cardHeader}>
           <RefreshIcon size={20} color="#1f2937" />
           <Text style={styles.cardTitle}>환전</Text>
+          {lastUpdated && (
+            <Text style={styles.lastUpdated}>마지막 업데이트: {lastUpdated}</Text>
+          )}
         </View>
         <View style={styles.cardContent}>
           <View style={styles.exchangeFormContainer}>
@@ -210,12 +234,8 @@ export default function ExchangeScreen() {
             <View style={[styles.inputSection, styles.toSection]}>
               <Text style={styles.sectionLabel}>받을 통화</Text>
               <View style={styles.inputRowContainer}>
-                <View style={styles.currencySelectContainer}>
-                  <CurrencySelector
-                    value={toCurrency}
-                    onSelect={setToCurrency}
-                    id="to"
-                  />
+                <View style={styles.fixedCurrencyContainer}>
+                  <Text style={styles.fixedCurrencyText}>{toCurrency}</Text>
                 </View>
                 <View style={styles.resultContainer}>
                   <Text style={styles.resultAmount}>{getEstimatedAmount()}</Text>
@@ -239,11 +259,15 @@ export default function ExchangeScreen() {
           <TouchableOpacity
             style={[
               styles.primaryButton,
-              (!amount || getCurrentRate() === 0) && styles.disabledButton,
+              (!amount || getCurrentRate() === 0 || isLoading) && styles.disabledButton,
             ]}
             onPress={handleExchange}
-            disabled={!amount || getCurrentRate() === 0}>
-            <Text style={styles.primaryButtonText}>환전하기</Text>
+            disabled={!amount || getCurrentRate() === 0 || isLoading}>
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Text style={styles.primaryButtonText}>환전하기</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -253,6 +277,16 @@ export default function ExchangeScreen() {
         <View style={styles.cardHeader}>
           <ChartIcon size={20} color="#1f2937" />
           <Text style={styles.cardTitle}>실시간 환율</Text>
+          <TouchableOpacity
+            style={styles.refreshButton}
+            onPress={handleRefreshRates}
+            disabled={isLoading}>
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#6b7280" />
+            ) : (
+              <RefreshIcon size={16} color="#6b7280" />
+            )}
+          </TouchableOpacity>
         </View>
         <View style={styles.cardContent}>
           {exchangeRates.map((rate, index) => (
@@ -360,6 +394,19 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 0,
   },
+  lastUpdated: {
+    fontSize: 12,
+    color: '#6b7280',
+    marginLeft: 'auto',
+  },
+  refreshButton: {
+    marginLeft: 'auto',
+    padding: 8,
+    borderRadius: 6,
+    backgroundColor: '#f9fafb',
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
   cardTitle: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -399,6 +446,22 @@ const styles = StyleSheet.create({
     width: 80,
     zIndex: 5000,
     elevation: 5000,
+  },
+  fixedCurrencyContainer: {
+    width: 80,
+    backgroundColor: '#f9fafb',
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fixedCurrencyText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#6b7280',
   },
   currencyDropdownContainer: {
     position: 'relative',

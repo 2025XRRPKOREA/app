@@ -25,9 +25,12 @@ export default function TabLayout() {
             shadowOffset: { width: 0, height: -3 },
             shadowOpacity: 0.1,
             shadowRadius: 3,
-            paddingTop: 8,
-            paddingBottom: 8,
+            paddingTop: 12,
+            paddingBottom: 12,
             height: 70,
+          },
+          tabBarIconStyle: {
+            marginTop: 4,
           },
           headerShown: true,
           headerStyle: {
