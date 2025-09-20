@@ -1,26 +1,28 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
-  Alert,
-} from 'react-native';
-import {
-  PersonIcon,
-  EditIcon,
-  CloseIcon,
-  CheckIcon,
-  ShieldIcon,
-  BellIcon,
-  GearIcon,
-  ChevronRightIcon,
-  EyeIcon
-} from '../../components/icons';
 import { useAuth } from '@/context/AuthContext';
 import { router } from 'expo-router';
+import React, { useState } from 'react';
+import {
+  Alert,
+  Animated,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {
+  BellIcon,
+  CheckIcon,
+  ChevronRightIcon,
+  CloseIcon,
+  EditIcon,
+  EyeIcon,
+  GearIcon,
+  PersonIcon,
+  ShieldIcon
+} from '../../components/icons';
 
 interface UserProfile {
   name: string;
@@ -37,6 +39,8 @@ export default function ProfileScreen() {
     walletAddress: 'rN7n7otQDd6FczFgLdSqtcsAUxDkw6fzRH',
   });
   const [editProfile, setEditProfile] = useState<UserProfile>(profile);
+  const [showToast, setShowToast] = useState(false);
+  const [toastAnimation] = useState(new Animated.Value(0));
 
   const [notifications, setNotifications] = useState({
     transaction: true,
@@ -44,6 +48,29 @@ export default function ProfileScreen() {
     security: true,
     marketing: false,
   });
+
+  const showToastMessage = () => {
+    setShowToast(true);
+    Animated.sequence([
+      Animated.timing(toastAnimation, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.delay(2000),
+      Animated.timing(toastAnimation, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setShowToast(false);
+    });
+  };
+
+  const handleEditPress = () => {
+    showToastMessage();
+  };
 
   const handleSave = () => {
     setProfile(editProfile);
@@ -102,7 +129,7 @@ export default function ProfileScreen() {
             <Text style={styles.cardTitle}>프로필</Text>
           </View>
           {!isEditing ? (
-            <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
+            <TouchableOpacity style={styles.editButton} onPress={handleEditPress}>
               <EditIcon size={16} color="#2563eb" />
               <Text style={styles.editButtonText}>편집</Text>
             </TouchableOpacity>
@@ -121,7 +148,11 @@ export default function ProfileScreen() {
           {/* 아바타 */}
           <View style={styles.avatarSection}>
             <View style={styles.avatar}>
-              <Text style={styles.avatarText}>{profile.name.charAt(0)}</Text>
+              <Image
+                source={require('../../assets/images/xrp-logo.png')}
+                style={styles.avatarImage}
+                resizeMode="contain"
+              />
             </View>
             <View style={styles.avatarInfo}>
               <Text style={styles.avatarName}>{profile.name}</Text>
@@ -294,6 +325,27 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Toast Notification */}
+      {showToast && (
+        <Animated.View
+          style={[
+            styles.toast,
+            {
+              opacity: toastAnimation,
+              transform: [
+                {
+                  translateY: toastAnimation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [-20, 0],
+                  }),
+                },
+              ],
+            },
+          ]}>
+          <Text style={styles.toastText}>🚧 기능 준비중입니다</Text>
+        </Animated.View>
+      )}
     </ScrollView>
   );
 }
@@ -378,15 +430,21 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
+    borderWidth: 2,
+    borderColor: '#e5e7eb',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  avatarText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#6b7280',
+  avatarImage: {
+    width: 64,
+    height: 64,
   },
   avatarInfo: {},
   avatarName: {
@@ -432,25 +490,36 @@ const styles = StyleSheet.create({
   },
   walletAddress: {
     flex: 1,
-    backgroundColor: '#f3f4f6',
-    borderRadius: 8,
-    padding: 12,
+    backgroundColor: '#f8fafc',
+    borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 8,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
   },
   walletAddressText: {
     fontSize: 12,
     fontFamily: 'monospace',
-    color: '#1f2937',
+    color: '#1e293b',
+    lineHeight: 22,
+    letterSpacing: 0.5,
+    textAlign: 'center',
   },
   copyButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: '#d1d5db',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 8,
+    backgroundColor: '#2563eb',
+    shadowColor: '#2563eb',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   copyButtonText: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#ffffff',
+    fontWeight: '600',
   },
   walletStatus: {
     flexDirection: 'row',
@@ -486,40 +555,56 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 4,
     borderBottomWidth: 1,
-    borderBottomColor: '#f3f4f6',
+    borderBottomColor: '#f1f5f9',
+    backgroundColor: '#fafbfc',
+    borderRadius: 8,
+    marginBottom: 8,
   },
   notificationLeft: {
     flex: 1,
+    paddingHorizontal: 8,
   },
   notificationTitle: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '600',
     color: '#1f2937',
     marginBottom: 4,
   },
   notificationSubtitle: {
-    fontSize: 12,
-    color: '#6b7280',
+    fontSize: 13,
+    color: '#64748b',
+    lineHeight: 18,
   },
   switch: {
-    width: 44,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#e5e7eb',
+    width: 48,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#e2e8f0',
     justifyContent: 'center',
     paddingHorizontal: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
   },
   switchActive: {
-    backgroundColor: '#2563eb',
+    backgroundColor: '#3b82f6',
   },
   switchThumb: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
     backgroundColor: '#ffffff',
     alignSelf: 'flex-start',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
+    elevation: 2,
   },
   switchThumbActive: {
     alignSelf: 'flex-end',
@@ -527,26 +612,59 @@ const styles = StyleSheet.create({
   settingItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 4,
     borderBottomWidth: 1,
-    borderBottomColor: '#f3f4f6',
+    borderBottomColor: '#f1f5f9',
+    backgroundColor: '#fafbfc',
+    borderRadius: 8,
+    marginBottom: 8,
   },
   settingText: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 15,
     color: '#1f2937',
     marginLeft: 12,
+    fontWeight: '500',
   },
   logoutButton: {
-    backgroundColor: '#dc2626',
-    padding: 12,
-    borderRadius: 8,
+    backgroundColor: '#ef4444',
+    padding: 16,
+    borderRadius: 12,
     alignItems: 'center',
-    marginTop: 16,
+    marginTop: 20,
+    shadowColor: '#ef4444',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    elevation: 4,
   },
   logoutButtonText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#ffffff',
+    letterSpacing: 0.5,
+  },
+  toast: {
+    position: 'absolute',
+    top: 60,
+    left: 20,
+    right: 20,
+    backgroundColor: '#1f2937',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 12,
+    zIndex: 1000,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  toastText: {
+    color: '#ffffff',
+    fontSize: 15,
+    fontWeight: '600',
+    textAlign: 'center',
   },
 });

@@ -14,8 +14,19 @@ export default function TabLayout() {
     <AuthGuard>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: '#2563eb',
-          tabBarInactiveTintColor: '#6b7280',
+          tabBarActiveTintColor: '#3b82f6',
+          tabBarInactiveTintColor: '#9ca3af',
+          tabBarStyle: {
+            backgroundColor: '#ffffff',
+            borderTopWidth: 0,
+            elevation: 0,
+            shadowOffset: { width: 0, height: -3 },
+            shadowOpacity: 0.1,
+            shadowRadius: 3,
+            paddingTop: 8,
+            paddingBottom: 8,
+            height: 70,
+          },
           headerShown: true,
           headerStyle: {
             backgroundColor: '#ffffff',
@@ -46,29 +57,29 @@ export default function TabLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: '홈',
-            tabBarIcon: ({ color }) => <HomeIcon size={24} color={color} />,
+            title: '',
+            tabBarIcon: ({ color }) => <HomeIcon size={28} color={color} />,
           }}
         />
         <Tabs.Screen
           name="transaction"
           options={{
-            title: '거래',
-            tabBarIcon: ({ color }) => <ArrowLeftRightIcon size={24} color={color} />,
+            title: '',
+            tabBarIcon: ({ color }) => <ArrowLeftRightIcon size={28} color={color} />,
           }}
         />
         <Tabs.Screen
           name="exchange"
           options={{
-            title: '환전',
-            tabBarIcon: ({ color }) => <RefreshIcon size={24} color={color} />,
+            title: '',
+            tabBarIcon: ({ color }) => <RefreshIcon size={28} color={color} />,
           }}
         />
         <Tabs.Screen
           name="profile"
           options={{
-            title: '마이페이지',
-            tabBarIcon: ({ color }) => <UserIcon size={24} color={color} />,
+            title: '',
+            tabBarIcon: ({ color }) => <UserIcon size={28} color={color} />,
           }}
         />
       </Tabs>

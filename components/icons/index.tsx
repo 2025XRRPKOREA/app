@@ -16,5 +16,4 @@ export { BellIcon } from './BellIcon';
 export { GearIcon } from './GearIcon';
 export { ChevronRightIcon } from './ChevronRightIcon';
 export { EyeIcon } from './EyeIcon';
-export { SwapIcon } from './SwapIcon';
 export { ChartIcon } from './ChartIcon';
