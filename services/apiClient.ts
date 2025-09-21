@@ -1,8 +1,8 @@
-import { AuthApi, WalletApi, MarketApi, Configuration } from '@/api';
+import { AuthApi, Configuration, MarketApi, WalletApi } from '@/api';
 import { API_CONFIG, STORAGE_KEYS } from '@/constants/config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
-import { authService, walletService, transactionService } from './';
+import { authService, transactionService, walletService } from './';
 import type { User } from './authService';
 
 class ApiClient {
@@ -115,11 +115,11 @@ class ApiClient {
   }> {
     try {
       const response = await authService.login({ email, password });
-      
+
       // 기존 토큰 관리 시스템 동기화
       this.token = response.token;
       this.updateConfiguration();
-      
+
       return response;
     } catch (error: any) {
       throw error;
@@ -139,11 +139,11 @@ class ApiClient {
   }> {
     try {
       const response = await authService.register({ email, password });
-      
+
       // 기존 토큰 관리 시스템 동기화
       this.token = response.token;
       this.updateConfiguration();
-      
+
       return response;
     } catch (error: any) {
       throw error;

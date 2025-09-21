@@ -141,8 +141,12 @@ export function NotificationProvider({ children }: NotificationProviderProps): R
       });
 
       return () => {
-        Notifications.removeNotificationSubscription(notificationListener);
-        Notifications.removeNotificationSubscription(responseListener);
+        if (notificationListener) {
+          notificationListener.remove();
+        }
+        if (responseListener) {
+          responseListener.remove();
+        }
       };
     }
   }, []);

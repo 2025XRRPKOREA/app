@@ -11,9 +11,6 @@ interface AuthState {
   token: string | null;
   isLoading: boolean;
   
-  // Computed
-  isAuthenticated: boolean;
-  
   // Actions
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
@@ -33,11 +30,6 @@ export const useAuthStore = create<AuthState>()(
     token: null,
     isLoading: true,
     
-    // Computed values
-    get isAuthenticated() {
-      const state = get();
-      return !!state.user && !!state.token;
-    },
     
     // Actions
     login: async (email: string, password: string) => {
@@ -124,7 +116,7 @@ export const useAuthStore = create<AuthState>()(
 // Selector hooks for optimal performance
 export const useAuthUser = () => useAuthStore((state) => state.user);
 export const useAuthToken = () => useAuthStore((state) => state.token);
-export const useIsAuthenticated = () => useAuthStore((state) => state.isAuthenticated);
+export const useIsAuthenticated = () => useAuthStore((state) => !!state.user && !!state.token);
 export const useAuthLoading = () => useAuthStore((state) => state.isLoading);
 
 // Action hooks

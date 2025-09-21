@@ -13,7 +13,7 @@ import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
-import { useAuthActions, useIsAuthenticated } from '@/stores';
+import { useAuthActions, useIsAuthenticated, useAuthLoading } from '@/stores';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -23,13 +23,19 @@ export default function LoginScreen() {
   const colors = Colors[colorScheme ?? 'light'];
   const { login } = useAuthActions();
   const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   // 이미 로그인된 상태면 메인 화면으로 이동
   useEffect(() => {
-    if (isAuthenticated) {
-      router.replace('/(tabs)');
+    // 초기 로딩이 완료된 후에만 리다이렉션 수행
+    if (isAuthenticated && !authLoading) {
+      const timer = setTimeout(() => {
+        router.replace('/(tabs)');
+      }, 100); // 약간의 지연을 두어 렌더링 사이클 회피
+      
+      return () => clearTimeout(timer);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, authLoading]);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -41,8 +47,7 @@ export default function LoginScreen() {
     
     try {
       await login(email, password);
-      // 로그인 성공 시 메인 화면으로 이동
-      router.replace('/(tabs)');
+      // 로그인 성공 시 useEffect에서 자동으로 리다이렉션됨
     } catch (error: any) {
       // API 클라이언트에서 처리된 에러 메시지 사용
       const errorMessage = error.message || '로그인 중 오류가 발생했습니다.';

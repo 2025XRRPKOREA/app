@@ -1,32 +1,27 @@
 // HTTP Client
 export { default as httpClient } from './httpClient';
-export type { ApiResponse, ApiError } from './httpClient';
+export type { ApiError, ApiResponse } from './httpClient';
 
 // Service Layer
 export { default as authService } from './authService';
-export type { 
-  LoginRequest, 
-  RegisterRequest, 
-  AuthResponse, 
-  User 
+export type {
+  AuthResponse, LoginRequest,
+  RegisterRequest, User
 } from './authService';
 
 export { default as walletService } from './walletService';
-export type { 
-  WalletBalance, 
-  WalletAccount, 
-  SendTransactionRequest, 
-  SendTransactionResponse 
+export type {
+  SendTransactionRequest,
+  SendTransactionResponse, WalletAccount, WalletBalance
 } from './walletService';
 
 export { default as transactionService } from './transactionService';
-export type { 
-  Transaction, 
-  TransactionFilter, 
-  TransactionHistory, 
-  CreateTransactionRequest, 
-  ExchangeRequest, 
-  ExchangeResponse 
+export type {
+  CreateTransactionRequest,
+  ExchangeRequest,
+  ExchangeResponse, Transaction,
+  TransactionFilter,
+  TransactionHistory
 } from './transactionService';
 
 // Legacy API Client (for gradual migration)
