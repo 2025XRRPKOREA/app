@@ -92,6 +92,7 @@ export default function ProfileScreen() {
             await logout();
             router.replace('/login');
           } catch (error) {
+            console.error('로그아웃 오류:', error);
             Alert.alert('오류', '로그아웃 중 문제가 발생했습니다.');
           }
         }

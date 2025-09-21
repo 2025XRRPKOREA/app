@@ -5,7 +5,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Dimensions,
 } from 'react-native';
 import { CheckIcon, BellIcon } from './icons';
 
@@ -22,8 +21,6 @@ interface InAppNotificationProps {
   notification: NotificationData | null;
   onDismiss: () => void;
 }
-
-const { width } = Dimensions.get('window');
 
 export function InAppNotification({ notification, onDismiss }: InAppNotificationProps) {
   const [fadeAnim] = useState(new Animated.Value(0));

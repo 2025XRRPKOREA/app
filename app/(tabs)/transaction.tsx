@@ -15,7 +15,7 @@ import { CameraIcon, QRCodeIcon, QRGenerateIcon, ScanQRIcon } from '../../compon
 import { useNotification } from '../../context/NotificationContext';
 import { TransactionList } from '../../components/TransactionList';
 import * as Haptics from 'expo-haptics';
-import apiClient from '../../services/apiClient';
+import { apiClient } from '../../services/apiClient';
 
 type TransactionMode = 'main' | 'receive' | 'qr-display' | 'qr-scan';
 
@@ -169,7 +169,7 @@ export default function TransactionScreen() {
         throw new Error(`API Error: ${finishResponse.status}`);
       }
 
-      const finishData = await finishResponse.json();
+      await finishResponse.json();
 
       // 거래 완료 후 알림 발송
       await sendTransactionNotification('sent', '송금완료', 'QR');

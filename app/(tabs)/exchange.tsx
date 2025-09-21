@@ -10,7 +10,7 @@ import {
   View
 } from 'react-native';
 import { ArrowLeftRightIcon, ChartIcon, RefreshIcon } from '../../components/icons';
-import exchangeRateService, { ExchangeRate } from '../../services/exchangeRateService';
+import { exchangeRateService, ExchangeRate } from '../../services/exchangeRateService';
 
 interface ExchangeHistory {
   id: string;
