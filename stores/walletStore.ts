@@ -1,3 +1,4 @@
+import React from 'react';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { walletService, authService } from '@/services';
@@ -124,17 +125,42 @@ export const useWalletStore = create<WalletState>()(
 
 // Selector hooks for optimal performance
 export const useWalletBalance = () => useWalletStore((state) => state.balance);
-export const useWalletLoading = () => useWalletStore((state) => ({
-  isInitialLoading: state.isInitialLoading,
-  isRefreshing: state.isRefreshing,
-}));
+// Split loading state into individual hooks for stability
+export const useWalletInitialLoading = () => useWalletStore((state) => state.isInitialLoading);
+export const useWalletRefreshing = () => useWalletStore((state) => state.isRefreshing);
+
+// Legacy hook with stable reference
+export const useWalletLoading = () => {
+  const isInitialLoading = useWalletInitialLoading();
+  const isRefreshing = useWalletRefreshing();
+  
+  return React.useMemo(() => ({
+    isInitialLoading,
+    isRefreshing,
+  }), [isInitialLoading, isRefreshing]);
+};
 export const useWalletLastUpdated = () => useWalletStore((state) => state.lastUpdated);
 
-// Action hooks
-export const useWalletActions = () => useWalletStore((state) => ({
-  fetchBalance: state.fetchBalance,
-  refreshBalance: state.refreshBalance,
-  startAutoRefresh: state.startAutoRefresh,
-  stopAutoRefresh: state.stopAutoRefresh,
-  reset: state.reset,
-}));
+// Individual action hooks (stable function references)
+export const useFetchBalance = () => useWalletStore((state) => state.fetchBalance);
+export const useRefreshBalance = () => useWalletStore((state) => state.refreshBalance);
+export const useStartAutoRefresh = () => useWalletStore((state) => state.startAutoRefresh);
+export const useStopAutoRefresh = () => useWalletStore((state) => state.stopAutoRefresh);
+export const useResetWallet = () => useWalletStore((state) => state.reset);
+
+// Legacy hook for backward compatibility (using useMemo for stable reference)
+export const useWalletActions = () => {
+  const fetchBalance = useFetchBalance();
+  const refreshBalance = useRefreshBalance();
+  const startAutoRefresh = useStartAutoRefresh();
+  const stopAutoRefresh = useStopAutoRefresh();
+  const reset = useResetWallet();
+  
+  return React.useMemo(() => ({
+    fetchBalance,
+    refreshBalance,
+    startAutoRefresh,
+    stopAutoRefresh,
+    reset,
+  }), [fetchBalance, refreshBalance, startAutoRefresh, stopAutoRefresh, reset]);
+};

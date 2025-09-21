@@ -1,3 +1,4 @@
+import React from 'react';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { transactionService, authService } from '@/services';
@@ -135,18 +136,43 @@ export const useTransactionStore = create<TransactionState>()(
 
 // Selector hooks for optimal performance
 export const useTransactions = () => useTransactionStore((state) => state.transactions);
-export const useTransactionLoading = () => useTransactionStore((state) => ({
-  isLoading: state.isLoading,
-  isRefreshing: state.isRefreshing,
-}));
+// Split loading state into individual hooks for stability
+export const useTransactionIsLoading = () => useTransactionStore((state) => state.isLoading);
+export const useTransactionIsRefreshing = () => useTransactionStore((state) => state.isRefreshing);
+
+// Legacy hook with stable reference
+export const useTransactionLoading = () => {
+  const isLoading = useTransactionIsLoading();
+  const isRefreshing = useTransactionIsRefreshing();
+  
+  return React.useMemo(() => ({
+    isLoading,
+    isRefreshing,
+  }), [isLoading, isRefreshing]);
+};
 export const usePendingTransactions = () => useTransactionStore((state) => state.getPendingTransactions());
 export const useCompletedTransactions = () => useTransactionStore((state) => state.getCompletedTransactions());
 
-// Action hooks
-export const useTransactionActions = () => useTransactionStore((state) => ({
-  fetchTransactions: state.fetchTransactions,
-  refreshTransactions: state.refreshTransactions,
-  addTransaction: state.addTransaction,
-  updateTransaction: state.updateTransaction,
-  reset: state.reset,
-}));
+// Individual action hooks (stable function references)
+export const useFetchTransactions = () => useTransactionStore((state) => state.fetchTransactions);
+export const useRefreshTransactions = () => useTransactionStore((state) => state.refreshTransactions);
+export const useAddTransaction = () => useTransactionStore((state) => state.addTransaction);
+export const useUpdateTransaction = () => useTransactionStore((state) => state.updateTransaction);
+export const useResetTransactions = () => useTransactionStore((state) => state.reset);
+
+// Legacy hook for backward compatibility (using useMemo for stable reference)
+export const useTransactionActions = () => {
+  const fetchTransactions = useFetchTransactions();
+  const refreshTransactions = useRefreshTransactions();
+  const addTransaction = useAddTransaction();
+  const updateTransaction = useUpdateTransaction();
+  const reset = useResetTransactions();
+  
+  return React.useMemo(() => ({
+    fetchTransactions,
+    refreshTransactions,
+    addTransaction,
+    updateTransaction,
+    reset,
+  }), [fetchTransactions, refreshTransactions, addTransaction, updateTransaction, reset]);
+};

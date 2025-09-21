@@ -1,3 +1,4 @@
+import React from 'react';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { authService } from '@/services';
@@ -119,10 +120,23 @@ export const useAuthToken = () => useAuthStore((state) => state.token);
 export const useIsAuthenticated = () => useAuthStore((state) => !!state.user && !!state.token);
 export const useAuthLoading = () => useAuthStore((state) => state.isLoading);
 
-// Action hooks
-export const useAuthActions = () => useAuthStore((state) => ({
-  login: state.login,
-  register: state.register,
-  logout: state.logout,
-  initializeAuth: state.initializeAuth,
-}));
+// Individual action hooks (stable function references)
+export const useLogin = () => useAuthStore((state) => state.login);
+export const useRegister = () => useAuthStore((state) => state.register);
+export const useLogout = () => useAuthStore((state) => state.logout);
+export const useInitializeAuth = () => useAuthStore((state) => state.initializeAuth);
+
+// Legacy hook for backward compatibility (using useMemo for stable reference)
+export const useAuthActions = () => {
+  const login = useLogin();
+  const register = useRegister();
+  const logout = useLogout();
+  const initializeAuth = useInitializeAuth();
+  
+  return React.useMemo(() => ({
+    login,
+    register, 
+    logout,
+    initializeAuth
+  }), [login, register, logout, initializeAuth]);
+};
