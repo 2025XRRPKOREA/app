@@ -49,7 +49,7 @@ const mockHistory: ExchangeHistory[] = [
 
 // 환율 포맷팅 함수 - 소수점 자릿수를 적절히 표시
 const formatExchangeRate = (rate: number): string => {
-  if (rate === 0) return '0';
+  if (rate === 0 || isNaN(rate) || !isFinite(rate)) return '0';
   
   // XRP 관련 환율 (매우 작은 값)은 더 많은 소수점 자릿수 표시
   if (rate < 0.001) {
@@ -132,8 +132,16 @@ export default function ExchangeScreen() {
 
   const getEstimatedAmount = () => {
     if (!amount) return '0';
+    
+    const numAmount = parseFloat(amount);
+    if (isNaN(numAmount)) return '0';
+    
     const rate = getCurrentRate();
-    const result = parseFloat(amount) * rate;
+    if (!rate || isNaN(rate)) return '0';
+    
+    const result = numAmount * rate;
+    if (isNaN(result) || !isFinite(result)) return '0';
+    
     return result.toLocaleString();
   };
 
@@ -158,7 +166,7 @@ export default function ExchangeScreen() {
 
       const convertedAmountStr = result.convertedAmount < 0.001 
         ? formatExchangeRate(result.convertedAmount)
-        : result.convertedAmount.toLocaleString();
+        : (isNaN(result.convertedAmount) ? '0' : result.convertedAmount.toLocaleString());
       
       showToastMessage(
         `✅ ${amount} ${fromCurrency} → ${convertedAmountStr} ${toCurrency} 환전 완료!`,
