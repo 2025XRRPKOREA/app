@@ -13,7 +13,7 @@ import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthActions, useIsAuthenticated } from '@/stores';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -21,7 +21,8 @@ export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
-  const { login, isAuthenticated } = useAuth();
+  const { login } = useAuthActions();
+  const isAuthenticated = useIsAuthenticated();
 
   // 이미 로그인된 상태면 메인 화면으로 이동
   useEffect(() => {

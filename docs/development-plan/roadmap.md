@@ -26,17 +26,43 @@
 - 🔄 모든 컴포넌트에서 `useAuth()` → `useAuthStore()` 변경
 
 #### 🎯 구체적 작업
-- [ ] Zustand 설치 및 기본 설정
-- [ ] AuthContext → Zustand Auth Store 마이그레이션
-- [ ] 지갑 잔고 상태 통합 관리
-- [ ] 거래 내역 상태 통합 관리
-- [ ] 기존 Context API 코드 제거
+- [x] Zustand 설치 및 기본 설정
+- [x] AuthContext → Zustand Auth Store 마이그레이션
+- [x] 지갑 잔고 상태 통합 관리
+- [x] 거래 내역 상태 통합 관리
+- [x] 기존 Context API 코드 제거
 
 #### 💡 기대 효과
 - 불필요한 리렌더링 최소화
 - 상태 로직 중앙집중화
 - 타입스크립트 지원 개선
 - 디버깅 도구 지원
+
+#### ✅ 실제 구현 내용 (2025-09-21 완료)
+**생성된 파일:**
+- ➕ `stores/authStore.ts` - 인증 상태 관리 (login, register, logout, initializeAuth)
+- ➕ `stores/walletStore.ts` - 지갑 잔고 관리 (fetchBalance, auto-refresh 기능)
+- ➕ `stores/transactionStore.ts` - 거래 내역 관리 (fetchTransactions, addTransaction)
+- ➕ `stores/index.ts` - 모든 store 통합 export
+- ➕ `components/StoreInitializer.tsx` - Zustand 초기화 컴포넌트
+
+**수정된 파일:**
+- 🔄 `app/_layout.tsx` - AuthProvider → StoreInitializer 교체
+- 🔄 `app/login.tsx` - useAuth() → useAuthActions(), useIsAuthenticated()
+- 🔄 `app/(tabs)/profile.tsx` - useAuth() → useAuthUser(), useAuthActions()
+- 🔄 `app/(tabs)/index.tsx` - useWalletBalance() → store hooks
+- 🔄 `components/AuthGuard.tsx` - useAuth() → useIsAuthenticated(), useAuthLoading()
+
+**삭제된 파일:**
+- 🗑️ `context/AuthContext.tsx` - 기존 Context API 제거
+- 🗑️ `hooks/useWalletBalance.ts` - Zustand store로 대체
+
+**주요 개선 사항:**
+- **Selective Subscriptions**: 필요한 상태만 구독하여 리렌더링 최적화
+- **TypeScript 개선**: 더 나은 타입 추론과 자동완성
+- **DevTools 지원**: Zustand DevTools로 상태 변화 디버깅
+- **Auto-refresh**: 지갑 잔고 자동 새로고침 (30초 간격)
+- **초기화 자동화**: StoreInitializer로 앱 시작 시 자동 상태 복원
 
 ### Phase 2: API 통신 통일 (1일)
 **목표**: 혼재된 API 통신 방식을 Axios로 통합
@@ -178,7 +204,7 @@
 
 | Phase | 상태 | 시작일 | 완료일 | 핵심 파일 | 비고 |
 |-------|------|--------|--------|-----------|------|
-| Phase 1 | 🟡 대기 중 | - | - | `context/AuthContext.tsx` → `stores/` | Zustand 마이그레이션 |
+| Phase 1 | 🟢 완료 | 2025-09-21 | 2025-09-21 | `stores/authStore.ts`, `stores/walletStore.ts`, `stores/transactionStore.ts` | Zustand 마이그레이션 완료 |
 | Phase 2 | ⚪ 미시작 | - | - | `services/apiClient.ts` → axios | API 통신 통합 |
 | Phase 3 | ⚪ 미시작 | - | - | `app/(tabs)/index.tsx` 140줄 → className | 스타일링 시스템 |
 | Phase 4 | ⚪ 미시작 | - | - | `components/` + animations | 애니메이션 & UI |

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
-import { useAuth } from '@/context/AuthContext';
+import { useIsAuthenticated, useAuthLoading } from '@/stores';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
 
@@ -10,7 +10,8 @@ interface AuthGuardProps {
 }
 
 export default function AuthGuard({ children }: AuthGuardProps) {
-  const { isAuthenticated, isLoading } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const isLoading = useAuthLoading();
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
 

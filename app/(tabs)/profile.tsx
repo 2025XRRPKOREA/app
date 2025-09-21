@@ -1,4 +1,4 @@
-import { useAuth } from '@/context/AuthContext';
+import { useAuthUser, useAuthActions } from '@/stores';
 import { useNotification } from '@/context/NotificationContext';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
@@ -33,7 +33,8 @@ interface UserProfile {
 }
 
 export default function ProfileScreen() {
-  const { user, logout } = useAuth();
+  const user = useAuthUser();
+  const { logout } = useAuthActions();
   const { notificationSettings, updateNotificationSettings } = useNotification();
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<UserProfile>({

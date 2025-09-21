@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { AuthProvider } from '@/context/AuthContext';
+import StoreInitializer from '@/components/StoreInitializer';
 import { NotificationProvider } from '@/context/NotificationContext';
 
 export const unstable_settings = {
@@ -15,7 +15,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <AuthProvider>
+    <StoreInitializer>
       <NotificationProvider>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <Stack>
@@ -26,6 +26,6 @@ export default function RootLayout() {
           <StatusBar style="auto" />
         </ThemeProvider>
       </NotificationProvider>
-    </AuthProvider>
+    </StoreInitializer>
   );
 }

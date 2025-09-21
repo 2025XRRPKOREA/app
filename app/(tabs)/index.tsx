@@ -1,5 +1,5 @@
 import React from 'react';
-import { useWalletBalance } from '../../hooks/useWalletBalance';
+import { useWalletBalance, useWalletLoading } from '@/stores';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { WalletIcon } from '../../components/icons';
@@ -7,7 +7,8 @@ import { TransactionList } from '../../components/TransactionList';
 
 
 export default function HomeScreen() {
-  const { balance, isInitialLoading } = useWalletBalance();
+  const balance = useWalletBalance();
+  const { isInitialLoading } = useWalletLoading();
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
