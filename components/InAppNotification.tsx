@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Animated,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -94,18 +93,14 @@ export function InAppNotification({ notification, onDismiss }: InAppNotification
 
   return (
     <Animated.View
-      style={[
-        styles.container,
-        {
-          opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }],
-        },
-      ]}>
+      className="absolute top-15 left-4 right-4 z-[9999]"
+      style={{
+        opacity: fadeAnim,
+        transform: [{ translateY: slideAnim }],
+      }}>
       <TouchableOpacity
-        style={[
-          styles.notification,
-          getNotificationStyle(notification.type),
-        ]}
+        className="rounded-xl border flex-row items-center py-4 px-4 shadow-lg shadow-black/30"
+        style={getNotificationStyle(notification.type)}
         onPress={() => {
           if (notification.onPress) {
             notification.onPress();
@@ -113,73 +108,20 @@ export function InAppNotification({ notification, onDismiss }: InAppNotification
           hideNotification();
         }}
         activeOpacity={0.9}>
-        <View style={styles.iconContainer}>
+        <View className="mr-3">
           {getIcon(notification.type)}
         </View>
-        <View style={styles.content}>
-          <Text style={styles.title}>{notification.title}</Text>
-          <Text style={styles.message}>{notification.message}</Text>
+        <View className="flex-1">
+          <Text className="text-base font-bold text-white mb-0.5">{notification.title}</Text>
+          <Text className="text-sm text-white opacity-90 leading-tight">{notification.message}</Text>
         </View>
-        <TouchableOpacity style={styles.closeButton} onPress={hideNotification}>
-          <Text style={styles.closeText}>×</Text>
+        <TouchableOpacity className="ml-3 w-6 h-6 justify-center items-center" onPress={hideNotification}>
+          <Text className="text-xl text-white font-bold">×</Text>
         </TouchableOpacity>
       </TouchableOpacity>
     </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    top: 60, // 상태바 아래
-    left: 16,
-    right: 16,
-    zIndex: 9999,
-  },
-  notification: {
-    borderRadius: 12,
-    borderWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-  },
-  iconContainer: {
-    marginRight: 12,
-  },
-  content: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#ffffff',
-    marginBottom: 2,
-  },
-  message: {
-    fontSize: 14,
-    color: '#ffffff',
-    opacity: 0.9,
-    lineHeight: 18,
-  },
-  closeButton: {
-    marginLeft: 12,
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  closeText: {
-    fontSize: 20,
-    color: '#ffffff',
-    fontWeight: 'bold',
-  },
-});
 
 // 알림 관리용 훅
 export function useInAppNotification() {

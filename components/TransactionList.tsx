@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { ArrowUpRightIcon, ArrowDownLeftIcon } from './icons';
 import { useTransactionHistory } from '../hooks/useTransactionHistory';
 
@@ -36,33 +36,30 @@ export const TransactionList: React.FC<TransactionListProps> = ({
   };
 
   return (
-    <View style={showCard ? styles.cardContainer : styles.container}>
-      <Text style={styles.title}>{title}</Text>
-      <View style={styles.transactionList}>
+    <View className={showCard ? "m-4 bg-white rounded-2xl p-5 shadow-sm shadow-black/10 elevation-2 gap-3" : "gap-3"}>
+      <Text className="text-lg font-bold mb-4 text-gray-800">{title}</Text>
+      <View className="gap-3">
         {error ? (
-          <View style={styles.errorContainer}>
-            <Text style={styles.errorText}>거래내역을 불러올 수 없습니다</Text>
+          <View className="items-center p-5">
+            <Text className="text-sm text-red-600 mb-3 text-center">거래내역을 불러올 수 없습니다</Text>
             <TouchableOpacity
-              style={styles.retryButton}
+              className="bg-blue-600 px-4 py-2 rounded-lg"
               onPress={handleRefresh}>
-              <Text style={styles.retryButtonText}>다시 시도</Text>
+              <Text className="text-white text-sm font-semibold">다시 시도</Text>
             </TouchableOpacity>
           </View>
         ) : transactions.length === 0 && !loading ? (
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyText}>거래내역이 없습니다</Text>
+          <View className="items-center justify-center py-8">
+            <Text className="text-sm text-gray-500">거래내역이 없습니다</Text>
           </View>
         ) : (
           transactions.map(transaction => (
-            <View key={transaction.id} style={styles.transactionItem}>
-              <View style={styles.transactionLeft}>
+            <View key={transaction.id} className="flex-row justify-between items-center p-3 bg-gray-50 rounded-xl">
+              <View className="flex-row items-center flex-1">
                 <View
-                  style={[
-                    styles.iconContainer,
-                    transaction.type === 'sent'
-                      ? styles.sendIconContainer
-                      : styles.receiveIconContainer,
-                  ]}>
+                  className={`w-8 h-8 rounded-2xl justify-center items-center mr-3 ${
+                    transaction.type === 'sent' ? 'bg-red-50' : 'bg-green-50'
+                  }`}>
                   {transaction.type === 'sent' ? (
                     <ArrowUpRightIcon size={16} color="#dc2626" />
                   ) : (
@@ -70,47 +67,42 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                   )}
                 </View>
                 <View>
-                  <Text style={styles.transactionType}>
+                  <Text className="text-sm font-semibold text-gray-800 mb-0.5">
                     {transaction.type === 'sent' ? '보냄' : '받음'}
                   </Text>
-                  <Text style={styles.transactionTime}>
+                  <Text className="text-xs text-gray-500">
                     {formatDate(transaction.timestamp)}
                   </Text>
                 </View>
               </View>
-              <View style={styles.transactionRight}>
+              <View className="items-end">
                 <Text
-                  style={[
-                    styles.transactionAmount,
-                    transaction.type === 'sent'
-                      ? styles.sendAmount
-                      : styles.receiveAmount,
-                  ]}>
+                  className={`text-sm font-semibold mb-0.5 ${
+                    transaction.type === 'sent' ? 'text-red-600' : 'text-green-600'
+                  }`}>
                   {transaction.type === 'sent' ? '-' : '+'}
                   {transaction.currency === 'KRW' ? '₩' : transaction.currency === 'USD' ? '$' : ''}
                   {transaction.price.toLocaleString()}
                 </Text>
-                <Text style={styles.transactionCurrency}>
+                <Text className="text-xs text-gray-500 mb-1">
                   {transaction.currency}
                 </Text>
                 <View
-                  style={[
-                    styles.statusBadge,
+                  className={`px-2 py-0.5 rounded-xl ${
                     transaction.status === 'completed'
-                      ? styles.completedBadge
+                      ? 'bg-green-100'
                       : transaction.status === 'pending'
-                      ? styles.pendingBadge
-                      : styles.failedBadge,
-                  ]}>
+                      ? 'bg-yellow-100'
+                      : 'bg-red-100'
+                  }`}>
                   <Text
-                    style={[
-                      styles.statusText,
+                    className={`text-xs font-semibold ${
                       transaction.status === 'completed'
-                        ? styles.completedText
+                        ? 'text-green-800'
                         : transaction.status === 'pending'
-                        ? styles.pendingText
-                        : styles.failedText,
-                    ]}>
+                        ? 'text-yellow-800'
+                        : 'text-red-800'
+                    }`}>
                     {transaction.status === 'completed' ? '완료' :
                      transaction.status === 'failed' ? '실패' : '대기중'}
                   </Text>
@@ -123,143 +115,3 @@ export const TransactionList: React.FC<TransactionListProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    gap: 12,
-  },
-  cardContainer: {
-    margin: 16,
-    backgroundColor: '#ffffff',
-    borderRadius: 16,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 2,
-    gap: 12,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    color: '#1f2937',
-  },
-  transactionList: {
-    gap: 12,
-  },
-  transactionItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 12,
-    backgroundColor: '#f9fafb',
-    borderRadius: 12,
-  },
-  transactionLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  iconContainer: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  sendIconContainer: {
-    backgroundColor: '#fef2f2',
-  },
-  receiveIconContainer: {
-    backgroundColor: '#f0fdf4',
-  },
-  transactionType: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1f2937',
-    marginBottom: 2,
-  },
-  transactionTime: {
-    fontSize: 12,
-    color: '#6b7280',
-  },
-  transactionRight: {
-    alignItems: 'flex-end',
-  },
-  transactionAmount: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 2,
-  },
-  transactionCurrency: {
-    fontSize: 12,
-    color: '#6b7280',
-    marginBottom: 4,
-  },
-  sendAmount: {
-    color: '#dc2626',
-  },
-  receiveAmount: {
-    color: '#16a34a',
-  },
-  statusBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 12,
-  },
-  completedBadge: {
-    backgroundColor: '#d1fae5',
-  },
-  pendingBadge: {
-    backgroundColor: '#fef3c7',
-  },
-  failedBadge: {
-    backgroundColor: '#fecaca',
-  },
-  statusText: {
-    fontSize: 10,
-    fontWeight: '600',
-  },
-  completedText: {
-    color: '#065f46',
-  },
-  pendingText: {
-    color: '#92400e',
-  },
-  failedText: {
-    color: '#991b1b',
-  },
-  emptyState: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 32,
-  },
-  emptyText: {
-    fontSize: 14,
-    color: '#6b7280',
-  },
-  errorContainer: {
-    alignItems: 'center',
-    padding: 20,
-  },
-  errorText: {
-    fontSize: 14,
-    color: '#dc2626',
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  retryButton: {
-    backgroundColor: '#2563eb',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  retryButtonText: {
-    color: '#ffffff',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-});

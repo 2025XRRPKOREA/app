@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Alert,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -190,57 +189,56 @@ export default function TransactionScreen() {
 
   if (mode === 'qr-display') {
     return (
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.card}>
-          <View style={styles.cardHeader}>
+      <ScrollView className="flex-1 bg-white p-4" showsVerticalScrollIndicator={false}>
+        <View className="bg-white rounded-2xl mb-6 shadow-sm shadow-black/10 elevation-2">
+          <View className="flex-row items-center p-5 pb-0">
             <QRCodeIcon size={20} color="#1f2937" />
-            <Text style={styles.cardTitle}>결제 요청 QR 코드</Text>
+            <Text className="text-lg font-bold text-gray-800 ml-2">결제 요청 QR 코드</Text>
           </View>
-          <View style={styles.cardContent}>
-            <View style={styles.qrContainer}>
+          <View className="p-5">
+            <View className="items-center mb-6">
               <QRGenerator data={transactionData.qrData || ''} />
             </View>
-            <View style={styles.qrInfo}>
-              <Text style={styles.amountText}>
+            <View className="items-center mb-6">
+              <Text className="text-2xl font-bold text-gray-800 mb-2">
                 {transactionData.amount} {transactionData.currency}
               </Text>
-              <Text style={styles.qrDescription}>
+              <Text className="text-sm text-gray-500 text-center">
                 상대방이 이 QR 코드를 스캔하여 결제할 수 있습니다
               </Text>
               {transactionData.offerId && (
-                <Text style={styles.offerIdText}>
+                <Text className="text-xs text-gray-400 mt-2">
                   오퍼 ID: {transactionData.offerId}
                 </Text>
               )}
             </View>
-            <View style={styles.buttonRow}>
+            <View className="flex-row gap-3">
               <TouchableOpacity
-                style={[styles.outlineButton, { flex: 1 }, loading && styles.disabledButton]}
+                className={`flex-1 py-3 px-4 rounded-lg border border-gray-300 items-center ${
+                  loading ? 'opacity-50' : ''
+                }`}
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                  // 간단하게 바로 메인 화면으로 돌아가기
                   setMode('main');
                   setTransactionData({ type: 'receive', currency: 'KRW', amount: '' });
                 }}
                 disabled={loading}>
-                <Text style={styles.outlineButtonText}>
+                <Text className="text-gray-700 font-semibold">
                   {loading ? '취소 중...' : '닫기'}
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[styles.primaryButton, { flex: 1 }]}
+                className="flex-1 py-3 px-4 rounded-lg bg-blue-600 items-center"
                 onPress={async () => {
-                  // 테스트용: 결제 완료 시뮬레이션
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
                   await sendTransactionNotification('received', transactionData.amount, transactionData.currency);
                   showTransactionSuccess(transactionData.amount, transactionData.currency, 'received');
                   Alert.alert('테스트', '결제 받기 완료 알림이 전송되었습니다!');
-                  // 테스트 후 메인 화면으로 돌아가기
                   setMode('main');
                   setTransactionData({ type: 'receive', currency: 'KRW', amount: '' });
                 }}>
-                <Text style={styles.primaryButtonText}>테스트 결제</Text>
+                <Text className="text-white font-semibold">테스트 결제</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -251,18 +249,18 @@ export default function TransactionScreen() {
 
   if (mode === 'qr-scan') {
     return (
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.card}>
-          <View style={styles.cardHeader}>
+      <ScrollView className="flex-1 bg-white p-4" showsVerticalScrollIndicator={false}>
+        <View className="bg-white rounded-2xl mb-6 shadow-sm shadow-black/10 elevation-2">
+          <View className="flex-row items-center p-5 pb-0">
             <CameraIcon size={20} color="#1f2937" />
-            <Text style={styles.cardTitle}>QR 코드 스캔</Text>
+            <Text className="text-lg font-bold text-gray-800 ml-2">QR 코드 스캔</Text>
           </View>
-          <View style={styles.cardContent}>
+          <View className="p-5">
             <QRScanner onScan={handleQRScanned} />
             <TouchableOpacity
-              style={styles.outlineButton}
+              className="py-3 px-4 rounded-lg border border-gray-300 items-center mt-4"
               onPress={() => setMode('main')}>
-              <Text style={styles.outlineButtonText}>취소</Text>
+              <Text className="text-gray-700 font-semibold">취소</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -274,87 +272,89 @@ export default function TransactionScreen() {
 
   return (
     <ScrollView
-      style={styles.container}
+      className="flex-1 bg-white p-4"
       showsVerticalScrollIndicator={false}>
       {/* 메인 거래 옵션 */}
-      <View style={styles.optionsGrid}>
+      <View className="flex-row gap-4 mb-6">
         <TouchableOpacity
-          style={styles.optionCard}
+          className="flex-1 bg-white rounded-2xl p-6 items-center shadow-sm shadow-black/10 elevation-2"
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
             setMode('receive');
           }}>
           <QRGenerateIcon size={36} color="#10b981" />
-          <Text style={styles.optionTitle}>QR 생성하기</Text>
-          <Text style={styles.optionSubtitle}>결제 요청</Text>
+          <Text className="text-base font-bold text-gray-800 mt-3">QR 생성하기</Text>
+          <Text className="text-sm text-gray-500 mt-1">결제 요청</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.optionCard}
+          className="flex-1 bg-white rounded-2xl p-6 items-center shadow-sm shadow-black/10 elevation-2"
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
             handleSend();
           }}>
           <ScanQRIcon size={36} color="#3b82f6" />
-          <Text style={styles.optionTitle}>QR 송금하기</Text>
-          <Text style={styles.optionSubtitle}>즉시 결제</Text>
+          <Text className="text-base font-bold text-gray-800 mt-3">QR 송금하기</Text>
+          <Text className="text-sm text-gray-500 mt-1">즉시 결제</Text>
         </TouchableOpacity>
       </View>
 
       {/* 받기 폼 */}
       {mode === 'receive' && (
-        <View style={styles.card}>
-          <View style={styles.cardHeader}>
+        <View className="bg-white rounded-2xl mb-6 shadow-sm shadow-black/10 elevation-2">
+          <View className="flex-row items-center p-5 pb-0">
             <QRGenerateIcon size={20} color="#16a34a" />
-            <Text style={styles.cardTitle}>QR 생성하기</Text>
+            <Text className="text-lg font-bold text-gray-800 ml-2">QR 생성하기</Text>
           </View>
-          <View style={styles.cardContent}>
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>통화 선택</Text>
-              <View style={styles.currencySelector}>
+          <View className="p-5">
+            <View className="mb-4">
+              <Text className="text-sm font-semibold text-gray-700 mb-3">통화 선택</Text>
+              <View className="flex-row gap-3">
                 <TouchableOpacity
-                  style={[
-                    styles.currencyOption,
-                    transactionData.currency === 'KRW' && styles.currencyOptionActive,
-                  ]}
+                  className={`flex-1 py-3 px-4 rounded-lg border ${
+                    transactionData.currency === 'KRW'
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-gray-300 bg-white'
+                  }`}
                   onPress={() => {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     setTransactionData(prev => ({ ...prev, currency: 'KRW' }));
-                  }}
-                  >
+                  }}>
                   <Text
-                    style={[
-                      styles.currencyOptionText,
-                      transactionData.currency === 'KRW' && styles.currencyOptionTextActive,
-                    ]}>
+                    className={`text-center font-semibold ${
+                      transactionData.currency === 'KRW'
+                        ? 'text-green-600'
+                        : 'text-gray-600'
+                    }`}>
                     KRW (원)
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[
-                    styles.currencyOption,
-                    transactionData.currency === 'USD' && styles.currencyOptionActive,
-                  ]}
+                  className={`flex-1 py-3 px-4 rounded-lg border ${
+                    transactionData.currency === 'USD'
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-gray-300 bg-white'
+                  }`}
                   onPress={() => {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     setTransactionData(prev => ({ ...prev, currency: 'USD' }));
-                  }}
-                  >
+                  }}>
                   <Text
-                    style={[
-                      styles.currencyOptionText,
-                      transactionData.currency === 'USD' && styles.currencyOptionTextActive,
-                    ]}>
+                    className={`text-center font-semibold ${
+                      transactionData.currency === 'USD'
+                        ? 'text-green-600'
+                        : 'text-gray-600'
+                    }`}>
                     USD (달러)
                   </Text>
                 </TouchableOpacity>
               </View>
             </View>
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>금액</Text>
+            <View className="mb-6">
+              <Text className="text-sm font-semibold text-gray-700 mb-3">금액</Text>
               <TextInput
-                style={styles.textInput}
+                className="border border-gray-300 rounded-lg py-3 px-4 text-base text-gray-800 bg-white"
                 placeholder="받을 금액을 입력하세요"
                 value={transactionData.amount}
                 onChangeText={text =>
@@ -363,25 +363,25 @@ export default function TransactionScreen() {
               />
             </View>
 
-            <View style={styles.buttonRow}>
+            <View className="flex-row gap-3">
               <TouchableOpacity
-                style={[styles.outlineButton, { flex: 1 }]}
+                className="flex-1 py-3 px-4 rounded-lg border border-gray-300 items-center"
                 onPress={() => setMode('main')}>
-                <Text style={styles.outlineButtonText}>취소</Text>
+                <Text className="text-gray-700 font-semibold">취소</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[
-                  styles.primaryButton,
-                  { flex: 1 },
-                  (!transactionData.amount || loading) && styles.disabledButton,
-                ]}
+                className={`flex-1 py-3 px-4 rounded-lg items-center ${
+                  (!transactionData.amount || loading)
+                    ? 'bg-gray-300'
+                    : 'bg-blue-600'
+                }`}
                 onPress={() => {
                   if (!transactionData.amount || loading) return;
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
                   handleReceive();
                 }}
                 disabled={!transactionData.amount || loading}>
-                <Text style={styles.primaryButtonText}>
+                <Text className="text-white font-semibold">
                   {loading ? '생성 중...' : '⚡ QR 생성'}
                 </Text>
               </TouchableOpacity>
@@ -396,223 +396,3 @@ export default function TransactionScreen() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    padding: 16,
-  },
-  optionsGrid: {
-    flexDirection: 'row',
-    gap: 16,
-    marginBottom: 24,
-  },
-  optionCard: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    borderRadius: 20,
-    padding: 28,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 8,
-    borderWidth: 1,
-    borderColor: '#f3f4f6',
-  },
-  optionTitle: {
-    fontSize: 17,
-    fontWeight: '700',
-    marginTop: 12,
-    color: '#1f2937',
-    textAlign: 'center',
-  },
-  optionSubtitle: {
-    fontSize: 13,
-    color: '#6b7280',
-    marginTop: 6,
-    fontWeight: '500',
-    textAlign: 'center',
-  },
-  card: {
-    backgroundColor: '#ffffff',
-    borderRadius: 16,
-    marginBottom: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    paddingBottom: 0,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1f2937',
-    marginLeft: 8,
-  },
-  cardContent: {
-    padding: 20,
-  },
-  inputGroup: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#374151',
-    marginBottom: 8,
-  },
-  currencySelector: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  currencyOption: {
-    flex: 1,
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-    alignItems: 'center',
-  },
-  currencyOptionActive: {
-    borderColor: '#2563eb',
-    backgroundColor: '#eff6ff',
-  },
-  currencyOptionText: {
-    fontSize: 14,
-    color: '#6b7280',
-  },
-  currencyOptionTextActive: {
-    color: '#2563eb',
-    fontWeight: '600',
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  primaryButton: {
-    backgroundColor: '#2563eb',
-    paddingVertical: 16,
-    paddingHorizontal: 28,
-    borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#2563eb',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  primaryButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  outlineButton: {
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  outlineButtonText: {
-    color: '#6b7280',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  disabledButton: {
-    backgroundColor: '#e5e7eb',
-  },
-  qrContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  qrInfo: {
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  amountText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#1f2937',
-    marginBottom: 8,
-  },
-  qrDescription: {
-    fontSize: 14,
-    color: '#6b7280',
-    textAlign: 'center',
-  },
-  offerIdText: {
-    fontSize: 12,
-    color: '#9ca3af',
-    textAlign: 'center',
-    marginTop: 8,
-    fontFamily: 'monospace',
-  },
-  confirmContainer: {
-    backgroundColor: '#f3f4f6',
-    padding: 24,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  confirmAmount: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#dc2626',
-    marginBottom: 8,
-  },
-  confirmLabel: {
-    fontSize: 14,
-    color: '#6b7280',
-  },
-  detailsContainer: {
-    marginBottom: 24,
-  },
-  detailRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-  },
-  detailLabel: {
-    fontSize: 14,
-    color: '#6b7280',
-  },
-  detailValue: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1f2937',
-  },
-  scanInstructions: {
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  instructionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1f2937',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  instructionSubtitle: {
-    fontSize: 14,
-    color: '#6b7280',
-    textAlign: 'center',
-  },
-});

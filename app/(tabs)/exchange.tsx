@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   Animated,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -207,36 +206,36 @@ export default function ExchangeScreen() {
     };
 
     return (
-      <View style={styles.currencyDropdownContainer}>
+      <View className="relative z-[5000]">
         <TouchableOpacity 
-          style={styles.currencyPickerButton}
+          className="bg-gray-50 border border-gray-300 rounded-lg py-3 px-3 flex-row items-center justify-between"
           onPress={handleToggle}
         >
-          <Text style={styles.currencyPickerText}>{value}</Text>
-          <View style={[styles.dropdownArrow, isOpen && styles.dropdownArrowOpen]}>
-            <Text style={styles.dropdownArrowText}>▼</Text>
+          <Text className="text-sm font-semibold text-gray-700">{value}</Text>
+          <View className={`ml-1 ${isOpen ? 'rotate-180' : ''}`}>
+            <Text className="text-xs text-gray-500">▼</Text>
           </View>
         </TouchableOpacity>
         
         {isOpen && (
-          <View style={styles.currencyDropdown}>
+          <View className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg mt-1 shadow-lg z-[50000]">
             {currencies.map((currency) => (
               <TouchableOpacity
                 key={currency}
-                style={[
-                  styles.currencyDropdownItem,
-                  currency === value && styles.currencyDropdownItemSelected
-                ]}
+                className={`py-3 px-4 flex-row justify-between items-center ${
+                  currency === value ? 'bg-gray-100' : ''
+                }`}
                 onPress={() => handleSelect(currency as 'XRP' | 'KRW')}
               >
-                <Text style={[
-                  styles.currencyDropdownText,
-                  currency === value && styles.currencyDropdownTextSelected
-                ]}>
+                <Text className={`text-sm ${
+                  currency === value 
+                    ? 'font-semibold text-blue-600' 
+                    : 'text-gray-700'
+                }`}>
                   {currency}
                 </Text>
                 {currency === value && (
-                  <Text style={styles.checkMark}>✓</Text>
+                  <Text className="text-sm text-blue-600 font-bold">✓</Text>
                 )}
               </TouchableOpacity>
             ))}
@@ -247,23 +246,23 @@ export default function ExchangeScreen() {
   };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView className="flex-1 bg-white p-4" showsVerticalScrollIndicator={false}>
       {/* 환전 폼 */}
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
+      <View className="bg-white rounded-2xl mb-6 shadow-sm shadow-black/10 elevation-2">
+        <View className="flex-row items-center p-5 pb-0">
           <RefreshIcon size={20} color="#1f2937" />
-          <Text style={styles.cardTitle}>환전</Text>
+          <Text className="text-lg font-bold text-gray-800 ml-2">환전</Text>
           {lastUpdated && (
-            <Text style={styles.lastUpdated}>마지막 업데이트: {lastUpdated}</Text>
+            <Text className="text-xs text-gray-500 ml-auto">마지막 업데이트: {lastUpdated}</Text>
           )}
         </View>
-        <View style={styles.cardContent}>
-          <View style={styles.exchangeFormContainer}>
+        <View className="p-5">
+          <View className="z-[1000]">
             {/* From 섹션 */}
-            <View style={[styles.inputSection, styles.fromSection]}>
-              <Text style={styles.sectionLabel}>보낼 통화</Text>
-              <View style={styles.inputRowContainer}>
-                <View style={styles.currencySelectContainer}>
+            <View className="mb-4 z-[10000]">
+              <Text className="text-sm font-semibold text-gray-700 mb-2">보낼 통화</Text>
+              <View className="flex-row gap-2 items-center">
+                <View className="w-20 z-[5000]">
                   <CurrencySelector
                     value={fromCurrency}
                     onSelect={setFromCurrency}
@@ -271,7 +270,7 @@ export default function ExchangeScreen() {
                   />
                 </View>
                 <TextInput
-                  style={styles.amountInput}
+                  className="flex-1 border border-gray-300 rounded-lg py-3 px-4 text-base text-gray-800 bg-white"
                   placeholder="0"
                   value={amount}
                   onChangeText={setAmount}
@@ -282,21 +281,24 @@ export default function ExchangeScreen() {
             </View>
 
             {/* 스왑 버튼 */}
-            <View style={styles.swapButtonContainer}>
-              <TouchableOpacity style={styles.swapButton} onPress={handleSwapCurrencies}>
+            <View className="items-center my-4">
+              <TouchableOpacity 
+                className="w-10 h-10 rounded-full border border-gray-300 bg-white justify-center items-center shadow-sm" 
+                onPress={handleSwapCurrencies}
+              >
                 <ArrowLeftRightIcon size={20} color="#6b7280" />
               </TouchableOpacity>
             </View>
 
             {/* To 섹션 */}
-            <View style={[styles.inputSection, styles.toSection]}>
-              <Text style={styles.sectionLabel}>받을 통화</Text>
-              <View style={styles.inputRowContainer}>
-                <View style={styles.fixedCurrencyContainer}>
-                  <Text style={styles.fixedCurrencyText}>{toCurrency}</Text>
+            <View className="mb-4 z-[1000]">
+              <Text className="text-sm font-semibold text-gray-700 mb-2">받을 통화</Text>
+              <View className="flex-row gap-2 items-center">
+                <View className="w-20 bg-gray-50 border border-gray-300 rounded-lg py-3 px-3 justify-center items-center">
+                  <Text className="text-sm font-semibold text-gray-500">{toCurrency}</Text>
                 </View>
-                <View style={styles.resultContainer}>
-                  <Text style={styles.resultAmount}>{getEstimatedAmount()}</Text>
+                <View className="flex-1 bg-gray-50 border border-gray-300 rounded-lg py-3 px-4 justify-center">
+                  <Text className="text-base text-gray-500 font-medium">{getEstimatedAmount()}</Text>
                 </View>
               </View>
             </View>
@@ -304,10 +306,10 @@ export default function ExchangeScreen() {
 
           {/* 환율 정보 */}
           {getCurrentRate() > 0 && (
-            <View style={styles.exchangeRateContainer}>
-              <View style={styles.exchangeRateRow}>
-                <Text style={styles.exchangeRateLabel}>현재 환율</Text>
-                <Text style={styles.exchangeRateValue}>
+            <View className="bg-gray-50 border border-gray-300 rounded-lg p-3 mb-5">
+              <View className="flex-row justify-between items-center">
+                <Text className="text-sm text-gray-500">현재 환율</Text>
+                <Text className="text-sm font-semibold text-gray-800">
                   1 {fromCurrency} = {formatExchangeRate(getCurrentRate())} {toCurrency}
                 </Text>
               </View>
@@ -315,28 +317,29 @@ export default function ExchangeScreen() {
           )}
 
           <TouchableOpacity
-            style={[
-              styles.primaryButton,
-              (!amount || getCurrentRate() === 0 || isLoading) && styles.disabledButton,
-            ]}
+            className={`py-3 px-6 rounded-lg items-center ${
+              (!amount || getCurrentRate() === 0 || isLoading) 
+                ? 'bg-gray-300' 
+                : 'bg-blue-600'
+            }`}
             onPress={handleExchange}
             disabled={!amount || getCurrentRate() === 0 || isLoading}>
             {isLoading ? (
               <ActivityIndicator size="small" color="#ffffff" />
             ) : (
-              <Text style={styles.primaryButtonText}>환전하기</Text>
+              <Text className="text-white text-base font-semibold">환전하기</Text>
             )}
           </TouchableOpacity>
         </View>
       </View>
 
       {/* 실시간 환율 */}
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
+      <View className="bg-white rounded-2xl mb-6 shadow-sm shadow-black/10 elevation-2">
+        <View className="flex-row items-center p-5 pb-0">
           <ChartIcon size={20} color="#1f2937" />
-          <Text style={styles.cardTitle}>실시간 환율</Text>
+          <Text className="text-lg font-bold text-gray-800 ml-2">실시간 환율</Text>
           <TouchableOpacity
-            style={styles.refreshButton}
+            className="ml-auto p-2 rounded-md bg-gray-50 border border-gray-300"
             onPress={handleRefreshRates}
             disabled={isLoading}>
             {isLoading ? (
@@ -346,25 +349,23 @@ export default function ExchangeScreen() {
             )}
           </TouchableOpacity>
         </View>
-        <View style={styles.cardContent}>
+        <View className="p-5">
           {exchangeRates.map((rate, index) => (
-            <View key={index} style={styles.rateItem}>
-              <View style={styles.rateItemLeft}>
-                <Text style={styles.ratePair}>
+            <View key={index} className="flex-row justify-between items-center p-3 bg-gray-50 rounded-xl mb-3">
+              <View>
+                <Text className="text-sm font-semibold text-gray-800 mb-1">
                   {rate.from} → {rate.to}
                 </Text>
-                <Text style={styles.rateAmount}>{formatExchangeRate(rate.rate)}</Text>
+                <Text className="text-base font-bold text-gray-800">{formatExchangeRate(rate.rate)}</Text>
               </View>
               <View
-                style={[
-                  styles.changeBadge,
-                  rate.change >= 0 ? styles.changeBadgePositive : styles.changeBadgeNegative,
-                ]}>
+                className={`px-2 py-1 rounded-xl ${
+                  rate.change >= 0 ? 'bg-green-100' : 'bg-red-100'
+                }`}>
                 <Text
-                  style={[
-                    styles.changeText,
-                    rate.change >= 0 ? styles.changeTextPositive : styles.changeTextNegative,
-                  ]}>
+                  className={`text-xs font-semibold ${
+                    rate.change >= 0 ? 'text-green-600' : 'text-red-600'
+                  }`}>
                   {rate.change >= 0 ? '+' : ''}
                   {rate.change}%
                 </Text>
@@ -375,45 +376,47 @@ export default function ExchangeScreen() {
       </View>
 
       {/* 환전 내역 */}
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.cardTitle}>최근 환전 내역</Text>
+      <View className="bg-white rounded-2xl mb-6 shadow-sm shadow-black/10 elevation-2">
+        <View className="flex-row items-center p-5 pb-0">
+          <Text className="text-lg font-bold text-gray-800">최근 환전 내역</Text>
         </View>
-        <View style={styles.cardContent}>
+        <View className="p-5">
           {mockHistory.map(history => (
-            <View key={history.id} style={styles.historyItem}>
-              <View style={styles.historyLeft}>
-                <View style={styles.exchangeIconContainer}>
+            <View key={history.id} className="flex-row justify-between items-center p-3 bg-gray-50 rounded-xl mb-3">
+              <View className="flex-row items-center flex-1">
+                <View className="w-8 h-8 rounded-full bg-blue-50 justify-center items-center mr-3">
                   <RefreshIcon size={16} color="#2563eb" />
                 </View>
                 <View>
-                  <Text style={styles.historyPair}>
+                  <Text className="text-sm font-semibold text-gray-800 mb-0.5">
                     {history.from} → {history.to}
                   </Text>
-                  <Text style={styles.historyTime}>{history.timestamp}</Text>
+                  <Text className="text-xs text-gray-500">{history.timestamp}</Text>
                 </View>
               </View>
-              <View style={styles.historyRight}>
-                <Text style={styles.historyAmount}>
+              <View className="items-end">
+                <Text className="text-sm font-semibold text-gray-800 mb-0.5">
                   {history.fromAmount} {history.from}
                 </Text>
-                <Text style={styles.historyResult}>
+                <Text className="text-xs text-gray-500 mb-1">
                   → {history.toAmount} {history.to}
                 </Text>
                 <View
-                  style={[
-                    styles.statusBadge,
-                    history.status === 'completed' && styles.completedBadge,
-                    history.status === 'pending' && styles.pendingBadge,
-                    history.status === 'failed' && styles.failedBadge,
-                  ]}>
+                  className={`px-2 py-0.5 rounded-xl ${
+                    history.status === 'completed' 
+                      ? 'bg-gray-200' 
+                      : history.status === 'pending' 
+                      ? 'bg-yellow-100' 
+                      : 'bg-red-100'
+                  }`}>
                   <Text
-                    style={[
-                      styles.statusText,
-                      history.status === 'completed' && styles.completedText,
-                      history.status === 'pending' && styles.pendingText,
-                      history.status === 'failed' && styles.failedText,
-                    ]}>
+                    className={`text-xs font-semibold ${
+                      history.status === 'completed' 
+                        ? 'text-gray-700' 
+                        : history.status === 'pending' 
+                        ? 'text-yellow-700' 
+                        : 'text-red-600'
+                    }`}>
                     {history.status === 'completed'
                       ? '완료'
                       : history.status === 'pending'
@@ -430,413 +433,24 @@ export default function ExchangeScreen() {
       {/* Toast Notification */}
       {showToast && (
         <Animated.View
-          style={[
-            styles.toast,
-            toastType === 'success' ? styles.toastSuccess : styles.toastError,
-            {
-              opacity: toastAnimation,
-              transform: [
-                {
-                  translateY: toastAnimation.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [-20, 0],
-                  }),
-                },
-              ],
-            },
-          ]}>
-          <Text style={styles.toastText}>{toastMessage}</Text>
+          className={`absolute top-15 left-5 right-5 px-5 py-3 rounded-xl z-[1000] shadow-lg ${
+            toastType === 'success' ? 'bg-green-600' : 'bg-red-600'
+          }`}
+          style={{
+            opacity: toastAnimation,
+            transform: [
+              {
+                translateY: toastAnimation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [-20, 0],
+                }),
+              },
+            ],
+          }}>
+          <Text className="text-white text-base font-semibold text-center">{toastMessage}</Text>
         </Animated.View>
       )}
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    padding: 16,
-  },
-  card: {
-    backgroundColor: '#ffffff',
-    borderRadius: 16,
-    marginBottom: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    paddingBottom: 0,
-  },
-  lastUpdated: {
-    fontSize: 12,
-    color: '#6b7280',
-    marginLeft: 'auto',
-  },
-  refreshButton: {
-    marginLeft: 'auto',
-    padding: 8,
-    borderRadius: 6,
-    backgroundColor: '#f9fafb',
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1f2937',
-    marginLeft: 8,
-  },
-  cardContent: {
-    padding: 20,
-  },
-  exchangeFormContainer: {
-    zIndex: 1000,
-    elevation: 1000,
-  },
-  inputSection: {
-    marginBottom: 16,
-  },
-  fromSection: {
-    zIndex: 10000,
-    elevation: 10000,
-  },
-  toSection: {
-    zIndex: 1000,
-    elevation: 1000,
-  },
-  sectionLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#374151',
-    marginBottom: 8,
-  },
-  inputRowContainer: {
-    flexDirection: 'row',
-    gap: 8,
-    alignItems: 'center',
-  },
-  currencySelectContainer: {
-    width: 80,
-    zIndex: 5000,
-    elevation: 5000,
-  },
-  fixedCurrencyContainer: {
-    width: 80,
-    backgroundColor: '#f9fafb',
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  fixedCurrencyText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#6b7280',
-  },
-  currencyDropdownContainer: {
-    position: 'relative',
-    zIndex: 5000,
-    elevation: 5000,
-  },
-  currencyPickerButton: {
-    backgroundColor: '#f9fafb',
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  currencyPickerText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#374151',
-  },
-  dropdownArrow: {
-    marginLeft: 4,
-  },
-  dropdownArrowOpen: {
-    transform: [{ rotate: '180deg' }],
-  },
-  dropdownArrowText: {
-    fontSize: 10,
-    color: '#6b7280',
-  },
-  currencyDropdown: {
-    position: 'absolute',
-    top: '100%',
-    left: 0,
-    right: 0,
-    backgroundColor: '#ffffff',
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    borderRadius: 8,
-    marginTop: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
-    elevation: 20,
-    zIndex: 50000,
-  },
-  currencyDropdownItem: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  currencyDropdownItemSelected: {
-    backgroundColor: '#f3f4f6',
-  },
-  currencyDropdownText: {
-    fontSize: 14,
-    color: '#374151',
-  },
-  currencyDropdownTextSelected: {
-    fontWeight: '600',
-    color: '#2563eb',
-  },
-  checkMark: {
-    fontSize: 14,
-    color: '#2563eb',
-    fontWeight: 'bold',
-  },
-  amountInput: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    color: '#1f2937',
-    backgroundColor: '#ffffff',
-  },
-  swapButtonContainer: {
-    alignItems: 'center',
-    marginVertical: 16,
-  },
-  swapButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    backgroundColor: '#ffffff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  resultContainer: {
-    flex: 1,
-    backgroundColor: '#f9fafb',
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    justifyContent: 'center',
-  },
-  resultAmount: {
-    fontSize: 16,
-    color: '#6b7280',
-    fontWeight: '500',
-  },
-  exchangeRateContainer: {
-    backgroundColor: '#f9fafb',
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 20,
-  },
-  exchangeRateRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  exchangeRateLabel: {
-    fontSize: 14,
-    color: '#6b7280',
-  },
-  exchangeRateValue: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1f2937',
-  },
-  primaryButton: {
-    backgroundColor: '#2563eb',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  primaryButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  disabledButton: {
-    backgroundColor: '#e5e7eb',
-  },
-  rateItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 12,
-    backgroundColor: '#f9fafb',
-    borderRadius: 12,
-    marginBottom: 12,
-  },
-  rateItemLeft: {},
-  ratePair: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1f2937',
-    marginBottom: 4,
-  },
-  rateAmount: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#1f2937',
-  },
-  changeBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  changeBadgePositive: {
-    backgroundColor: '#dcfce7',
-  },
-  changeBadgeNegative: {
-    backgroundColor: '#fef2f2',
-  },
-  changeText: {
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  changeTextPositive: {
-    color: '#16a34a',
-  },
-  changeTextNegative: {
-    color: '#dc2626',
-  },
-  historyItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 12,
-    backgroundColor: '#f9fafb',
-    borderRadius: 12,
-    marginBottom: 12,
-  },
-  historyLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  exchangeIconContainer: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#eff6ff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  historyPair: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1f2937',
-    marginBottom: 2,
-  },
-  historyTime: {
-    fontSize: 12,
-    color: '#6b7280',
-  },
-  historyRight: {
-    alignItems: 'flex-end',
-  },
-  historyAmount: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1f2937',
-    marginBottom: 2,
-  },
-  historyResult: {
-    fontSize: 12,
-    color: '#6b7280',
-    marginBottom: 4,
-  },
-  statusBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 12,
-  },
-  completedBadge: {
-    backgroundColor: '#e5e7eb',
-  },
-  pendingBadge: {
-    backgroundColor: '#fef3c7',
-  },
-  failedBadge: {
-    backgroundColor: '#fef2f2',
-  },
-  statusText: {
-    fontSize: 10,
-    fontWeight: '600',
-  },
-  completedText: {
-    color: '#374151',
-  },
-  pendingText: {
-    color: '#d97706',
-  },
-  failedText: {
-    color: '#dc2626',
-  },
-  toast: {
-    position: 'absolute',
-    top: 60,
-    left: 20,
-    right: 20,
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 12,
-    zIndex: 1000,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  toastSuccess: {
-    backgroundColor: '#16a34a',
-  },
-  toastError: {
-    backgroundColor: '#dc2626',
-  },
-  toastText: {
-    color: '#ffffff',
-    fontSize: 15,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-});

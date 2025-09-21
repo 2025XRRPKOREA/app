@@ -1,7 +1,7 @@
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Camera, CameraView } from 'expo-camera';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 interface QRScannerProps {
   onScan: (data: string) => void;
@@ -46,10 +46,10 @@ export function QRScanner({ onScan }: QRScannerProps) {
 
   if (hasPermission === null) {
     return (
-      <View style={styles.container}>
-        <View style={styles.permissionContainer}>
+      <View className="gap-4">
+        <View className="aspect-square bg-gray-100 rounded-lg justify-center items-center p-5">
           <IconSymbol name="camera" size={64} color="#6b7280" />
-          <Text style={styles.permissionText}>카메라 권한을 확인하는 중...</Text>
+          <Text className="text-base font-semibold text-gray-800 mt-4 text-center">카메라 권한을 확인하는 중...</Text>
         </View>
       </View>
     );
@@ -57,21 +57,21 @@ export function QRScanner({ onScan }: QRScannerProps) {
 
   if (hasPermission === false) {
     return (
-      <View style={styles.container}>
-        <View style={styles.permissionContainer}>
+      <View className="gap-4">
+        <View className="aspect-square bg-gray-100 rounded-lg justify-center items-center p-5">
           <IconSymbol name="camera.fill" size={64} color="#ef4444" />
-          <Text style={styles.permissionText}>카메라 권한이 필요합니다</Text>
-          <Text style={styles.permissionSubtext}>
+          <Text className="text-base font-semibold text-gray-800 mt-4 text-center">카메라 권한이 필요합니다</Text>
+          <Text className="text-sm text-gray-500 mt-2 text-center">
             설정에서 카메라 접근 권한을 허용해주세요
           </Text>
           <TouchableOpacity
-            style={styles.permissionButton}
+            className="bg-blue-600 py-3 px-6 rounded-lg mt-4"
             onPress={async () => {
               const { status } = await Camera.requestCameraPermissionsAsync();
               setHasPermission(status === 'granted');
             }}
           >
-            <Text style={styles.permissionButtonText}>권한 요청</Text>
+            <Text className="text-white text-base font-semibold">권한 요청</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -80,9 +80,9 @@ export function QRScanner({ onScan }: QRScannerProps) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.cameraContainer}>
+      <View className="aspect-square rounded-lg overflow-hidden relative">
         <CameraView
-          style={styles.camera}
+          className="flex-1"
           onBarcodeScanned={handleBarCodeScanned}
           barcodeScannerSettings={{
             barcodeTypes: ['qr'],
@@ -90,33 +90,33 @@ export function QRScanner({ onScan }: QRScannerProps) {
         />
 
         {/* 스캔 오버레이 */}
-        <View style={styles.overlay}>
-          <View style={styles.scanFrame}>
-            <View style={[styles.corner, styles.topLeft]} />
-            <View style={[styles.corner, styles.topRight]} />
-            <View style={[styles.corner, styles.bottomLeft]} />
-            <View style={[styles.corner, styles.bottomRight]} />
+        <View className="absolute top-0 left-0 right-0 bottom-0 justify-center items-center">
+          <View className="w-50 h-50 relative">
+            <View className="absolute top-0 left-0 w-10 h-10 border-blue-600 border-4 border-r-0 border-b-0 rounded-tl-lg" />
+            <View className="absolute top-0 right-0 w-10 h-10 border-blue-600 border-4 border-l-0 border-b-0 rounded-tr-lg" />
+            <View className="absolute bottom-0 left-0 w-10 h-10 border-blue-600 border-4 border-r-0 border-t-0 rounded-bl-lg" />
+            <View className="absolute bottom-0 right-0 w-10 h-10 border-blue-600 border-4 border-l-0 border-t-0 rounded-br-lg" />
           </View>
         </View>
       </View>
 
-      <View style={styles.instructions}>
+      <View className="items-center gap-3">
         {scanned ? (
-          <View style={styles.scannedState}>
-            <Text style={styles.scannedText}>✅ QR 코드 인식됨!</Text>
-            <Text style={styles.scannedSubtext}>송금을 처리하는 중...</Text>
+          <View className="items-center gap-1">
+            <Text className="text-base font-semibold text-green-600 text-center">✅ QR 코드 인식됨!</Text>
+            <Text className="text-sm text-gray-500 text-center">송금을 처리하는 중...</Text>
           </View>
         ) : (
-          <Text style={styles.instructionText}>
+          <Text className="text-sm text-gray-500 text-center">
             QR 코드를 스캔 영역에 맞춰주세요
           </Text>
         )}
 
         <TouchableOpacity
-          style={styles.scanAgainButton}
+          className="bg-blue-600 py-3 px-6 rounded-lg w-full items-center"
           onPress={() => setScanned(false)}
         >
-          <Text style={styles.scanAgainButtonText}>
+          <Text className="text-white text-base font-semibold">
             {scanned ? '처리 중...' : '스캔 대기 중'}
           </Text>
         </TouchableOpacity>
@@ -125,136 +125,3 @@ export function QRScanner({ onScan }: QRScannerProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    gap: 16,
-  },
-  cameraContainer: {
-    aspectRatio: 1,
-    borderRadius: 8,
-    overflow: 'hidden',
-    position: 'relative',
-  },
-  camera: {
-    flex: 1,
-  },
-  permissionContainer: {
-    aspectRatio: 1,
-    backgroundColor: '#f3f4f6',
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  permissionText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#374151',
-    marginTop: 16,
-    textAlign: 'center',
-  },
-  permissionSubtext: {
-    fontSize: 14,
-    color: '#6b7280',
-    marginTop: 8,
-    textAlign: 'center',
-  },
-  permissionButton: {
-    backgroundColor: '#2563eb',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    marginTop: 16,
-  },
-  permissionButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  overlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  scanFrame: {
-    width: 200,
-    height: 200,
-    position: 'relative',
-  },
-  corner: {
-    position: 'absolute',
-    width: 40,
-    height: 40,
-    borderColor: '#2563eb',
-    borderWidth: 4,
-  },
-  topLeft: {
-    top: 0,
-    left: 0,
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
-    borderTopLeftRadius: 8,
-  },
-  topRight: {
-    top: 0,
-    right: 0,
-    borderLeftWidth: 0,
-    borderBottomWidth: 0,
-    borderTopRightRadius: 8,
-  },
-  bottomLeft: {
-    bottom: 0,
-    left: 0,
-    borderRightWidth: 0,
-    borderTopWidth: 0,
-    borderBottomLeftRadius: 8,
-  },
-  bottomRight: {
-    bottom: 0,
-    right: 0,
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
-    borderBottomRightRadius: 8,
-  },
-  instructions: {
-    alignItems: 'center',
-    gap: 12,
-  },
-  instructionText: {
-    fontSize: 14,
-    color: '#6b7280',
-    textAlign: 'center',
-  },
-  scannedState: {
-    alignItems: 'center',
-    gap: 4,
-  },
-  scannedText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#16a34a',
-    textAlign: 'center',
-  },
-  scannedSubtext: {
-    fontSize: 14,
-    color: '#6b7280',
-    textAlign: 'center',
-  },
-  scanAgainButton: {
-    backgroundColor: '#2563eb',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    width: '100%',
-    alignItems: 'center',
-  },
-  scanAgainButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});

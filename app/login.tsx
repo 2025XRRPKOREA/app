@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   Alert,
   KeyboardAvoidingView,
   Platform,
@@ -57,126 +56,57 @@ export default function LoginScreen() {
     }
   };
 
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-      justifyContent: 'center',
-      paddingHorizontal: 20,
-    },
-    title: {
-      fontSize: 32,
-      fontWeight: 'bold',
-      color: colors.text,
-      textAlign: 'center',
-      marginBottom: 10,
-    },
-    subtitle: {
-      fontSize: 16,
-      color: colors.icon,
-      textAlign: 'center',
-      marginBottom: 40,
-    },
-    inputContainer: {
-      marginBottom: 16,
-    },
-    label: {
-      fontSize: 14,
-      color: colors.text,
-      marginBottom: 8,
-      fontWeight: '500',
-    },
-    input: {
-      borderWidth: 1,
-      borderColor: colors.icon,
-      borderRadius: 12,
-      paddingHorizontal: 16,
-      paddingVertical: 12,
-      fontSize: 16,
-      color: colors.text,
-      backgroundColor: colors.background,
-    },
-    inputFocused: {
-      borderColor: colors.tint,
-      borderWidth: 2,
-    },
-    loginButton: {
-      backgroundColor: colors.tint,
-      borderRadius: 12,
-      paddingVertical: 16,
-      marginTop: 24,
-      marginBottom: 16,
-    },
-    loginButtonDisabled: {
-      backgroundColor: colors.icon,
-    },
-    loginButtonText: {
-      color: '#fff',
-      fontSize: 18,
-      fontWeight: '600',
-      textAlign: 'center',
-    },
-    forgotPassword: {
-      textAlign: 'center',
-      color: colors.tint,
-      fontSize: 14,
-      marginTop: 16,
-    },
-  });
-
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      className="flex-1 bg-white justify-center px-5"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
       
-      <View>
-        <Text style={styles.title}>RipplePay</Text>
-        <Text style={styles.subtitle}>안전한 XRP 결제를 시작하세요</Text>
+      <View className="bg-white p-6 rounded-2xl shadow-sm shadow-black/10">
+        <Text className="text-3xl font-bold text-gray-800 text-center mb-2">RipplePay</Text>
+        <Text className="text-base text-gray-500 text-center mb-10">안전한 XRP 결제를 시작하세요</Text>
         
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>이메일</Text>
+        <View className="mb-4">
+          <Text className="text-sm text-gray-800 mb-2 font-medium">이메일</Text>
           <TextInput
-            style={styles.input}
+            className="border border-gray-300 rounded-xl px-4 py-3 text-base text-gray-800 bg-white"
             value={email}
             onChangeText={setEmail}
             placeholder="이메일을 입력하세요"
-            placeholderTextColor={colors.icon}
+            placeholderTextColor="#9CA3AF"
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
           />
         </View>
         
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>비밀번호</Text>
+        <View className="mb-4">
+          <Text className="text-sm text-gray-800 mb-2 font-medium">비밀번호</Text>
           <TextInput
-            style={styles.input}
+            className="border border-gray-300 rounded-xl px-4 py-3 text-base text-gray-800 bg-white"
             value={password}
             onChangeText={setPassword}
             placeholder="비밀번호를 입력하세요"
-            placeholderTextColor={colors.icon}
+            placeholderTextColor="#9CA3AF"
             secureTextEntry
           />
         </View>
         
         <TouchableOpacity
-          style={[
-            styles.loginButton,
-            isLoading && styles.loginButtonDisabled,
-          ]}
+          className={`rounded-xl py-4 mt-6 mb-4 ${
+            isLoading ? 'bg-gray-400' : 'bg-blue-600'
+          }`}
           onPress={handleLogin}
           disabled={isLoading}
         >
-          <Text style={styles.loginButtonText}>
+          <Text className="text-white text-lg font-semibold text-center">
             {isLoading ? '로그인 중...' : '로그인'}
           </Text>
         </TouchableOpacity>
         
         <TouchableOpacity>
-          <Text style={styles.forgotPassword}>비밀번호를 잊으셨나요?</Text>
+          <Text className="text-center text-blue-600 text-sm mt-4">비밀번호를 잊으셨나요?</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
