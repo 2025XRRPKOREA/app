@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import { ApiWalletBalanceGet200Response } from '../api';
-import apiClient from '@/services/apiClient';
+import { walletService, authService } from '@/services';
+import type { WalletBalance } from '@/services/walletService';
 
 interface WalletState {
   // State
-  balance: ApiWalletBalanceGet200Response | null;
+  balance: WalletBalance | null;
   isInitialLoading: boolean;
   isRefreshing: boolean;
   lastUpdated: number | null;
@@ -13,7 +13,7 @@ interface WalletState {
   // Actions
   fetchBalance: (isInitial?: boolean) => Promise<void>;
   refreshBalance: () => Promise<void>;
-  setBalance: (balance: ApiWalletBalanceGet200Response | null) => void;
+  setBalance: (balance: WalletBalance | null) => void;
   reset: () => void;
   
   // Auto-refresh management
@@ -23,7 +23,7 @@ interface WalletState {
 
 // Auto-refresh interval (30 seconds)
 const AUTO_REFRESH_INTERVAL = 30000;
-let refreshInterval: NodeJS.Timeout | null = null;
+let refreshInterval: ReturnType<typeof setInterval> | null = null;
 
 export const useWalletStore = create<WalletState>()(
   subscribeWithSelector((set, get) => ({
@@ -35,8 +35,6 @@ export const useWalletStore = create<WalletState>()(
     
     // Actions
     fetchBalance: async (isInitial = false) => {
-      const state = get();
-      
       try {
         if (isInitial) {
           set({ isInitialLoading: true });
@@ -44,13 +42,11 @@ export const useWalletStore = create<WalletState>()(
           set({ isRefreshing: true });
         }
         
-        // API 호출을 위한 토큰 확인
-        const token = apiClient.getCurrentToken();
+        // 인증 상태 확인
+        const isAuthenticated = await authService.isAuthenticated();
         
-        console.log('토큰 상태:', token ? '있음' : '없음');
-        
-        if (!token) {
-          console.error('토큰이 없습니다. 로그인이 필요합니다.');
+        if (!isAuthenticated) {
+          console.error('인증이 필요합니다.');
           set({ 
             isInitialLoading: false, 
             isRefreshing: false 
@@ -58,27 +54,11 @@ export const useWalletStore = create<WalletState>()(
           return;
         }
         
-        // 직접 API 호출 (기존 방식 유지)
-        const apiUrl = 'http://122.40.46.59/api/wallet/balance';
-        const response = await fetch(apiUrl, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          if (response.status === 401) {
-            console.error('인증 실패 - 토큰이 유효하지 않습니다.');
-          }
-          throw new Error(`API 요청 실패: ${response.status}`);
-        }
-
-        const data = await response.json();
+        // 새로운 서비스 레이어 사용
+        const balance = await walletService.getBalance();
         
         set({
-          balance: data,
+          balance,
           lastUpdated: Date.now(),
           isInitialLoading: false,
           isRefreshing: false,
@@ -97,7 +77,7 @@ export const useWalletStore = create<WalletState>()(
       await fetchBalance(false);
     },
     
-    setBalance: (balance: ApiWalletBalanceGet200Response | null) => {
+    setBalance: (balance: WalletBalance | null) => {
       set({ 
         balance, 
         lastUpdated: balance ? Date.now() : null 

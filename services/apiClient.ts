@@ -2,6 +2,8 @@ import { AuthApi, WalletApi, MarketApi, Configuration } from '@/api';
 import { API_CONFIG, STORAGE_KEYS } from '@/constants/config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
+import { authService, walletService, transactionService } from './';
+import type { User } from './authService';
 
 class ApiClient {
   private configuration: Configuration;
@@ -105,113 +107,46 @@ class ApiClient {
     return this.token ? this.token : '';
   }
 
-  // 인증 관련 메서드들
+  // 인증 관련 메서드들 - 새로운 서비스 레이어 사용
   async login(email: string, password: string): Promise<{
     token: string;
-    user: any;
+    user: User;
     message?: string;
   }> {
     try {
-      // 해커톤 모드: 직접 서버 호출
-      const apiUrl = 'http://122.40.46.59/api/auth/login';
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('이메일 또는 비밀번호가 올바르지 않습니다.');
-        } else if (response.status === 404) {
-          throw new Error('해당 이메일로 등록된 사용자를 찾을 수 없습니다.');
-        }
-        throw new Error(`Login failed: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (data.token) {
-        await this.saveTokenToStorage(data.token);
-
-        // 사용자 정보도 저장
-        if (data.user) {
-          if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
-            localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(data.user));
-          } else {
-            await AsyncStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(data.user));
-          }
-        }
-
-        return {
-          token: data.token,
-          user: data.user || { email },
-          message: data.message,
-        };
-      } else {
-        throw new Error('토큰이 응답에 포함되지 않았습니다.');
-      }
+      const response = await authService.login({ email, password });
+      
+      // 기존 토큰 관리 시스템 동기화
+      this.token = response.token;
+      this.updateConfiguration();
+      
+      return response;
     } catch (error: any) {
-      console.error('Login failed:', error);
-
-      // 에러 메시지 처리
-      if (error.message.includes('이메일') || error.message.includes('비밀번호')) {
-        throw error;
-      } else {
-        throw new Error('로그인 중 오류가 발생했습니다. 다시 시도해 주세요.');
-      }
+      throw error;
     }
   }
 
   async logout(): Promise<void> {
-    await this.removeTokenFromStorage();
+    await authService.logout();
+    this.token = null;
+    this.updateConfiguration();
   }
 
   async register(email: string, password: string): Promise<{
     token: string;
-    user: any;
+    user: User;
     message?: string;
   }> {
     try {
-      const registerRequest = {
-        email,
-        password,
-      };
-
-      const response = await this.authApi.apiAuthRegisterPost(registerRequest);
-      const data = response.data;
-
-      if (data.token) {
-        await this.saveTokenToStorage(data.token);
-
-        if (data.user) {
-          if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
-            localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(data.user));
-          } else {
-            await AsyncStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(data.user));
-          }
-        }
-
-        return {
-          token: data.token,
-          user: data.user || { email },
-          message: data.message,
-        };
-      } else {
-        throw new Error('토큰이 응답에 포함되지 않았습니다.');
-      }
+      const response = await authService.register({ email, password });
+      
+      // 기존 토큰 관리 시스템 동기화
+      this.token = response.token;
+      this.updateConfiguration();
+      
+      return response;
     } catch (error: any) {
-      console.error('Registration failed:', error);
-
-      if (error.response?.status === 409) {
-        throw new Error('이미 등록된 이메일입니다.');
-      } else if (error.response?.data?.message) {
-        throw new Error(error.response.data.message);
-      } else {
-        throw new Error('회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.');
-      }
+      throw error;
     }
   }
 
@@ -225,41 +160,29 @@ class ApiClient {
     return this.token;
   }
 
-
-  // 저장된 사용자 정보 로드
-  async getStoredUserData(): Promise<any | null> {
-    try {
-      let userData: string | null = null;
-
-      if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
-        userData = localStorage.getItem(STORAGE_KEYS.USER_DATA);
-      } else {
-        userData = await AsyncStorage.getItem(STORAGE_KEYS.USER_DATA);
-      }
-
-      return userData ? JSON.parse(userData) : null;
-    } catch (error) {
-      console.error('Failed to load user data:', error);
-      return null;
-    }
+  // 저장된 사용자 정보 로드 - 새로운 서비스 레이어 사용
+  async getStoredUserData(): Promise<User | null> {
+    return await authService.getStoredUserData();
   }
 
-  // 지갑 관련 메서드들
+  // 지갑 관련 메서드들 - 새로운 서비스 레이어 사용
   async getWalletBalance() {
-    return this.walletApi.apiWalletBalanceGet();
+    return await walletService.getBalance();
   }
 
   async getWalletAccount() {
-    return this.walletApi.apiWalletAccountGet();
+    return await walletService.getAccount();
   }
 
   async getKrwBalance() {
-    return this.walletApi.apiWalletKrwBalanceGet();
+    return await walletService.getKrwBalance();
   }
 
-  // 거래 관련 메서드들
+  // 거래 관련 메서드들 - 새로운 서비스 레이어 사용
   async getTransactionHistory(limit?: number) {
-    return this.marketApi.apiTransactionHistoryGet(limit);
+    const filter = limit ? { limit } : undefined;
+    const result = await transactionService.getTransactions(filter);
+    return { data: result }; // 기존 API 호환성 유지
   }
 
   // API 설정 업데이트 (개발/프로덕션 환경 변경 시)

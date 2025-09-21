@@ -6,8 +6,10 @@ export {
   useIsAuthenticated,
   useAuthLoading,
   useAuthActions,
-  type User,
 } from './authStore';
+
+// Re-export User type from services
+export type { User } from '@/services/authService';
 
 // Wallet Store
 export {

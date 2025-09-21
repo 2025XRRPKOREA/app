@@ -1,20 +1,13 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import apiClient from '@/services/apiClient';
+import { transactionService, authService } from '@/services';
+import type { Transaction as ServiceTransaction } from '@/services/transactionService';
 
-// Transaction 타입 정의 (기존 API 응답에 맞춤)
-export interface Transaction {
-  id: string;
-  amount: number;
-  currency: string;
-  type: 'send' | 'receive' | 'exchange';
-  status: 'pending' | 'completed' | 'failed';
-  timestamp: string;
+// Transaction 타입을 서비스 레이어에서 가져와서 확장
+export interface Transaction extends ServiceTransaction {
+  // 추가 필드가 필요한 경우 여기에 정의
   description?: string;
-  fromAddress?: string;
-  toAddress?: string;
   transactionHash?: string;
-  [key: string]: any;
 }
 
 interface TransactionState {
@@ -49,8 +42,6 @@ export const useTransactionStore = create<TransactionState>()(
     
     // Actions
     fetchTransactions: async (limit = 50, isInitial = false) => {
-      const state = get();
-      
       try {
         if (isInitial) {
           set({ isLoading: true });
@@ -58,11 +49,11 @@ export const useTransactionStore = create<TransactionState>()(
           set({ isRefreshing: true });
         }
         
-        // API 호출을 위한 토큰 확인
-        const token = apiClient.getCurrentToken();
+        // 인증 상태 확인
+        const isAuthenticated = await authService.isAuthenticated();
         
-        if (!token) {
-          console.error('토큰이 없습니다. 로그인이 필요합니다.');
+        if (!isAuthenticated) {
+          console.error('인증이 필요합니다.');
           set({ 
             isLoading: false, 
             isRefreshing: false 
@@ -70,34 +61,15 @@ export const useTransactionStore = create<TransactionState>()(
           return;
         }
         
-        // API 호출 (기존 방식과 유사하게 구현)
-        const apiUrl = `http://122.40.46.59/api/transaction/history?limit=${limit}`;
-        const response = await fetch(apiUrl, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          if (response.status === 401) {
-            console.error('인증 실패 - 토큰이 유효하지 않습니다.');
-          }
-          throw new Error(`거래 내역 요청 실패: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        // 응답 데이터 구조에 따라 조정
-        const transactions = Array.isArray(data) ? data : data.transactions || [];
+        // 새로운 서비스 레이어 사용
+        const result = await transactionService.getTransactions({ limit });
         
         set({
-          transactions,
+          transactions: result.transactions,
           lastUpdated: Date.now(),
           isLoading: false,
           isRefreshing: false,
-          hasMore: transactions.length === limit, // 받은 데이터가 limit와 같으면 더 있을 가능성
+          hasMore: result.hasMore,
         });
       } catch (error) {
         console.error('거래 내역 조회 실패:', error);
@@ -151,7 +123,7 @@ export const useTransactionStore = create<TransactionState>()(
     
     getCompletedTransactions: () => {
       const state = get();
-      return state.transactions.filter(tx => tx.status === 'completed');
+      return state.transactions.filter(tx => tx.status === 'confirmed');
     },
     
     getTransactionsByType: (type: Transaction['type']) => {

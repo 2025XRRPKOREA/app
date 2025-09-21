@@ -1,14 +1,9 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import apiClient from '@/services/apiClient';
+import { authService } from '@/services';
+import type { User } from '@/services/authService';
 
-export interface User {
-  id?: string;
-  email: string;
-  name?: string;
-  walletAddress?: string;
-  [key: string]: any;
-}
+// User interface is now imported from authService
 
 interface AuthState {
   // State
@@ -47,7 +42,7 @@ export const useAuthStore = create<AuthState>()(
     // Actions
     login: async (email: string, password: string) => {
       try {
-        const response = await apiClient.login(email, password);
+        const response = await authService.login({ email, password });
         
         set({
           token: response.token,
@@ -61,7 +56,7 @@ export const useAuthStore = create<AuthState>()(
     
     register: async (email: string, password: string) => {
       try {
-        const response = await apiClient.register(email, password);
+        const response = await authService.register({ email, password });
         
         set({
           token: response.token,
@@ -75,7 +70,7 @@ export const useAuthStore = create<AuthState>()(
     
     logout: async () => {
       try {
-        await apiClient.logout();
+        await authService.logout();
         set({
           token: null,
           user: null,
@@ -92,9 +87,9 @@ export const useAuthStore = create<AuthState>()(
     
     initializeAuth: async () => {
       try {
-        // API 클라이언트에서 토큰 확인
-        const storedToken = apiClient.getCurrentToken();
-        const storedUser = await apiClient.getStoredUserData();
+        // 인증 서비스에서 토큰과 사용자 정보 확인
+        const storedToken = await authService.getCurrentToken();
+        const storedUser = await authService.getStoredUserData();
 
         if (storedToken && storedUser) {
           set({
@@ -105,7 +100,7 @@ export const useAuthStore = create<AuthState>()(
       } catch (error) {
         console.error('Failed to load stored session:', error);
         // 저장된 세션이 손상된 경우 정리
-        await apiClient.logout();
+        await authService.logout();
       } finally {
         set({ isLoading: false });
       }

@@ -16,7 +16,7 @@ export interface ConvertResponse {
 
 class ExchangeRateService {
   private rates: ExchangeRate[] = [];
-  private updateInterval: NodeJS.Timeout | null = null;
+  private updateInterval: ReturnType<typeof setInterval> | null = null;
   private subscribers: ((rates: ExchangeRate[]) => void)[] = [];
 
   // 기본 fallback 환율 (API 실패 시 사용)
