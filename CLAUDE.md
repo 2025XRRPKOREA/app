@@ -9,11 +9,11 @@ RipplePay is a React Native mobile wallet application built with Expo for XRP an
 ## Development Commands
 
 ### Core Development
-- `npm start` - Start Expo development server
+- `npm start` - Start Expo development server (runs on port 3001)
 - `npm run android` - Start on Android emulator  
 - `npm run ios` - Start on iOS simulator
 - `npm run web` - Start web version
-- `npm run lint` - Run ESLint
+- `npm run lint` - Run ESLint with expo-config-expo/flat configuration
 
 ### Project Management
 - `npm run reset-project` - Move starter code to app-example and create blank app directory
@@ -81,9 +81,10 @@ The project uses OpenAPI Generator to create TypeScript API clients:
 ## Development Notes
 
 ### Environment Configuration
-- Server host configurable via `app.config.js` extra.serverHost
-- Development server defaults to localhost:8081
-- API timeout configurable via extra.apiTimeout
+- Server host configurable via `app.config.js` extra.serverHost (defaults to localhost:3000)
+- Production API base URL: `http://122.40.46.59` (configured in constants/config.ts)
+- API timeout configurable via extra.apiTimeout (defaults to 30000ms)
+- Environment variables: SERVER_HOST, API_TIMEOUT, NODE_ENV, EXPO_PROJECT_ID
 
 ### Platform Considerations
 - Cross-platform storage abstraction in apiClient.ts
@@ -101,3 +102,23 @@ The project uses OpenAPI Generator to create TypeScript API clients:
 - Local notifications for transaction events (sent/received/exchange/QR payments)
 - Notification settings management with user preferences
 - Integration with QR payment flow for instant payment confirmations
+
+## Deployment
+
+### CI/CD Pipeline
+- GitHub Actions workflow deploys to self-hosted runner on main branch push
+- Uses Node.js 18 and PM2 for process management
+- Commands: `npm ci` → `pm2 delete app` → `pm2 start npm --name app -- start`
+
+## Configuration Details
+
+### Transaction Limits (constants/config.ts)
+- Minimum transaction: 100 KRW
+- Maximum transaction: 10,000,000 KRW  
+- Daily limit: 50,000,000 KRW
+- Supported currencies: KRW, XRP, USD
+
+### Storage Keys
+- Authentication: `auth_token`, `refresh_token`
+- User data: `user_data`, `app_settings`
+- Biometric: `biometric_enabled`
